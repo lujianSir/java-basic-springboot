@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace： 1. namespace必须和Mapper接口类路径一致 -->
+<mapper namespace="com.item.mapper.UserMapper">
+	<!-- 2. id必须和Mapper接口方法名一致 -->
+	<!-- 3. parameterType必须和接口方法参数类型一致 -->
+	<!-- 4. resultType必须和接口方法返回值类型一致 -->
+
+	<resultMap id="BaseResultMap" type="com.item.entity.UserBean">
+		<id column="userid" property="userID" jdbcType="INTEGER" />
+		<result column="username" property="userName"
+			jdbcType="VARCHAR" />
+		<result column="password" property="password"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="account" property="account" jdbcType="DOUBLE" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="registertime" property="registertime"
+			jdbcType="DATE" />
+		<result column="role" property="role" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		userid, username, status, role
+	</sql>
+
+	<!-- 检测用户是否存在 -->
+	<select id="userExist" parameterType="string" resultType="int">
+		SELECT
+		count(*) FROM userinfo WHERE username=#{userName}
+	</select>
+
+	<!-- 用户登录 -->
+	<select id="userLogin" parameterType="String"
+		resultMap="BaseResultMap">
+		SELECT * FROM
+		userinfo WHERE username = #{username}
+	</select>
+
+	<!-- 用户注册 -->
+	<insert id="userRegister" parameterType="com.item.entity.UserBean">
+		INSERT INTO userinfo
+		(`username`,`password`,`status`,`role`,`phone`,`registertime`)
+		VALUES
+		(#{userName},#{password},#{status},#{role},#{phone},now())
+	</insert>
+	
+	
+		<!-- 根据用户名去查询用户信息	 -->
+	<select id="queryByName" parameterType="String" resultType="com.item.entity.UserBean">
+		select * from userinfo where username = #{username}
+	</select>
+	
+	
+	<!-- 根据角色身份去查询用户信息 -->
+	<select id="queryByRole" parameterType="int" resultType="com.item.entity.UserBean">
+		select * from userinfo where role > #{role}
+	</select>
+
+</mapper>
