@@ -49,7 +49,11 @@ public class FileServiceImpl implements FileService {
 				// 0代表前台 1代表模型端
 				switch (role) {
 				case 0:
-					dir = new File(rootPath + File.separator + "web" + File.separator + catalog);
+					if(catalog.equals("模型描述")) {
+						dir = new File(rootPath+File.separator + catalog);
+					}else {
+						dir = new File(rootPath + File.separator + "web" + File.separator + catalog);
+					}						
 					break;
 				case 1:
 					dir = new File(rootPath + File.separator + "model" + File.separator + catalog);
@@ -71,9 +75,13 @@ public class FileServiceImpl implements FileService {
 				FileBean fileinfo = new FileBean();
 				fileinfo.setCatalog(catalog);
 				fileinfo.setFileurl(filePath);
-				fileinfo.setRole(role);
+				fileinfo.setRole(role);	
+				if(catalog.equals("模型描述")) {
+					String str="/image/模型描述/"+filename;
+					filename=str;
+				}
+				fileinfo.setId(filename);
 				fileMapper.fileinfoAdd(fileinfo);
-
 				return Result.success(filename);
 			} catch (Exception e) {
 				LOG.error(e.getMessage());
@@ -141,6 +149,27 @@ public class FileServiceImpl implements FileService {
 				filesurl.add(fileurl);
 			}
 			return Result.success(filesurl);
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			return Result.error(500, "服务端错误");
+		}
+	}
+
+	@Override
+	public Result<?> fileDelete(String id) {
+		// TODO Auto-generated method stub
+		try {
+			FileBean fileinfo =  new FileBean();
+			// 根据名称查询数据,获取文件路径
+			fileinfo = fileMapper.selectFileById(id);
+			// 删除文件
+			File file = new File(fileinfo.getFileurl());
+			if (file.exists()) {
+				file.delete();
+			}
+			// 删除记录
+			fileMapper.fileinfoDelete(fileinfo.getId());
+			return Result.success();
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
 			return Result.error(500, "服务端错误");

@@ -13,9 +13,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="fileinfoAdd"
 		parameterType="com.item.entity.FileBean">
 		INSERT INTO fileinfo
-		(`catalog`,`fileurl`,`role`,`uploadtime`)
+		(`id`,`catalog`,`fileurl`,`role`,`uploadtime`)
 		VALUES
-		(#{catalog},#{fileurl},#{role},now())
+		(#{id},#{catalog},#{fileurl},#{role},now())
 	</insert>
 
 	<!-- 录入模型信息 -->
@@ -34,9 +34,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<!-- 删除文件信息 -->
-	<delete id="fileinfoDelete" parameterType="int">
+	<delete id="fileinfoDelete" parameterType="String">
 		DELETE FROM fileinfo WHERE id = #{id}
 	</delete>
+	
+	<!-- 通过ID查询上传的文件 -->
+	<select id="selectFileById" resultType="com.item.entity.FileBean">
+		select * from fileinfo where id=#{id}
+	</select>
 	
 	<!-- 查询模型封面下所有的信息 -->
 	<select id="webStoreQuery" resultType="com.item.entity.FileBean">

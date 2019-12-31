@@ -12,7 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.item.entity.ModelBean;
 import com.item.service.FileService;
 import com.item.tool.Result;
-
+/**
+ * 文件上传、模型上传
+ * @author Administrator
+ *
+ */
 @Controller
 @RequestMapping(value = "file")
 public class FileController {
@@ -40,6 +44,18 @@ public class FileController {
 		return fileService.fileUpload(file, request, catalog, role);
 	}
 
+	/**
+	 * 通过ID删除文件
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/deleteFileById")
+	@ResponseBody
+	public Result<?> fileDelete(String id){	
+		return fileService.fileDelete(id);
+	}
+	
+	
 	/**
 	 * 模型数据录入
 	 */

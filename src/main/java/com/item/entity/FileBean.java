@@ -20,7 +20,7 @@ public class FileBean implements Serializable{
 	private static final long serialVersionUID = -4296341561794490100L;
 	
 	// 目录ID
-	private int id;
+	private String  id;
 	// 目录名称
 	private String catalog;
 	// 文件路径
@@ -54,12 +54,12 @@ public class FileBean implements Serializable{
 	public void setRole(int role) {
 		this.role = role;
 	}
-	public int getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 	
 }

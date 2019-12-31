@@ -13,6 +13,9 @@ public interface FileMapper {
 	//文件信息录入数据库
 	public void fileinfoAdd(FileBean file);
 	
+	//通过ID查询上传文件的信息
+	public FileBean selectFileById(String id);
+		
 	//模型信息录入
 	public void modelinfoAdd(ModelBean model);
 	
@@ -20,7 +23,7 @@ public interface FileMapper {
 	public List<FileBean> fileinfoQuery(String filename);
 	
 	//删除文件信息
-	public void fileinfoDelete(int id);
+	public void fileinfoDelete(String id);
 	
 	//商城主页信息模型加载
 	public List<FileBean> webStoreQuery();
