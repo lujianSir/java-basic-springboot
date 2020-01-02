@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.item.entity.ModelBean;
+import com.item.entity.Page;
 import com.item.service.FileService;
 import com.item.tool.Result;
 /**
@@ -57,23 +58,26 @@ public class FileController {
 	
 	
 	/**
-	 * 模型数据录入
+	 * 模型数据录入、修改
 	 */
 	@RequestMapping("/model")
 	@ResponseBody
-	public Result<?> modelUpload(@RequestParam("modelname") String modelname,
-			@RequestParam("resource_two") String resource_two, @RequestParam("modelprice") double modelprice,
-			@RequestParam("buildtype") String buildtype, @RequestParam("resource_one") String resource_one,
-			@RequestParam("describe") String describe) {
-
+	public Result<?> modelUpload(String modelname,String resource_two, String modelprice,String buildtype, String resource_one,
+			 String describe, String filePics, String fileModel,String mid) {
 		ModelBean model = new ModelBean();
 		model.setBuildtype(buildtype);
 		model.setDescribe(describe);
 		model.setModelname(modelname);
-		model.setModelprice(modelprice);
+		if(modelprice!=null && !modelprice.equals("")) {
+			model.setModelprice(Double.parseDouble(modelprice));
+		}	
 		model.setResource_one(resource_one);
 		model.setResource_two(resource_two);
-
+		model.setFilePics(filePics);
+		model.setFileModel(fileModel);
+		if(mid!=null && !mid.equals("")) {
+			model.setMid(Integer.parseInt(mid));
+		}
 		return fileService.modelUpload(model);
 	}
 
@@ -104,4 +108,29 @@ public class FileController {
 		return fileService.webStoreQuery();
 	}
 
+	/**
+	 * 商城分页查询
+	 * @param modelBean 模型属性
+	 * @param page 分页属性
+	 * @param startPrice 开始价格
+	 * @param endPrice 结尾价格
+	 * @return
+	 */
+	@RequestMapping("/queryModels")
+	@ResponseBody
+	public Result<?> queryModels(ModelBean modelBean,Page page,String startPrice ,String endPrice){	
+		return fileService.queryModels(modelBean, page, startPrice, endPrice);
+	}
+	
+	/**
+	 * 通过ID查询模型的信息
+	 * @param mid 模型ID
+	 * @return
+	 */
+	public Result<?> queryModelById(String  mid){
+		return fileService.queryModelById(mid);
+	}
+	
+	
+	
 }

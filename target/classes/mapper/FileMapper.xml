@@ -22,10 +22,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`buildtype`,`resource_one`,`resource_two`,`filename`,`describe`)
+		(`modelname`,`modelprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`)
 		VALUES
-		(#{modelname},#{modelprice},#{buildtype},#{resource_one},#{resource_two},#{filename},#{describe})
+		(#{modelname},#{modelprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe})
 	</insert>
+	
+	<!-- 模型信息修改 -->
+	<update id="modelInfoUpdate" parameterType="com.item.entity.ModelBean">
+		update modelinfo 
+		<set>
+			<if test="modelname!=null and modelname!=''">
+			modelname=#{modelname},
+			</if>
+			<if test="modelprice!=null and modelprice!=''">
+				modelprice=#{modelprice},
+			</if>
+			<if test="buildtype!=null and buildtype!=''">
+				buildtype=#{buildtype},
+			</if>
+			<if test="resource_one!=null and resource_one!=''">
+				resource_one=#{resource_one},
+			</if>
+			<if test="resource_two!=null and resource_two!=''">
+				resource_two=#{resource_two},
+			</if>
+			<if test="filePics!=null and filePics!=''">
+				filePics=#{filePics},
+			</if>
+			<if test="fileModel!=null and fileModel!=''">
+				fileModel=#{fileModel},	
+			</if>
+			<if test="describe!=null and describe!=''">
+				describe=#{describe},
+			</if>
+		</set>	
+		where mid=#{mid}	
+	</update>
 
 	<!-- 根据名字查询 -->
 	<select id="fileinfoQuery" parameterType="String"
@@ -47,5 +79,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="webStoreQuery" resultType="com.item.entity.FileBean">
 		SELECT * FROM `fileinfo` WHERE catalog = '模型封面'
 	</select>
+
+	<!-- 查询商城所以的信息 -->
+	<select id="queryModels" resultType="com.item.entity.ModelBean">
+		select * from modelinfo 
+			<where>
+				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
+					and modelname like  CONCAT('%',#{modelBean.modelname},'%');
+				</if>
+				<if test="modelBean.buildtype!=null and modelBean.buildtype!=''">
+					and buildtype=#{modelBean.buildtype}
+				</if>
+				<if test="modelBean.resource_one!=null and modelBean.resource_one!=''"> 
+					and resource_one=#{modelBean.resource_one}			
+				</if>
+				<if test="modelBean.resource_two!=null and modelBean.resource_two!=''">
+					and resource_two=#{modelBean.resource_two}
+				</if>
+				<if test="modelBean.modelprice!=null and modelBean.modelprice!='' and  modelBean.modelprice!=201">
+					and modelprice &lt;= #{modelBean.modelprice}
+				</if>
+				<if test="modelBean.modelprice==201">
+					and modelprice &gt; 200
+				</if>
+				<if test="startPrice!=null and startPrice!=''">
+					and modelprice &gt;=#{startPrice}
+				</if>
+				<if test="endPrice!=null and endPrice !=''">
+					and modelprice &lt;= #{endPrice}
+				</if>
+				
+			</where>
+		
+	</select>
+
+	<!-- 通过ID查询模型的信息 -->
+	<select id="queryModelById" resultType="com.item.entity.ModelBean">
+		select * from 	modelinfo where mid=#{mid}
+	</select>
+	
+	<!-- 通过ID更改星级以及下载量 -->
+	<update id="updateStarAndDownById" parameterType="com.item.entity.ModelBean">
+		update modelinfo 
+		<set>
+			<if test="download!=null and download!=''">
+				download=#{download}
+			</if>
+			<if test="starclass!=null and starclass!=''">
+				starclass=#{starclass}
+			</if>
+		</set>
+		where mid=#{mid}
+	</update>
 
 </mapper>

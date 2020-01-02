@@ -13,8 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
+import com.item.entity.Page;
 import com.item.mapper.FileMapper;
 import com.item.tool.Result;
 
@@ -99,8 +102,13 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public Result<?> modelUpload(ModelBean model) {
 		try {
-			// 模型信息录入
-			fileMapper.modelinfoAdd(model);
+			// 模型信息修改
+			if(model.getMid()>0) {
+				fileMapper.modelInfoUpdate(model);
+			}else {
+				// 模型信息录入
+				fileMapper.modelinfoAdd(model);
+			}			
 			return Result.success();
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
@@ -174,6 +182,31 @@ public class FileServiceImpl implements FileService {
 			LOG.error(e.getMessage());
 			return Result.error(500, "服务端错误");
 		}
+	}
+
+	@Override
+	public Result<?> queryModels(ModelBean modelBean, Page page, String startPrice, String endPrice) {
+		// TODO Auto-generated method stub
+		List<ModelBean>  list=fileMapper.queryModels(modelBean, startPrice, endPrice);
+		List<ModelBean> newList=new ArrayList<ModelBean>();
+		for(int i=0;i<list.size();i++) {
+			ModelBean m=new ModelBean();
+			String str=m.getFilePics();
+			String[] strs=str.split(",");
+			String picurl="/image/web/模型封面/"+strs[0];
+			m.setFilePics(picurl);
+			newList.add(m);
+		}
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(newList);				
+		return Result.success(pageInfo);
+	}
+
+	@Override
+	public Result<?> queryModelById(String mid) {
+		// TODO Auto-generated method stub
+		ModelBean modelBean =fileMapper.queryModelById(mid);		
+		return Result.success(modelBean);
 	}
 
 }

@@ -25,11 +25,20 @@ public class ModelBean implements Serializable{
 	private String resource_one;
 	// 资源库类型二级
 	private String resource_two;
-	// 文件名称
-	private String filename;
+	// 模型图片地址
+	private String filePics;
+	
+	//模型地址
+	private String fileModel;
+	
 	// 模型描述
 	private String describe;
 	
+	//下载数量
+	private int download;
+	
+	//星级
+	private int starclass;
 	
 	public String getModelname() {
 		return modelname;
@@ -61,11 +70,21 @@ public class ModelBean implements Serializable{
 	public void setResource_two(String resource_two) {
 		this.resource_two = resource_two;
 	}
-	public String getFilename() {
-		return filename;
+		
+	public String getFilePics() {
+		return filePics;
 	}
-	public void setFilename(String filename) {
-		this.filename = filename;
+	public void setFilePics(String filePics) {
+		this.filePics = filePics;
+	}
+	public String getFileModel() {
+		return fileModel;
+	}
+	public void setFileModel(String fileModel) {
+		this.fileModel = fileModel;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	public String getDescribe() {
 		return describe;
@@ -79,6 +98,17 @@ public class ModelBean implements Serializable{
 	public void setMid(int mid) {
 		this.mid = mid;
 	}
-	
-	
+	public int getDownload() {
+		return download;
+	}
+	public void setDownload(int download) {
+		this.download = download;
+	}
+	public int getStarclass() {
+		return starclass;
+	}
+	public void setStarclass(int starclass) {
+		this.starclass = starclass;
+	}
+			
 }

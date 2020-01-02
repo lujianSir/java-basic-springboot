@@ -19,6 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/image/模型描述/**").addResourceLocations("file:/D:/upload/模型描述/");
+		registry.addResourceHandler("/image/web/模型封面/**").addResourceLocations("file:/D:/upload/web/模型封面/");
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 	}
 

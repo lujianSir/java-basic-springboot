@@ -1,0 +1,11 @@
+{
+  "hints": [],
+  "groups": [],
+  "properties": [
+    {
+      "name": "upload",
+      "description": "A description for 'upload'",
+      "type": "java.lang.String"
+    }
+  ]
+}
