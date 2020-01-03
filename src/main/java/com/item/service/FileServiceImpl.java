@@ -177,7 +177,7 @@ public class FileServiceImpl implements FileService {
 			}
 			// 删除记录
 			fileMapper.fileinfoDelete(fileinfo.getId());
-			return Result.success();
+			return Result.success(fileinfo.getId());
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
 			return Result.error(500, "服务端错误");
