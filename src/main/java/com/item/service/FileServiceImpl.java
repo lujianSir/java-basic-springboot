@@ -185,20 +185,24 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public Result<?> queryModels(ModelBean modelBean, Page page, String startPrice, String endPrice) {
+	public Result<?> queryModels(ModelBean modelBean, Page page, String startPrice, String endPrice,String orderBy) {
 		// TODO Auto-generated method stub
-		List<ModelBean>  list=fileMapper.queryModels(modelBean, startPrice, endPrice);
-		List<ModelBean> newList=new ArrayList<ModelBean>();
-		for(int i=0;i<list.size();i++) {
-			ModelBean m=new ModelBean();
-			String str=m.getFilePics();
-			String[] strs=str.split(",");
-			String picurl="/image/web/模型封面/"+strs[0];
-			m.setFilePics(picurl);
-			newList.add(m);
+		Double star=null;
+		Double end=null;
+		if(startPrice!=null&& !startPrice.equals("")) {
+			star=Double.parseDouble(startPrice);
+		}else {
+			star=0.0;
 		}
+		if(endPrice!=null&& !endPrice.equals("")) {
+			end=Double.parseDouble(endPrice);
+		}else {
+			end=0.0;
+		}
+		
+		List<ModelBean>  list=fileMapper.queryModels(modelBean, star, end,orderBy);
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
-		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(newList);				
+		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(list);				
 		return Result.success(pageInfo);
 	}
 

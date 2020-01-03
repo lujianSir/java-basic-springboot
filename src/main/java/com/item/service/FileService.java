@@ -30,7 +30,7 @@ public interface FileService {
 	public Result<?> webStoreQuery();
 	
 	//查询商城所有的数据(带参数类型)
-	public Result<?> queryModels(ModelBean modelBean,Page page,String startPrice ,String endPrice);
+	public Result<?> queryModels(ModelBean modelBean,Page page,String startPrice ,String endPrice,String orderBy);
 	
 	//通过ID查询模型的信息
 	public Result<?> queryModelById(String  mid);

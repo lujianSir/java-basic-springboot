@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`)
+		(`modelname`,`modelprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`)
 		VALUES
-		(#{modelname},#{modelprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe})
+		(#{modelname},#{modelprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},now())
 	</insert>
 	
 	<!-- 模型信息修改 -->
@@ -96,21 +96,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="modelBean.resource_two!=null and modelBean.resource_two!=''">
 					and resource_two=#{modelBean.resource_two}
 				</if>
-				<if test="modelBean.modelprice!=null and modelBean.modelprice!='' and  modelBean.modelprice!=201">
+				<if test="modelBean.modelprice!=201.0 and  modelBean.modelprice != 0.0">
 					and modelprice &lt;= #{modelBean.modelprice}
 				</if>
-				<if test="modelBean.modelprice==201">
+				<if test="modelBean.modelprice==201.0 and modelBean.modelprice != 0.0">
 					and modelprice &gt; 200
 				</if>
-				<if test="startPrice!=null and startPrice!=''">
+				<if test="startPrice != 0.0">
 					and modelprice &gt;=#{startPrice}
 				</if>
-				<if test="endPrice!=null and endPrice !=''">
+				<if test="endPrice != 0.0">
 					and modelprice &lt;= #{endPrice}
-				</if>
-				
+				</if>				
 			</where>
-		
+			
+			<if test="orderBy=='' or orderBy== null">
+				order by download desc
+			</if>			
+			<if test="orderBy=='xiazai' and orderBy!='' and orderBy!= null ">
+				order by download desc
+			</if>	
+			<if test="orderBy=='xingji'  and orderBy!='' and orderBy!= null ">
+				order by starclass desc
+			</if>			
+			<if test="orderBy=='shijian'  and orderBy!='' and orderBy!= null ">
+				order by creatTime desc
+			</if>
+						
 	</select>
 
 	<!-- 通过ID查询模型的信息 -->

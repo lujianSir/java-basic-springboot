@@ -118,8 +118,11 @@ public class FileController {
 	 */
 	@RequestMapping("/queryModels")
 	@ResponseBody
-	public Result<?> queryModels(ModelBean modelBean,Page page,String startPrice ,String endPrice){	
-		return fileService.queryModels(modelBean, page, startPrice, endPrice);
+	public Result<?> queryModels(ModelBean modelBean,Page page,String startPrice ,String endPrice,String price,String orderBy){
+		if(price!=null &&! price.equals("")) {
+			modelBean.setModelprice(Double.parseDouble(price));
+		}
+		return fileService.queryModels(modelBean, page, startPrice, endPrice,orderBy);
 	}
 	
 	/**

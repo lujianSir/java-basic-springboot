@@ -1,6 +1,7 @@
 package com.item.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 
@@ -39,6 +40,9 @@ public class ModelBean implements Serializable{
 	
 	//星级
 	private int starclass;
+	
+	//上传时间
+	private Date creatTime;
 	
 	public String getModelname() {
 		return modelname;
@@ -110,5 +114,11 @@ public class ModelBean implements Serializable{
 	public void setStarclass(int starclass) {
 		this.starclass = starclass;
 	}
-			
+	public Date getCreatTime() {
+		return creatTime;
+	}
+	public void setCreatTime(Date creatTime) {
+		this.creatTime = creatTime;
+	}
+	
 }

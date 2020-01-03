@@ -34,7 +34,8 @@ public interface FileMapper {
 	public List<FileBean> webStoreQuery();
 	
 	//查询商城所以的信息
-	public List<ModelBean> queryModels(@Param("modelBean")ModelBean modelBean,@Param("startPrice") String startPrice, @Param("endPrice")String endPrice);
+	public List<ModelBean> queryModels(@Param("modelBean")ModelBean modelBean,@Param("startPrice") Double startPrice,
+										@Param("endPrice")Double endPrice,@Param("orderBy")String orderBy);
 	
 	//通过ID查询模型的信息
 	public ModelBean queryModelById(String id);
