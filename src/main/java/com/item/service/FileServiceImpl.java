@@ -192,16 +192,16 @@ public class FileServiceImpl implements FileService {
 		if(startPrice!=null&& !startPrice.equals("")) {
 			star=Double.parseDouble(startPrice);
 		}else {
-			star=0.0;
+			star=-0.1;
 		}
 		if(endPrice!=null&& !endPrice.equals("")) {
 			end=Double.parseDouble(endPrice);
 		}else {
-			end=0.0;
+			end=-0.1;
 		}
 		
-		List<ModelBean>  list=fileMapper.queryModels(modelBean, star, end,orderBy);
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<ModelBean>  list=fileMapper.queryModels(modelBean, star, end,orderBy);	
 		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(list);				
 		return Result.success(pageInfo);
 	}

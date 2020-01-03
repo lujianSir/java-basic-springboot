@@ -19,7 +19,7 @@ public class ModelBean implements Serializable{
 	// 模型名称
 	private String modelname;
 	// 模型价格
-	private double modelprice;
+	private double modelprice=-0.1;
 	// 构建类型
 	private String buildtype;
 	// 资源库类型一级

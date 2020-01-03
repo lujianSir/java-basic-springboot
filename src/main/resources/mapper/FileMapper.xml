@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from modelinfo 
 			<where>
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
-					and modelname like  CONCAT('%',#{modelBean.modelname},'%');
+					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
 				</if>
 				<if test="modelBean.buildtype!=null and modelBean.buildtype!=''">
 					and buildtype=#{modelBean.buildtype}
@@ -96,16 +96,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="modelBean.resource_two!=null and modelBean.resource_two!=''">
 					and resource_two=#{modelBean.resource_two}
 				</if>
-				<if test="modelBean.modelprice!=201.0 and  modelBean.modelprice != 0.0">
+				<if test="modelBean.modelprice!=201.0 and  modelBean.modelprice != -0.1">
 					and modelprice &lt;= #{modelBean.modelprice}
 				</if>
-				<if test="modelBean.modelprice==201.0 and modelBean.modelprice != 0.0">
+				<if test="modelBean.modelprice==201.0 and modelBean.modelprice != -0.1">
 					and modelprice &gt; 200
 				</if>
-				<if test="startPrice != 0.0">
+				<if test="startPrice != -0.1">
 					and modelprice &gt;=#{startPrice}
 				</if>
-				<if test="endPrice != 0.0">
+				<if test="endPrice != -0.1">
 					and modelprice &lt;= #{endPrice}
 				</if>				
 			</where>
