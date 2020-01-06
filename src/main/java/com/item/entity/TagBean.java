@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 /**
  * 用来处理页面标签
  * 
- * @author hjy
+ * @author 
  *
  */
 @Entity
@@ -18,44 +18,59 @@ public class TagBean implements Serializable {
 	 */
 	private static final long serialVersionUID = -833491664501890240L;
 
-	// 标题名称
-	private String typeName;
-	// 标题类型
-	private String typeClass;
+	// ID
+	private int id;
+	
 	// 父节点
-	private int parentid;
-	// 子节点
-	private int nodeid;
+	private int pid; // 一级 默认父ID为0
 	
-	public String getTypeName() {
-		return typeName;
-	}
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	public String getTypeClass() {
-		return typeClass;
-	}
-	public void setTypeClass(String typeClass) {
-		this.typeClass = typeClass;
-	}
-	public int getParentid() {
-		return parentid;
-	}
-	public void setParentid(int parentid) {
-		this.parentid = parentid;
-	}
-	public int getNodeid() {
-		return nodeid;
-	}
-	public void setNodeid(int nodeid) {
-		this.nodeid = nodeid;
-	}
+	// 标题类型
+	private String typeclass;
 	
-	@Override
-	public String toString() {
-		return "Tag [typeName=" + typeName + ", typeClass=" + typeClass + ", parentid=" + parentid + ", nodeid="
-				+ nodeid + "]";
+	// 标题名称
+	private String typename;
+	
+	//标题对应的内容
+	private String content;
+
+	public int getId() {
+		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getPid() {
+		return pid;
+	}
+
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
+
+	public String getTypeclass() {
+		return typeclass;
+	}
+
+	public void setTypeclass(String typeclass) {
+		this.typeclass = typeclass;
+	}
+
+	public String getTypename() {
+		return typename;
+	}
+
+	public void setTypename(String typename) {
+		this.typename = typename;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+			
 }

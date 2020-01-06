@@ -1,10 +1,14 @@
 package com.item.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.item.entity.TagBean;
 import com.item.mapper.TagMapper;
 import com.item.tool.Result;
 
@@ -44,10 +48,17 @@ public class TagServiceImpl implements TagService {
 	 */
 	@Override
 	public Result<?> tagQuery(String tagname) {
-		try {
-
-			if (tagMapper.tagQuery(tagname).size() > 0) {
-				return Result.success(tagMapper.tagQuery(tagname));
+		List<TagBean> tagBeans=new ArrayList<TagBean>();
+		try {			
+			List<TagBean> list=tagMapper.tagQuery(tagname);
+			if (list.size() > 0) {
+				for(int i=0;i<list.size();i++) {
+					int id=0;
+					id=list.get(i).getId();
+					List<TagBean> t=tagMapper.queryTagFatherById(id);
+					tagBeans.addAll(t);
+				}							
+				return Result.success(tagBeans);
 			} else {
 				return Result.error(50010, "标签不存在");
 			}
@@ -79,7 +90,15 @@ public class TagServiceImpl implements TagService {
 	@Override
 	public Result<?> tagAllQuery() {
 		// TODO Auto-generated method stub
-		return null;
+		List<TagBean> list=tagMapper.tagAllQuery();
+		return Result.success(list);
+	}
+
+	@Override
+	public Result<?> queryTagById(int id) {
+		// TODO Auto-generated method stub
+		TagBean tagBean=tagMapper.queryTagById(id);
+		return Result.success(tagBean);
 	}
 
 }

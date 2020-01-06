@@ -16,12 +16,36 @@ public class TagController {
 	@Autowired
 	private TagService tagService;
 	
-	/**标签查询
+	/**
+	 * 查询所有的标签
+	 * @return
+	 */
+	@RequestMapping(value = "/tagAllQuery" )
+	public Result<?> tagAllQuery() {
+		return tagService.tagAllQuery();
+	}
+	
+	/**
+	 * 通过ID查询
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/queryTagById" )
+	public Result<?> queryTagById(String id) {
+		int num=0;
+		if(id!=null && !id.equals("")) {
+			num=Integer.parseInt(id);
+		}
+		return tagService.queryTagById(num);
+	}
+	
+	
+	/**标签模糊查询
 	 * @param tagname
 	 * @return
 	 */
-	@RequestMapping(value = "/query" , method = RequestMethod.POST)
-	public Result<?> tagQuery(@RequestParam("tagname") String tagname) {
+	@RequestMapping(value = "/query")
+	public Result<?> tagQuery(String tagname) {
 		return tagService.tagQuery(tagname);
 	}
 	

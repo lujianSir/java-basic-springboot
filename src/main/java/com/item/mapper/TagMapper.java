@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.item.entity.TagBean;
+import com.item.tool.Result;
 
 @Repository
 public interface TagMapper {
@@ -18,8 +19,12 @@ public interface TagMapper {
 	//查询出标签与它的子标签
 	public List<TagBean> tagSubquery(String tagname);
 	
-	//查询出所有标签信息
+	//查询出所有标签信息(递归 父查询子)
 	public List<TagBean> tagAllQuery();
 	
+	//通过ID查询标签的信息
+	public TagBean queryTagById(int id);
 	
+	//通过ID查询父类
+	public  List<TagBean> queryTagFatherById(int id);
 }

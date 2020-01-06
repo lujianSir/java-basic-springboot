@@ -10,21 +10,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- 检测标签是否存在 -->
     <select id="tagExist"  parameterType="string" resultType="int">
-         select count(*) from alltype where typename = #{typeName}
+         select count(*) from alltype where typename = #{typename}
     </select>
     <!-- 根据标签输入模糊查询 -->
     <select id="tagQuery"  parameterType="string" resultType="com.item.entity.TagBean">
-         select * from alltype where typename   like  "%"#{typeName}"%"
+         select id from alltype where typename   like  "%"#{typename}"%"
     </select>
     
     <!-- 根据标签输入做子查询 -->
     <select id="tagSubquery"  parameterType="string" resultType="com.item.entity.TagBean">
-        SELECT * FROM alltype WHERE typeclass LIKE CONCAT((SELECT typeclass FROM alltype where typename=#{typeName}), '%')
+        SELECT * FROM alltype WHERE typeclass LIKE CONCAT((SELECT typeclass FROM alltype where typename=#{typename}), '%')
     </select>
     
      <!-- 查询所有标签 -->
     <select id="tagAllQuery"   resultType="com.item.entity.TagBean">
-        SELECT * FROM alltype 
+       	select * from (select id ,pid ,typeclass,typename from alltype where FIND_IN_SET(id,getChildList(0))) a ORDER BY typeclass
+    </select>
+    
+    <select id="queryTagById" resultType="com.item.entity.TagBean">
+    	select *from alltype where id=#{id}
+    </select>
+    
+    <select id="queryTagFatherById" resultType="com.item.entity.TagBean"> 	
+		select * from (select id,pid,typeclass,typename from alltype where FIND_IN_SET(id,getParList(#{id}))) a ORDER BY typeclass
     </select>
     
 </mapper>
