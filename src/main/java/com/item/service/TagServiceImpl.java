@@ -1,7 +1,9 @@
 package com.item.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +50,7 @@ public class TagServiceImpl implements TagService {
 	 */
 	@Override
 	public Result<?> tagQuery(String tagname) {
-		List<TagBean> tagBeans=new ArrayList<TagBean>();
+		List<Object> lists=new ArrayList<Object>();
 		try {			
 			List<TagBean> list=tagMapper.tagQuery(tagname);
 			if (list.size() > 0) {
@@ -56,15 +58,15 @@ public class TagServiceImpl implements TagService {
 					int id=0;
 					id=list.get(i).getId();
 					List<TagBean> t=tagMapper.queryTagFatherById(id);
-					tagBeans.addAll(t);
+					lists.add(t);
 				}							
-				return Result.success(tagBeans);
+				return Result.success(lists);
 			} else {
-				return Result.error(50010, "标签不存在");
+				return Result.error(200, "");
 			}
-		} catch (Exception e) {
+		} catch (Exception e) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 			LOG.error(e.getMessage());
-			return Result.error(500,"服务端异常");
+			return Result.error(200,"");
 		}
 	}
 	

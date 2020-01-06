@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <!-- 根据标签输入模糊查询 -->
     <select id="tagQuery"  parameterType="string" resultType="com.item.entity.TagBean">
-         select id from alltype where typename   like  "%"#{typename}"%"
+         select id from alltype where typename   like  "%"#{typename}"%" ORDER BY typeclass
     </select>
     
     <!-- 根据标签输入做子查询 -->
