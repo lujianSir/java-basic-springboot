@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -193,4 +194,15 @@ public class JavaTool {
 
  		return matrixImage;
  	}
+ 	
+ 	/**
+ 	 * 获取32位UUID
+ 	 * @return
+ 	 */
+ 	public static String getUserId() {
+ 		String uuid = UUID.randomUUID().toString(); 		
+ 		uuid = uuid.replace("-", "");        
+ 		return uuid;
+ 	}
+ 	
 }

@@ -70,7 +70,7 @@ public class FlowServiceImpl implements FlowService{
 					while(this.approveExist(approvenum)) {
 						approve.setApprovenum(approvenum);
 						approve.setStatus(0);
-						approve.setApprover(users.get(i).getUserName());
+						approve.setApprover(users.get(i).getUsername());
 						approve.setProposer(flow.getProposer());
 						approve.setFlownum(flownum);
 						flowMapper.approveAdd(approve);

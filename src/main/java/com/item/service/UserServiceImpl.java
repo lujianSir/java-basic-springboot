@@ -81,9 +81,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Result<?> userRegister(UserBean user) {
 		try {
-			if (this.userExist(user.getUserName())) {
+			if (this.userExist(user.getUsername())) {
 				return Result.error(50010, "用户已存在");
 			} else {
+				user.setPassword(JavaTool.string2MD5(user.getPassword()));
+				user.setUserid(JavaTool.getUserId());
+				if(user.getNickname()==null || user.getNickname().endsWith("")) {
+					user.setNickname(user.getUsername());
+				}
 				userMapper.userRegister(user);
 				return Result.success();
 			}

@@ -14,7 +14,7 @@ import com.item.entity.UserBean;
 public interface UserMapper {
 	
 	//判断用户是否存在
-	public int userExist(String name);
+	public int userExist(String username);
 	
 	//根据用户名密码登录
 	public UserBean userLogin(String username);
