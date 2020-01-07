@@ -20,8 +20,6 @@ public class UserMessage extends User implements Serializable{
 	//账户余额
 	private double account;
 	
-	private String remark;
-
 	public double getAccount() {
 		return account;
 	}
@@ -29,14 +27,5 @@ public class UserMessage extends User implements Serializable{
 	public void setAccount(double account) {
 		this.account = account;
 	}
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-	
 	
 }

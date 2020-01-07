@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		count(*) FROM userinfo WHERE username=#{username}
 	</select>
 
-	<!-- 用户登录 -->
+	<!-- 管理用户登录 -->
 	<select id="userLogin" parameterType="String" resultType="com.item.entity.UserBean">
 		SELECT 
 		<include refid="Base_Column_List"></include>
@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		userinfo WHERE username = #{username}
 	</select>
 
-	<!-- 用户注册 -->
+	<!-- 管理用户注册 -->
 	<insert id="userRegister" parameterType="com.item.entity.UserBean">
 		INSERT INTO userinfo
 		(`userid`,`nickname`,`username`,`password`,`status`,`role`,`phone`,`registertime`)
@@ -35,15 +35,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	
-		<!-- 根据用户名去查询用户信息	 -->
+		<!-- 根据管理用户名去查询用户信息	 -->
 	<select id="queryByName" parameterType="String" resultType="com.item.entity.UserBean">
 		select * from userinfo where username = #{username}
 	</select>
 	
 	
-	<!-- 根据角色身份去查询用户信息 -->
+	<!-- 根据管理角色身份去查询用户信息 -->
 	<select id="queryByRole" parameterType="int" resultType="com.item.entity.UserBean">
 		select * from userinfo where role > #{role}
 	</select>
+	
+	
+	
+	
+	
+	
+	<!-- 检测商城用户是否存在 -->
+	<select id="userMessageExist" parameterType="string" resultType="int">
+		SELECT
+		count(*) FROM usermessage WHERE username=#{username}
+	</select>
+	
+	<!-- 商城用户注册 -->
+	<insert id="userMessageRegister" parameterType="com.item.entity.UserMessage">
+		INSERT INTO usermessage
+		(`userid`,`nickname`,`username`,`password`,`status`,`registertime`,`account`)
+		VALUES
+		(#{userid},#{nickname},#{username},#{password},#{status},now(),#{account})
+	</insert>
+	
+	<!-- 根据商城用户名去查询用户信息	 -->
+	<select id="userMessageLogin" parameterType="String" resultType="com.item.entity.UserMessage">
+		select * from usermessage where username = #{username}
+	</select>
+	
 
 </mapper>
