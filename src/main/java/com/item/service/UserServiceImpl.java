@@ -63,15 +63,15 @@ public class UserServiceImpl implements UserService {
 					user.setPassword("");
 					return Result.success(user);
 				} else {
-					return Result.error(200, "用户密码错误");
+					return Result.error(50010, "用户密码错误");
 				}
 			} else {
-				return Result.error(200, "用户不存在");
+				return Result.error(50020, "用户不存在");
 			}
 			// 根据用户信息判断
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
-			return Result.error(200, "服务端异常");
+			return Result.error(500, "服务端异常");
 		}
 	}
 
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	public Result<?> userRegister(UserBean user) {
 		try {
 			if (this.userExist(user.getUsername())) {
-				return Result.error(200, "用户已存在");
+				return Result.error(50010, "用户已存在");
 			} else {
 				user.setPassword(JavaTool.string2MD5(user.getPassword()));
 				user.setUserid(JavaTool.getUserId());
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			// TODO: handle exception
 			LOG.error(e.getMessage());
-			return Result.error(200, "用户注册失败");
+			return Result.error(50020, "用户注册失败");
 		}
 
 	}
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
 		int num=userMapper.userMessageExist(userMessage.getUsername());
 		try {
 			if (num>0) {
-				return Result.error(200, "用户已存在");
+				return Result.error(50010, "用户已存在");
 			} else {
 				userMessage.setPassword(JavaTool.string2MD5(userMessage.getPassword()));
 				userMessage.setUserid(JavaTool.getUserId());
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			// TODO: handle exception
 			LOG.error(e.getMessage());
-			return Result.error(200, "用户注册失败");
+			return Result.error(50020, "用户注册失败");
 		}
 	}
 
@@ -140,10 +140,10 @@ public class UserServiceImpl implements UserService {
 					user.setPassword("");
 					return Result.success(user);
 				} else {
-					return Result.error(200, "用户密码错误");
+					return Result.error(50010, "用户密码错误");
 				}
 			} else {
-				return Result.error(200, "用户不存在");
+				return Result.error(50020, "用户不存在");
 			}
 			// 根据用户信息判断
 		} catch (Exception e) {
