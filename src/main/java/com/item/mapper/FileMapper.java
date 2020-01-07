@@ -38,7 +38,7 @@ public interface FileMapper {
 										@Param("endPrice")Double endPrice,@Param("orderBy")String orderBy);
 	
 	//通过ID查询模型的信息
-	public ModelBean queryModelById(String id);
+	public ModelBean queryModelById(int mid);
 	
 	//通过模型ID修改下载量以及评分
 	public void updateStarAndDownById(ModelBean model);

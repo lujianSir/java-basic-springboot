@@ -209,7 +209,11 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public Result<?> queryModelById(String mid) {
 		// TODO Auto-generated method stub
-		ModelBean modelBean =fileMapper.queryModelById(mid);		
+		int num=0;
+		if(mid!=null && !mid.equals("")) {
+			num=Integer.parseInt(mid);
+		}
+		ModelBean modelBean =fileMapper.queryModelById(num);		
 		return Result.success(modelBean);
 	}
 

@@ -130,6 +130,8 @@ public class FileController {
 	 * @param mid 模型ID
 	 * @return
 	 */
+	@RequestMapping("/queryModelById")
+	@ResponseBody
 	public Result<?> queryModelById(String  mid){
 		return fileService.queryModelById(mid);
 	}
