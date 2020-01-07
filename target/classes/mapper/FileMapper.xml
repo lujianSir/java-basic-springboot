@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`)
+		(`modelname`,`modelprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`)
 		VALUES
-		(#{modelname},#{modelprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},now())
+		(#{modelname},#{modelprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},now(),#{userid})
 	</insert>
 	
 	<!-- 模型信息修改 -->
@@ -54,6 +54,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="describe!=null and describe!=''">
 				describe=#{describe},
+			</if>
+			<if test="userid!=null and userid!=''">
+				userid=#{userid},
 			</if>
 		</set>	
 		where mid=#{mid}	
@@ -127,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 通过ID查询模型的信息 -->
 	<select id="queryModelById" resultType="com.item.entity.ModelBean">
-		select * from 	modelinfo where mid=#{mid}
+		select a.*,b.username from 	modelinfo a LEFT JOIN usermessage b  on a.userid=b.userid where  a.mid=#{mid}
 	</select>
 	
 	<!-- 通过ID更改星级以及下载量 -->

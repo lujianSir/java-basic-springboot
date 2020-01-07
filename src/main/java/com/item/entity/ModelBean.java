@@ -44,6 +44,13 @@ public class ModelBean implements Serializable{
 	//上传时间
 	private Date creatTime;
 	
+	//上传用户id
+	private String userid;
+	
+	//上传用户名称
+	private String username;
+	
+	
 	public String getModelname() {
 		return modelname;
 	}
@@ -120,5 +127,18 @@ public class ModelBean implements Serializable{
 	public void setCreatTime(Date creatTime) {
 		this.creatTime = creatTime;
 	}
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 	
 }

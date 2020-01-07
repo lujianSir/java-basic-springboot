@@ -63,7 +63,7 @@ public class FileController {
 	@RequestMapping("/model")
 	@ResponseBody
 	public Result<?> modelUpload(String modelname,String resource_two, String modelprice,String buildtype, String resource_one,
-			 String describe, String filePics, String fileModel,String mid) {
+			 String describe, String filePics, String fileModel,String mid,String userid) {
 		ModelBean model = new ModelBean();
 		model.setBuildtype(buildtype);
 		model.setDescribe(describe);
@@ -75,6 +75,7 @@ public class FileController {
 		model.setResource_two(resource_two);
 		model.setFilePics(filePics);
 		model.setFileModel(fileModel);
+		model.setUserid(userid);
 		if(mid!=null && !mid.equals("")) {
 			model.setMid(Integer.parseInt(mid));
 		}
