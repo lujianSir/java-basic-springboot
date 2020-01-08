@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`)
+		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`)
 		VALUES
-		(#{modelname},#{modelprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},now(),#{userid})
+		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},now(),#{userid})
 	</insert>
 	
 	<!-- 模型信息修改 -->
@@ -36,6 +36,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="modelprice!=null and modelprice!=''">
 				modelprice=#{modelprice},
+			</if>
+			<if test="unitprice!=null and unitprice!=''">
+				unitprice=#{unitprice},
 			</if>
 			<if test="buildtype!=null and buildtype!=''">
 				buildtype=#{buildtype},

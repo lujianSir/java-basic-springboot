@@ -18,8 +18,12 @@ public class ModelBean implements Serializable{
 	
 	// 模型名称
 	private String modelname;
-	// 模型价格
+	// 模型总价格
 	private double modelprice=-0.1;
+	
+	//模型单价
+	private double unitprice;
+	
 	// 构建类型
 	private String buildtype;
 	// 资源库类型一级
@@ -138,6 +142,12 @@ public class ModelBean implements Serializable{
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public double getUnitprice() {
+		return unitprice;
+	}
+	public void setUnitprice(double unitprice) {
+		this.unitprice = unitprice;
 	}
 	
 	

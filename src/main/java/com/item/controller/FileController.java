@@ -62,7 +62,7 @@ public class FileController {
 	 */
 	@RequestMapping("/model")
 	@ResponseBody
-	public Result<?> modelUpload(String modelname,String resource_two, String modelprice,String buildtype, String resource_one,
+	public Result<?> modelUpload(String modelname,String resource_two, String modelprice,String unitprice,String buildtype, String resource_one,
 			 String describe, String filePics, String fileModel,String mid,String userid) {
 		ModelBean model = new ModelBean();
 		model.setBuildtype(buildtype);
@@ -70,7 +70,10 @@ public class FileController {
 		model.setModelname(modelname);
 		if(modelprice!=null && !modelprice.equals("")) {
 			model.setModelprice(Double.parseDouble(modelprice));
-		}	
+		}
+		if(unitprice!=null && !unitprice.equals("")) {
+			model.setUnitprice(Double.parseDouble(unitprice));
+		}
 		model.setResource_one(resource_one);
 		model.setResource_two(resource_two);
 		model.setFilePics(filePics);
