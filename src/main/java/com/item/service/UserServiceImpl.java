@@ -10,6 +10,7 @@ import com.item.entity.UserMessage;
 import com.item.mapper.UserMapper;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
+import com.item.tool.TokenUtil;
 
 /**
  * 用户相关方法，用来处理相关功能业务
@@ -136,8 +137,10 @@ public class UserServiceImpl implements UserService {
 				UserMessage user = userMapper.userMessageLogin(username);
 				// 判断密码是否相等
 				if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
-					// 清除密码消息
-					user.setPassword("");
+					
+					String token = TokenUtil.sign(user);
+					// 将token放在密码带出去
+					user.setPassword(token);
 					return Result.success(user);
 				} else {
 					return Result.error(50010, "用户密码错误");
