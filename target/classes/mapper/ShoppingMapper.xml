@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace： 1. namespace必须和Mapper接口类路径一致 -->
+<mapper namespace="com.item.mapper.ShoppingMapper">
+	<!-- 2. id必须和Mapper接口方法名一致 -->
+	<!-- 3. parameterType必须和接口方法参数类型一致 -->
+	<!-- 4. resultType必须和接口方法返回值类型一致 -->
+
+	<!-- 添加购物车 -->
+	<insert id="insertShopCart" parameterType="com.item.entity.ShoppingCart">
+		insert into shoppingcart (sid,uid,mid,account,cycle,str1,str2,str3) 
+			values (#{sid},#{uid},#{mid},#{account},#{cycle},#{str1},#{str2},#{str3})		
+	</insert>
+	
+	<!-- 更改购物车信息 -->
+	<update id="updateShopCart" parameterType="com.item.entity.ShoppingCart">
+		update shoppingcart
+			<set>
+				<if test="account!=null and account!=''">
+					account=#{account},
+				</if>
+				<if test="cycle!=null and cycle!=''">
+					cycle=#{cycle},
+				</if>
+			
+			</set>
+		where sid=#{sid}
+	</update>
+	
+	<!-- 删除购物车信息 -->
+	<delete id="deleteShopCartById" parameterType="String">
+		delete from shoppingcart where sid=#{sid}
+	</delete>
+	
+	<!-- 查询购物车 -->
+	<select id="selectShoppingCartByUid" resultType="com.item.entity.ShoppingCart">
+			SELECT
+			a.sid,
+			a.uid,
+			a.mid,
+			a.account,
+			a.cycle, 
+			case when a.cycle = 1 then '一个月' when  a.cycle = 2 then '半年'  when  a.cycle = 3 then '一年' else '永久' end  cyclename,
+			b.filePics filePics,
+			b.modelname modelname,
+			case  when c.username IS NULL then d.username else   c.username end  username
+		FROM
+			shoppingcart a
+		LEFT JOIN modelinfo b ON a.mid = b.mid
+		LEFT JOIN usermessage c ON b.userid = c.userid
+		LEFT JOIN userinfo d ON b.userid = d.userid
+		WHERE
+			a.uid = #{uid}
+	</select>
+
+</mapper>

@@ -24,9 +24,15 @@ public class ShoppingCart implements Serializable{
 	//模型ID
 	private int mid;
 	
+	//模型名称
+	private String modelname;
+	
+	//模型图片
+	private String  filePics;
+	
 	//模型上传的人名称
 	private String username;
-	
+			
 	//模型价格(计算可得)
 	private double account;
 	
@@ -124,6 +130,23 @@ public class ShoppingCart implements Serializable{
 	public void setAccount(double account) {
 		this.account = account;
 	}
+
+	public String getFilePics() {
+		return filePics;
+	}
+
+	public void setFilePics(String filePics) {
+		this.filePics = filePics;
+	}
+
+	public String getModelname() {
+		return modelname;
+	}
+
+	public void setModelname(String modelname) {
+		this.modelname = modelname;
+	}
+	
 	
 	
 }
