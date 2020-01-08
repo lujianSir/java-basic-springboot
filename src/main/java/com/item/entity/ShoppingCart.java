@@ -42,6 +42,15 @@ public class ShoppingCart implements Serializable{
 	//显示周期
 	private String cyclename;
 	
+	//状态
+	private int status; //是否支付   0是未支付  1是支付
+
+	//开始时间
+	private Date starttime;
+	
+	//结束时间
+	private Date endtime;
+	
 	//预留字段一
 	private String str1;
 	
@@ -145,6 +154,30 @@ public class ShoppingCart implements Serializable{
 
 	public void setModelname(String modelname) {
 		this.modelname = modelname;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Date getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+
+	public Date getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
 	}
 	
 	
