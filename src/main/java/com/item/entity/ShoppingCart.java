@@ -34,7 +34,7 @@ public class ShoppingCart implements Serializable{
 	private String username;
 			
 	//模型价格(计算可得)
-	private double account;
+	private String account;
 	
 	//周期
 	private int cycle; //一个月 1  半年 2  一年 3  永久 4
@@ -132,14 +132,6 @@ public class ShoppingCart implements Serializable{
 		this.str3 = str3;
 	}
 
-	public double getAccount() {
-		return account;
-	}
-
-	public void setAccount(double account) {
-		this.account = account;
-	}
-
 	public String getFilePics() {
 		return filePics;
 	}
@@ -179,7 +171,13 @@ public class ShoppingCart implements Serializable{
 	public void setEndtime(Date endtime) {
 		this.endtime = endtime;
 	}
-	
-	
-	
+
+	public String getAccount() {
+		return account;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+			
 }

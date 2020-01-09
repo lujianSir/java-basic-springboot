@@ -17,7 +17,7 @@ public class OrderFlow implements Serializable{
 	private int orderstatus;  // 0 待付款  1 已支付
 	
 	//订单金额
-	private double orderamount;
+	private String orderamount;
 	
 	//购买用户
 	private String uid;
@@ -59,11 +59,13 @@ public class OrderFlow implements Serializable{
 		this.orderstatus = orderstatus;
 	}
 
-	public double getOrderamount() {
+
+
+	public String getOrderamount() {
 		return orderamount;
 	}
 
-	public void setOrderamount(double orderamount) {
+	public void setOrderamount(String orderamount) {
 		this.orderamount = orderamount;
 	}
 

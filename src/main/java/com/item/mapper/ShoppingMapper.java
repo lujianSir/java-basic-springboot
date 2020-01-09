@@ -49,4 +49,10 @@ public interface ShoppingMapper {
 	 * @return
 	 */
 	public int selectShoppingCartCountByUid(String uid);
+	
+	/**
+	 * 勾选算总数
+	 * @return
+	 */
+	public String selectShoppingCartBySid(String[] st);
 }

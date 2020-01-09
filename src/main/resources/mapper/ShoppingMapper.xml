@@ -65,5 +65,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectShoppingCartCountByUid" resultType="int">
 		select count(sid) from shoppingcart where status=0 and uid = #{uid}
 	</select>
-
+	
+	<!-- 查询勾选数量 -->
+	<select id="selectShoppingCartBySid" resultType="String">
+		select sum(account) from shoppingcart where sid in 
+		<foreach item="item"  index="index" collection="array" open="(" separator="," close=")">
+				#{item}
+		</foreach>
+	</select>
+	
 </mapper>

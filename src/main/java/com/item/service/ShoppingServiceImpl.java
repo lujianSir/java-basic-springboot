@@ -1,6 +1,7 @@
 package com.item.service;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,18 +30,19 @@ public class ShoppingServiceImpl implements ShoppingService{
 		// TODO Auto-generated method stub
 		ModelBean modelBean=fileMapper.queryModelById(shoppingCart.getMid());
 		// 0代表前台 1代表模型端
+		DecimalFormat df = new DecimalFormat("#.00");  
 		switch (shoppingCart.getCycle()) {
 		case 1://一个月
-			shoppingCart.setAccount(modelBean.getUnitprice());
+			shoppingCart.setAccount(df.format(modelBean.getUnitprice()));
 			break;
 		case 2://半年 九折
-			shoppingCart.setAccount(modelBean.getUnitprice()*6*0.9);
+			shoppingCart.setAccount(df.format(modelBean.getUnitprice()*6*0.9));
 			break;
 		case 3://一年 八折
-			shoppingCart.setAccount(modelBean.getUnitprice()*12*0.8);
+			shoppingCart.setAccount(df.format(modelBean.getUnitprice()*12*0.8));
 			break;
 		case 4://永久
-			shoppingCart.setAccount(modelBean.getModelprice());
+			shoppingCart.setAccount(df.format(modelBean.getModelprice()));
 			break;
 		default:
 			break;
@@ -76,6 +78,12 @@ public class ShoppingServiceImpl implements ShoppingService{
 	public int selectShoppingCartCountByUid(String uid) {
 		// TODO Auto-generated method stub
 		return shoppingMapper.selectShoppingCartCountByUid(uid);
+	}
+
+	@Override
+	public String selectShoppingCartBySid(String[] st) {
+		// TODO Auto-generated method stub
+		return shoppingMapper.selectShoppingCartBySid(st);
 	}
 
 }

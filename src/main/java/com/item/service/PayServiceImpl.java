@@ -65,7 +65,7 @@ public class PayServiceImpl implements PayService {
 		 AlipayBean alipayBean = new AlipayBean();
 		 alipayBean.setOut_trade_no(orderFlow.getOid());
 		 alipayBean.setSubject(orderFlow.getMname());
-		 alipayBean.setTotal_amount(orderFlow.getOrderamount()+"");
+		 alipayBean.setTotal_amount(orderFlow.getOrderamount());
 		 alipayBean.setBody("");
 		// 1、获得初始化的AlipayClient
         String serverUrl = AlipayProperties.getGatewayUrl();
@@ -89,6 +89,7 @@ public class PayServiceImpl implements PayService {
         // 3、请求支付宝进行付款，并获取支付结果
         String result = alipayClient.pageExecute(alipayRequest).getBody();
         // 返回付款信息
+        System.out.println(result);
         return result;
 	}
 

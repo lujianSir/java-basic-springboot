@@ -72,4 +72,21 @@ public class ShoppingController {
 		return Result.success(pageInfo);
 	}
 	
+	/**
+	 * 勾选
+	 * @param sids
+	 * @return
+	 */
+	@RequestMapping(value = "/selectShoppingCartBySid")
+	public Result<?> selectShoppingCartBySid(String sids) {	
+		if(sids!=null&& !sids.equals("")) {
+			String[] st=sids.split(",");
+			String num=shoppingService.selectShoppingCartBySid(st);
+			return Result.success(num);
+		}else {
+			return Result.error(500, "查询失败");
+		}
+		
+	}
+	
 }

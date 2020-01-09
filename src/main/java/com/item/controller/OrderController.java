@@ -1,5 +1,6 @@
 package com.item.controller;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.item.alipay.OrderFlow;
 import com.item.entity.ModelBean;
 import com.item.service.PayService;
 import com.item.tool.JavaTool;
+import com.item.tool.Result;
 
 /**
  * 订单接口
@@ -38,32 +40,33 @@ public class OrderController {
      * @return
      */
     @RequestMapping(value = "orderByOne")
-    public String orderByOne(String uid,String mid,String cycle,String paidmethod) throws AlipayApiException{    	
+    public Result<?> orderByOne(String uid,String mid,String cycle,String paidmethod) throws AlipayApiException{    	
     	ModelBean modelBean=payService.queryModelById(Integer.parseInt(mid));   
     	OrderFlow orderFlow =new OrderFlow();
     	orderFlow.setOid(JavaTool.getUserId());
     	orderFlow.setOrderstatus(0);  	
     	orderFlow.setUid(uid);
+    	DecimalFormat df = new DecimalFormat("#.00");  
 		switch (Integer.parseInt(cycle)) {
 		case 1://一个月
-			orderFlow.setOrderamount(modelBean.getUnitprice());
+			orderFlow.setOrderamount(df.format(modelBean.getUnitprice()));
 			break;
 		case 2://半年 九折
-			orderFlow.setOrderamount(modelBean.getUnitprice()*6*0.9);
+			orderFlow.setOrderamount(df.format(modelBean.getUnitprice()*6*0.9));
 			break;
 		case 3://一年 八折
-			orderFlow.setOrderamount(modelBean.getUnitprice()*12*0.8);
+			orderFlow.setOrderamount(df.format(modelBean.getUnitprice()*12*0.8));
 			break;
 		case 4://永久
-			orderFlow.setOrderamount(modelBean.getModelprice());
+			orderFlow.setOrderamount(df.format(modelBean.getModelprice()));
 			break;
 		default:
 			break;
 		}	
 		orderFlow.setMids(mid);		
 		orderFlow.setPaidmethod(Integer.parseInt(paidmethod));	
-		orderFlow.setMname(modelBean.getModelname());
-    	return payService.aliPayOne(orderFlow);
+		orderFlow.setMname(modelBean.getModelname());		
+    	return Result.success(payService.aliPayOne(orderFlow));
     }
     
     
