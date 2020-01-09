@@ -12,4 +12,5 @@ public interface PayService {
      * @throws AlipayApiException
      */
     String aliPay(AlipayBean alipayBean) throws AlipayApiException;
+    
 }

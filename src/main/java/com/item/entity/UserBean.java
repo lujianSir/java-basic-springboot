@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 
 /**
- * 商城用户
+ * 后台管理用户
  * @author Administrator
  *
  */

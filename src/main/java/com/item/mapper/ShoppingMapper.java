@@ -24,6 +24,13 @@ public interface ShoppingMapper {
 	public int updateShopCart(ShoppingCart shoppingCart);
 	
 	/**
+	 * 查询用户之前是否加入过此商品
+	 * @param shoppingCart
+	 * @return
+	 */
+	public  ShoppingCart selectShopCartByUidAndMid(ShoppingCart shoppingCart);
+	
+	/**
 	 * 通过ID删除购物车信息
 	 * @param sid
 	 * @return
@@ -35,4 +42,11 @@ public interface ShoppingMapper {
 	 * @return
 	 */
 	public List<ShoppingCart> selectShoppingCartByUid(String uid);
+	
+	/**
+	 * 查询购物车数量
+	 * @param uid
+	 * @return
+	 */
+	public int selectShoppingCartCountByUid(String uid);
 }

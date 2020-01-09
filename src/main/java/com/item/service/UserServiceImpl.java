@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
+import com.item.mapper.ShoppingMapper;
 import com.item.mapper.UserMapper;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private ShoppingMapper shoppingMapper;
 
 	/**
 	 * 判断用户是否存在 
@@ -61,7 +65,7 @@ public class UserServiceImpl implements UserService {
 				if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
  
 					// 清除密码消息
-					user.setPassword("");
+					user.setPassword("");								
 					return Result.success(user);
 				} else {
 					return Result.error(50010, "用户密码错误");
@@ -141,6 +145,8 @@ public class UserServiceImpl implements UserService {
 					String token = TokenUtil.sign(user);
 					// 将token放在密码带出去
 					user.setPassword(token);
+					int shoppCount=shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
+					user.setShoppCount(shoppCount);
 					return Result.success(user);
 				} else {
 					return Result.error(50010, "用户密码错误");

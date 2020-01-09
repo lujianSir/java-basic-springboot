@@ -44,7 +44,12 @@ public class ShoppingServiceImpl implements ShoppingService{
 			break;
 		default:
 			break;
-		}		
+		}	
+		
+		ShoppingCart shop=shoppingMapper.selectShopCartByUidAndMid(shoppingCart);
+		if(shop!=null) {
+			shoppingCart.setSid(shop.getSid());
+		}	
 		if(shoppingCart.getSid()!=null && !shoppingCart.getSid().equals("")) {
 			return shoppingMapper.updateShopCart(shoppingCart);
 		}else{
@@ -65,6 +70,12 @@ public class ShoppingServiceImpl implements ShoppingService{
 	public List<ShoppingCart> selectShoppingCartByUid(String uid) {
 		// TODO Auto-generated method stub
 		return shoppingMapper.selectShoppingCartByUid(uid);
+	}
+
+	@Override
+	public int selectShoppingCartCountByUid(String uid) {
+		// TODO Auto-generated method stub
+		return shoppingMapper.selectShoppingCartCountByUid(uid);
 	}
 
 }

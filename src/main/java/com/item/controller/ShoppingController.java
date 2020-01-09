@@ -34,8 +34,9 @@ public class ShoppingController {
 	@RequestMapping(value = "/insertOrUpdateShopCart")
 	public Result<?> insertOrUpdateShopCart(ShoppingCart shoppingCart) {	
 		int num=shoppingService.insertOrUpdateShopCart(shoppingCart);
+		int totalShop=shoppingService.selectShoppingCartCountByUid(shoppingCart.getUid());
 		if(num>0) {
-			return	Result.success();
+			return	Result.success(totalShop);
 		}else {
 			return Result.error(500, "服务端错误");
 		}	

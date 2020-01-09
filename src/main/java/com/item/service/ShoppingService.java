@@ -25,4 +25,10 @@ public interface ShoppingService {
 	 * @return
 	 */
 	public List<ShoppingCart> selectShoppingCartByUid(String uid);
+	/**
+	 * 查询购物车数量
+	 * @param uid
+	 * @return
+	 */
+	public int selectShoppingCartCountByUid(String uid);
 }

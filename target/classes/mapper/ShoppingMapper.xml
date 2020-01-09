@@ -29,6 +29,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where sid=#{sid}
 	</update>
 	
+	<!-- 查询商品之前是否加入 -->
+	<select id="selectShopCartByUidAndMid" resultType="com.item.entity.ShoppingCart">
+		select * from shoppingcart where uid=#{uid} and mid=#{mid}
+	</select>
+	
+	
 	<!-- 删除购物车信息 -->
 	<delete id="deleteShopCartById" parameterType="String">
 		delete from shoppingcart where sid=#{sid}
@@ -53,6 +59,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			LEFT JOIN userinfo d ON b.userid = d.userid
 			WHERE
 				a.status=0 and  a.uid = #{uid}
+	</select>
+	
+	<!-- 查询购物车数量 -->
+	<select id="selectShoppingCartCountByUid" resultType="int">
+		select count(sid) from shoppingcart where status=0 and uid = #{uid}
 	</select>
 
 </mapper>
