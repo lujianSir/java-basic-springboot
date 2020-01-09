@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace： 1. namespace必须和Mapper接口类路径一致 -->
+<mapper namespace="com.item.mapper.PayMapper">
+   
+   <insert id="insertOrderFlow" parameterType="com.item.alipay.OrderFlow">
+   		insert into orderflow (oid,orderstatus,orderamount,mids,createtime,paidmethod,uid) values
+   			(#{oid},#{orderstatus},#{orderamount},#{mids},now(),#{paidmethod},#{uid})
+   </insert> 
+</mapper>

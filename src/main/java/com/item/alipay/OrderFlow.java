@@ -19,9 +19,15 @@ public class OrderFlow implements Serializable{
 	//订单金额
 	private double orderamount;
 	
+	//购买用户
+	private String uid;
+	
 	//模型ID
 	private String mids;
-
+	
+	//模型名称
+	private String mname;
+	
 	//订单创建时间
 	private Date createtime;
 	
@@ -109,7 +115,21 @@ public class OrderFlow implements Serializable{
 		this.paidmethod = paidmethod;
 	}
 
-	
-	
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String getMname() {
+		return mname;
+	}
+
+	public void setMname(String mname) {
+		this.mname = mname;
+	}
+		
 	
 }

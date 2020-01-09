@@ -48,10 +48,11 @@ public class ShoppingController {
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteShopCartById")
-	public Result<?> deleteShopCartById(String sid) {	
+	public Result<?> deleteShopCartById(String sid,String uid) {	
 		int num=shoppingService.deleteShopCartById(sid);
+		int totalShop=shoppingService.selectShoppingCartCountByUid(uid);
 		if(num>0) {
-			return	Result.success();
+			return	Result.success(totalShop);
 		}else {
 			return Result.error(500, "服务端错误");
 		}	

@@ -15,7 +15,10 @@ import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.item.alipay.AlipayBean;
 import com.item.alipay.AlipayProperties;
+import com.item.alipay.OrderFlow;
+import com.item.entity.ModelBean;
 import com.item.service.PayService;
+import com.item.tool.JavaTool;
 
 /**
  * 订单接口
@@ -30,6 +33,41 @@ public class OrderController {
     @Autowired
     private PayService payService;
         
+    /**
+     * 单个支付
+     * @return
+     */
+    @RequestMapping(value = "orderByOne")
+    public String orderByOne(String uid,String mid,String cycle,String paidmethod) throws AlipayApiException{    	
+    	ModelBean modelBean=payService.queryModelById(Integer.parseInt(mid));   
+    	OrderFlow orderFlow =new OrderFlow();
+    	orderFlow.setOid(JavaTool.getUserId());
+    	orderFlow.setOrderstatus(0);  	
+    	orderFlow.setUid(uid);
+		switch (Integer.parseInt(cycle)) {
+		case 1://一个月
+			orderFlow.setOrderamount(modelBean.getUnitprice());
+			break;
+		case 2://半年 九折
+			orderFlow.setOrderamount(modelBean.getUnitprice()*6*0.9);
+			break;
+		case 3://一年 八折
+			orderFlow.setOrderamount(modelBean.getUnitprice()*12*0.8);
+			break;
+		case 4://永久
+			orderFlow.setOrderamount(modelBean.getModelprice());
+			break;
+		default:
+			break;
+		}	
+		orderFlow.setMids(mid);		
+		orderFlow.setPaidmethod(Integer.parseInt(paidmethod));	
+		orderFlow.setMname(modelBean.getModelname());
+    	return payService.aliPayOne(orderFlow);
+    }
+    
+    
+    
     /**
      * 阿里支付
      * @param tradeNo
