@@ -29,7 +29,7 @@ public class OrderFlow implements Serializable{
 	private Date paidtime;
 	
 	//支付方式
-	private String paidmethod;//支付方式          
+	private int  paidmethod;//支付方式       1 支付宝  2 微信  3商城币    
 	
 	//预留字段
 	private String str1;
@@ -101,13 +101,15 @@ public class OrderFlow implements Serializable{
 		this.str2 = str2;
 	}
 
-	public String getPaidmethod() {
+	public int getPaidmethod() {
 		return paidmethod;
 	}
 
-	public void setPaidmethod(String paidmethod) {
+	public void setPaidmethod(int paidmethod) {
 		this.paidmethod = paidmethod;
 	}
+
+	
 	
 	
 }

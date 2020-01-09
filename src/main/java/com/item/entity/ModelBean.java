@@ -48,6 +48,8 @@ public class ModelBean implements Serializable{
 	//上传时间
 	private Date creatTime;
 	
+	private String creatTimeName;
+	
 	//上传用户id
 	private String userid;
 	
@@ -148,6 +150,12 @@ public class ModelBean implements Serializable{
 	}
 	public void setUnitprice(double unitprice) {
 		this.unitprice = unitprice;
+	}
+	public String getCreatTimeName() {
+		return creatTimeName;
+	}
+	public void setCreatTimeName(String creatTimeName) {
+		this.creatTimeName = creatTimeName;
 	}
 	
 	

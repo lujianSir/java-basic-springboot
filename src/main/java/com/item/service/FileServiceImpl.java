@@ -1,6 +1,7 @@
 package com.item.service;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -213,7 +214,11 @@ public class FileServiceImpl implements FileService {
 		if(mid!=null && !mid.equals("")) {
 			num=Integer.parseInt(mid);
 		}
-		ModelBean modelBean =fileMapper.queryModelById(num);		
+		
+		ModelBean modelBean =fileMapper.queryModelById(num);	
+		String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(modelBean.getCreatTime());
+		modelBean.setCreatTimeName(dateStr);
+		modelBean.setFileModel("");
 		return Result.success(modelBean);
 	}
 
