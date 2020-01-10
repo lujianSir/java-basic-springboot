@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
 					user.setNickname(user.getUsername());
 				}
 				user.setStatus(1);
+				user.setRegistertime(JavaTool.getCurrent());
 				userMapper.userRegister(user);
 				return Result.success();
 			}
@@ -121,6 +122,7 @@ public class UserServiceImpl implements UserService {
 					userMessage.setNickname(userMessage.getUsername());
 				}
 				userMessage.setStatus(1);
+				userMessage.setRegistertime(JavaTool.getCurrent());
 				userMapper.userMessageRegister(userMessage);
 				return Result.success();
 			}

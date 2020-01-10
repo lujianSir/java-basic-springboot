@@ -26,7 +26,7 @@ public class FileBean implements Serializable{
 	// 文件路径
 	private String fileurl;
 	// 上传时间
-	private Date uploadtime;
+	private String uploadtime;
 	// 上传角色身份  目前两个  0代表前台   1代表模型端
 	private int role;
 	
@@ -42,10 +42,11 @@ public class FileBean implements Serializable{
 	public void setFileurl(String fileurl) {
 		this.fileurl = fileurl;
 	}
-	public Date getUploadtime() {
+	
+	public String getUploadtime() {
 		return uploadtime;
 	}
-	public void setUploadtime(Date uploadtime) {
+	public void setUploadtime(String uploadtime) {
 		this.uploadtime = uploadtime;
 	}
 	public int getRole() {

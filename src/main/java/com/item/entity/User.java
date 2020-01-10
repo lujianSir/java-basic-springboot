@@ -15,7 +15,7 @@ public class User {
 		//用户状态
 		private int status; //0是关闭  1是开启  默认开启
 		// 注册时间
-		private Date registertime;
+		private String registertime;
 		
 		
 		public String getUserid() {
@@ -44,17 +44,18 @@ public class User {
 		public void setStatus(int status) {
 			this.status = status;
 		}
-		public Date getRegistertime() {
-			return registertime;
-		}
-		public void setRegistertime(Date registertime) {
-			this.registertime = registertime;
-		}
+		
 		public String getNickname() {
 			return nickname;
 		}
 		public void setNickname(String nickname) {
 			this.nickname = nickname;
+		}
+		public String getRegistertime() {
+			return registertime;
+		}
+		public void setRegistertime(String registertime) {
+			this.registertime = registertime;
 		}
 		
 		

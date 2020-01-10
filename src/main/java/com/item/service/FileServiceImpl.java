@@ -20,6 +20,7 @@ import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
 import com.item.mapper.FileMapper;
+import com.item.tool.JavaTool;
 import com.item.tool.Result;
 
 @Service
@@ -85,6 +86,7 @@ public class FileServiceImpl implements FileService {
 					filename=str;
 				}
 				fileinfo.setId(filename);
+				fileinfo.setUploadtime(JavaTool.getCurrent());
 				fileMapper.fileinfoAdd(fileinfo);
 				return Result.success(filename);
 			} catch (Exception e) {

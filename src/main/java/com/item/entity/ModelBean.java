@@ -46,7 +46,7 @@ public class ModelBean implements Serializable{
 	private int starclass;
 	
 	//上传时间
-	private Date creatTime;
+	private String creatTime;
 	
 	private String creatTimeName;
 	
@@ -127,10 +127,11 @@ public class ModelBean implements Serializable{
 	public void setStarclass(int starclass) {
 		this.starclass = starclass;
 	}
-	public Date getCreatTime() {
+	
+	public String getCreatTime() {
 		return creatTime;
 	}
-	public void setCreatTime(Date creatTime) {
+	public void setCreatTime(String creatTime) {
 		this.creatTime = creatTime;
 	}
 	public String getUserid() {

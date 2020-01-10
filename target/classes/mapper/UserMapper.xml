@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO userinfo
 		(`userid`,`nickname`,`username`,`password`,`status`,`role`,`phone`,`registertime`)
 		VALUES
-		(#{userid},#{nickname},#{username},#{password},#{status},#{role},#{phone},now())
+		(#{userid},#{nickname},#{username},#{password},#{status},#{role},#{phone},#{registertime})
 	</insert>
 	
 	
@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO usermessage
 		(`userid`,`nickname`,`username`,`password`,`status`,`registertime`,`account`)
 		VALUES
-		(#{userid},#{nickname},#{username},#{password},#{status},now(),#{account})
+		(#{userid},#{nickname},#{username},#{password},#{status},#{registertime},#{account})
 	</insert>
 	
 	<!-- 根据商城用户名去查询用户信息	 -->

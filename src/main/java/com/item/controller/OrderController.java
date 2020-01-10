@@ -83,6 +83,7 @@ public class OrderController {
 		orderFlow.setMname(modelBean.getModelname());
 		orderFlow.setStr1("1");//走单个支付
 		orderFlow.setCycle(Integer.parseInt(cycle));
+		orderFlow.setCreatetime(JavaTool.getCurrent());
     	return Result.success(payService.aliPayOne(orderFlow));
     }
     
@@ -155,6 +156,7 @@ public class OrderController {
 			OrderFlow orderFlow=payService.selectOrderFlowByOid(out_trade_no);
 			orderFlow.setOrderstatus(1);
 			//修改订单信息
+			orderFlow.setPaidtime(JavaTool.getCurrent());
 			payService.updateOrderFlow(orderFlow);
 			
 			//批量添加流水信息

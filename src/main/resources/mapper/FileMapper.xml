@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO fileinfo
 		(`id`,`catalog`,`fileurl`,`role`,`uploadtime`)
 		VALUES
-		(#{id},#{catalog},#{fileurl},#{role},now())
+		(#{id},#{catalog},#{fileurl},#{role},#{uploadtime})
 	</insert>
 
 	<!-- 录入模型信息 -->
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO modelinfo
 		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`)
 		VALUES
-		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},now(),#{userid})
+		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid})
 	</insert>
 	
 	<!-- 模型信息修改 -->

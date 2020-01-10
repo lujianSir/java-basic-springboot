@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    
    <insert id="insertOrderFlow" parameterType="com.item.alipay.OrderFlow">
    		insert into orderflow (oid,orderstatus,orderamount,mids,createtime,paidmethod,uid,str1,str2,cycle) values
-   			(#{oid},#{orderstatus},#{orderamount},#{mids},now(),#{paidmethod},#{uid},#{str1},#{str2},#{cycle})
+   			(#{oid},#{orderstatus},#{orderamount},#{mids},#{createtime},#{paidmethod},#{uid},#{str1},#{str2},#{cycle})
    </insert> 
    
    <!-- 查询订单列表 -->
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    					orderstatus=#{orderstatus},
    				</if>
    				<if test="paidtime!=null and paidtime!=''">
-   					paidtime=now(),
+   					paidtime={paidtime},
    				</if>
    			</set>
    			where oid=#{oid}

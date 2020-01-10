@@ -32,10 +32,10 @@ public class OrderFlow implements Serializable{
 	private String mname;
 	
 	//订单创建时间
-	private Date createtime;
+	private String createtime;
 	
 	//支付时间
-	private Date paidtime;
+	private String paidtime;
 	
 	//支付方式
 	private int  paidmethod;//支付方式       1 支付宝  2 微信  3商城币    
@@ -87,19 +87,20 @@ public class OrderFlow implements Serializable{
 		this.mids = mids;
 	}
 
-	public Date getCreatetime() {
+	
+	public String getCreatetime() {
 		return createtime;
 	}
 
-	public void setCreatetime(Date createtime) {
+	public void setCreatetime(String createtime) {
 		this.createtime = createtime;
 	}
 
-	public Date getPaidtime() {
+	public String getPaidtime() {
 		return paidtime;
 	}
 
-	public void setPaidtime(Date paidtime) {
+	public void setPaidtime(String paidtime) {
 		this.paidtime = paidtime;
 	}
 

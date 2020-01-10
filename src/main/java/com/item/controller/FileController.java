@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
 import com.item.service.FileService;
+import com.item.tool.JavaTool;
 import com.item.tool.Result;
 /**
  * 文件上传、模型上传
@@ -79,6 +80,7 @@ public class FileController {
 		model.setFilePics(filePics);
 		model.setFileModel(fileModel);
 		model.setUserid(userid);
+		model.setCreatTime(JavaTool.getCurrent());
 		if(mid!=null && !mid.equals("")) {
 			model.setMid(Integer.parseInt(mid));
 		}

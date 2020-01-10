@@ -46,10 +46,10 @@ public class ShoppingCart implements Serializable{
 	private int status; //是否支付   0是未支付  1是支付
 
 	//开始时间
-	private Date starttime;
+	private String starttime;
 	
 	//结束时间
-	private Date endtime;
+	private String endtime;
 	
 	//预留字段一
 	private String str1;
@@ -156,19 +156,19 @@ public class ShoppingCart implements Serializable{
 		this.status = status;
 	}
 
-	public Date getStarttime() {
+	public String getStarttime() {
 		return starttime;
 	}
 
-	public void setStarttime(Date starttime) {
+	public void setStarttime(String starttime) {
 		this.starttime = starttime;
 	}
 
-	public Date getEndtime() {
+	public String getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(Date endtime) {
+	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
 
