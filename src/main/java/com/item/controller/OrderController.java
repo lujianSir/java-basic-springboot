@@ -1,23 +1,31 @@
 package com.item.controller;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.item.alipay.AlipayBean;
 import com.item.alipay.AlipayProperties;
+import com.item.alipay.FlowModel;
 import com.item.alipay.OrderFlow;
 import com.item.entity.ModelBean;
+import com.item.service.FileService;
+import com.item.service.FlowServiceImpl;
 import com.item.service.PayService;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
@@ -28,18 +36,25 @@ import com.item.tool.Result;
  * @author Louis
  * @date Dec 12, 2018
  */
-@RestController()
+
+@Controller
 @RequestMapping("order")
 public class OrderController {
 
     @Autowired
     private PayService payService;
+    
+    @Autowired
+    private FileService fileService;
         
+    private static final Logger log = LoggerFactory.getLogger(FlowServiceImpl.class);
+    
     /**
      * 单个支付
      * @return
      */
     @RequestMapping(value = "orderByOne")
+    @ResponseBody
     public Result<?> orderByOne(String uid,String mid,String cycle,String paidmethod) throws AlipayApiException{    	
     	ModelBean modelBean=payService.queryModelById(Integer.parseInt(mid));   
     	OrderFlow orderFlow =new OrderFlow();
@@ -65,7 +80,9 @@ public class OrderController {
 		}	
 		orderFlow.setMids(mid);		
 		orderFlow.setPaidmethod(Integer.parseInt(paidmethod));	
-		orderFlow.setMname(modelBean.getModelname());		
+		orderFlow.setMname(modelBean.getModelname());
+		orderFlow.setStr1("1");//走单个支付
+		orderFlow.setCycle(Integer.parseInt(cycle));
     	return Result.success(payService.aliPayOne(orderFlow));
     }
     
@@ -81,6 +98,7 @@ public class OrderController {
      * @throws AlipayApiException
      */
     @RequestMapping(value = "alipay")
+    @ResponseBody
     public String alipay(String outTradeNo, String subject, String totalAmount, String body) throws AlipayApiException {
         AlipayBean alipayBean = new AlipayBean();
         alipayBean.setOut_trade_no(outTradeNo);
@@ -95,54 +113,78 @@ public class OrderController {
      * @return
      */
     @RequestMapping(value = "notifyUrl")
-    public String notifyUrl(HttpServletRequest request,HttpServletResponse response) {   	
-    	 Map<String, String> params = new HashMap<String, String>();  
-    	//1.从支付宝回调的request域中取值
-    	 Map<String, String[]> requestParams = request.getParameterMap();
-    	 for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {  
-    	        String name = iter.next();  
-    	        String[] values = requestParams.get(name);  
-    	        String valueStr = "";  
-    	        for (int i = 0; i < values.length; i++) {  
-    	            valueStr = (i == values.length - 1) ? valueStr + values[i] : valueStr + values[i] + ",";  
-    	        }  
-    	        // 乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化  
-    	        // valueStr = new String(valueStr.getBytes("ISO-8859-1"), "gbk");  
-    	        params.put(name, valueStr);  
-    	    }  
-    	 //2.封装必须参数
-	    String out_trade_no = request.getParameter("out_trade_no");            // 商户订单号  
-	    String orderType = request.getParameter("body");                    // 订单内容          
-	    String tradeStatus = request.getParameter("trade_status");            //交易状态 
-	    //3.签名验证(对支付宝返回的数据验证，确定是支付宝返回的)
-	    boolean signVerified = false;  
-	    try {  
-	        //3.1调用SDK验证签名
-	        signVerified = AlipaySignature.rsaCheckV1(params, AlipayProperties.getPublicKey(), AlipayProperties.getCharset(), AlipayProperties.getSignType());   
-	    } catch (AlipayApiException e) {  
-	        e.printStackTrace();  
-	    }  
-	    //4.对验签进行处理
-	    if (signVerified) {    //验签通过   
-//	        if(tradeStatus.equals("TRADE_SUCCESS")) {    //只处理支付成功的订单: 修改交易表状态,支付成功
-//	            Trade trade = tradeService.selectByOrderNumber(out_trade_no);
-//	            trade.setTradeStatus((byte)3);            //支付完成
-//	            int returnResult = tradeService.updateByPrimaryKeySelective(trade);    //更新交易表中状态
-//	            if(returnResult>0){
-//	                 return "success";
-//	            }else{
-//	                 return "fail";
-//	            }
-//	        }else{
-//	            return "fail";
-//	        }
-	    } else {  //验签不通过   
-	        System.err.println("验签失败");
-	        return "fail";
-	    }
-	    
-    	System.out.println("----notify-----");
-    	return "notifyUrl";
+    @ResponseBody
+    public String notifyUrl(HttpServletRequest request,HttpServletResponse response)throws Exception {   	
+    	log.info("支付成功, 进入异步通知接口...");
+    	 
+		//获取支付宝POST过来反馈信息
+		Map<String,String> params = new HashMap<String,String>();
+		Map<String,String[]> requestParams = request.getParameterMap();
+		for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) {
+				valueStr = (i == values.length - 1) ? valueStr + values[i]
+						: valueStr + values[i] + ",";
+			}
+			//乱码解决，这段代码在出现乱码时使用
+//			valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+			params.put(name, valueStr);
+		}
+ 
+		boolean signVerified = AlipaySignature.rsaCheckV1(params,AlipayProperties.getPublicKey(), AlipayProperties.getCharset(), AlipayProperties.getSignType());//调用SDK验证签名
+ 
+		//——请在这里编写您的程序（以下代码仅作参考）——
+		
+		/* 实际验证过程建议商户务必添加以下校验：
+		1、需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号，
+		2、判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额），
+		3、校验通知中的seller_id（或者seller_email) 是否为out_trade_no这笔单据的对应的操作方（有的时候，一个商户可能有多个seller_id/seller_email）
+		4、验证app_id是否为该商户本身。
+		*/
+		if(signVerified) {
+			//商户订单号
+			String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
+			//支付宝交易号
+			String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
+			//付款金额
+			String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"),"UTF-8");
+			//通过订单号查询订单信息
+			OrderFlow orderFlow=payService.selectOrderFlowByOid(out_trade_no);
+			orderFlow.setOrderstatus(1);
+			//修改订单信息
+			payService.updateOrderFlow(orderFlow);
+			
+			//批量添加流水信息
+			String str1=orderFlow.getStr1();
+			List<FlowModel> list =new ArrayList<FlowModel>();
+			if(str1.equals("1")) {//单个支付
+				FlowModel flowModel=new FlowModel();
+				flowModel.setFid(trade_no);
+				flowModel.setUid(orderFlow.getUid());
+				flowModel.setMid(Integer.parseInt(str1));
+				flowModel.setEndaccount(total_amount);
+				flowModel.setCycle(orderFlow.getCycle());
+												
+			}else if(str1.equals("2")){//多个支付 走购物车
+				
+			}
+			String mids=orderFlow.getMids();
+			String[] strs=mids.split(",");			
+			
+			for(int i=0;i<strs.length;i++) {
+				
+							
+			}
+			
+			
+		}else {
+			log.info("支付, 验签失败...");
+		}
+ 
+		return "success";
+
     }
     
     
@@ -151,9 +193,47 @@ public class OrderController {
      * @return
      */
     @RequestMapping(value = "returnUrl")
-    public String returnUrl() {
-    	System.out.println("----return-----");
-    	return "returnUrl";
+    @ResponseBody
+    public String returnUrl(HttpServletRequest request, HttpServletRequest response) throws Exception{
+    	log.info("支付成功, 进入同步通知接口...");
+    	 
+		//获取支付宝GET过来反馈信息
+		Map<String,String> params = new HashMap<String,String>();
+		Map<String,String[]> requestParams = request.getParameterMap();
+		for (Iterator<String> iter = requestParams.keySet().iterator(); iter.hasNext();) {
+			String name = (String) iter.next();
+			String[] values = (String[]) requestParams.get(name);
+			String valueStr = "";
+			for (int i = 0; i < values.length; i++) {
+				valueStr = (i == values.length - 1) ? valueStr + values[i]
+						: valueStr + values[i] + ",";
+			}
+			//乱码解决，这段代码在出现乱码时使用
+			valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+			params.put(name, valueStr);
+		}
+ 
+		boolean signVerified = false;
+		try{
+			signVerified = AlipaySignature.rsaCheckV1(params,AlipayProperties.getPublicKey(), AlipayProperties.getCharset(), AlipayProperties.getSignType()); //调用SDK验证签名
+		}catch (Exception e) {
+			System.out.println("SDK验证签名出现异常");
+		}
+ 	
+		if(signVerified) {
+			//商户订单号
+			String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"),"UTF-8");
+ 
+			//支付宝交易号
+			String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
+ 
+			//付款金额
+			String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"),"UTF-8");
+ 
+		}else {
+			log.info("支付, 验签失败...");
+		}
+		return "支付你好";
     }
     
 }

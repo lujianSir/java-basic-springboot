@@ -6,7 +6,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.item.mapper.PayMapper">
    
    <insert id="insertOrderFlow" parameterType="com.item.alipay.OrderFlow">
-   		insert into orderflow (oid,orderstatus,orderamount,mids,createtime,paidmethod,uid) values
-   			(#{oid},#{orderstatus},#{orderamount},#{mids},now(),#{paidmethod},#{uid})
+   		insert into orderflow (oid,orderstatus,orderamount,mids,createtime,paidmethod,uid,str1,str2,cycle) values
+   			(#{oid},#{orderstatus},#{orderamount},#{mids},now(),#{paidmethod},#{uid},#{str1},#{str2},#{cycle})
    </insert> 
+   
+   <!-- 查询订单列表 -->
+   <select id="selectOrderFlowByOid" resultType="com.item.alipay.OrderFlow">
+   		select * from orderflow where oid=#{oid}
+   </select>
+   
+   <!-- 修改订单 -->
+   <update id="updateOrderFlow" parameterType="com.item.alipay.OrderFlow">
+   		update orderflow 
+   			<set>
+   				<if test="orderstatus!=null and orderstatus!=''">
+   					orderstatus=#{orderstatus},
+   				</if>
+   				<if test="paidtime!=null and paidtime!=''">
+   					paidtime=now(),
+   				</if>
+   			</set>
+   			where oid=#{oid}
+   </update>
+   
+   <!-- 添加流水信息 -->  
+   <insert id="insertFlowModel" parameterType="com.item.alipay.FlowModel">
+   		insert into flowmodel (fid ,uid,mid,endaccount,cycle,starttime,endtime)  values(#{fid},#{uid},#{mid},#{endaccount},#{cycle},#{starttime},#{endtime})
+   </insert>
 </mapper>

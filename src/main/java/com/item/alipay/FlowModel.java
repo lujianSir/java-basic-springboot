@@ -25,7 +25,7 @@ public class FlowModel implements Serializable{
 	private int mid;
 	
 	//最终交易的钱
-	private double endaccount;
+	private String endaccount;
 	
 	//周期
 	private int cycle; //一个月 1  半年 2  一年 3  永久 4
@@ -35,5 +35,63 @@ public class FlowModel implements Serializable{
 		
 	//结束时间
 	private Date endtime;
+
+	public String getFid() {
+		return fid;
+	}
+
+	public void setFid(String fid) {
+		this.fid = fid;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public int getMid() {
+		return mid;
+	}
+
+	public void setMid(int mid) {
+		this.mid = mid;
+	}
+
+
+	public String getEndaccount() {
+		return endaccount;
+	}
+
+	public void setEndaccount(String endaccount) {
+		this.endaccount = endaccount;
+	}
+
+	public int getCycle() {
+		return cycle;
+	}
+
+	public void setCycle(int cycle) {
+		this.cycle = cycle;
+	}
+
+	public Date getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+
+	public Date getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+	
 	
 }

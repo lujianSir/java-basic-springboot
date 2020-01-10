@@ -11,6 +11,7 @@ import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.item.alipay.AlipayBean;
 import com.item.alipay.AlipayProperties;
+import com.item.alipay.FlowModel;
 import com.item.alipay.OrderFlow;
 import com.item.entity.ModelBean;
 import com.item.mapper.FileMapper;
@@ -91,6 +92,24 @@ public class PayServiceImpl implements PayService {
         // 返回付款信息
         System.out.println(result);
         return result;
+	}
+
+	@Override
+	public OrderFlow selectOrderFlowByOid(String oid) {
+		// TODO Auto-generated method stub
+		return payMapper.selectOrderFlowByOid(oid);
+	}
+
+	@Override
+	public void updateOrderFlow(OrderFlow orderFlow) {
+		// TODO Auto-generated method stub
+		payMapper.updateOrderFlow(orderFlow);
+	}
+
+	@Override
+	public void insertFlowModel(FlowModel flowModel) {
+		// TODO Auto-generated method stub	
+		payMapper.insertFlowModel(flowModel);
 	}
 
 }

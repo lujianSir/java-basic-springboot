@@ -25,6 +25,9 @@ public class OrderFlow implements Serializable{
 	//模型ID
 	private String mids;
 	
+	//周期
+	private int cycle;
+	
 	//模型名称
 	private String mname;
 	
@@ -60,6 +63,13 @@ public class OrderFlow implements Serializable{
 	}
 
 
+	public int getCycle() {
+		return cycle;
+	}
+
+	public void setCycle(int cycle) {
+		this.cycle = cycle;
+	}
 
 	public String getOrderamount() {
 		return orderamount;
