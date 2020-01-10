@@ -27,26 +27,26 @@ public class ShoppingServiceImpl implements ShoppingService{
 	
 	@Override
 	public int insertOrUpdateShopCart(ShoppingCart shoppingCart) {
-		// TODO Auto-generated method stub
-		ModelBean modelBean=fileMapper.queryModelById(shoppingCart.getMid());
-		// 0代表前台 1代表模型端
-		DecimalFormat df = new DecimalFormat("#.00");  
-		switch (shoppingCart.getCycle()) {
-		case 1://一个月
-			shoppingCart.setAccount(df.format(modelBean.getUnitprice()));
-			break;
-		case 2://半年 九折
-			shoppingCart.setAccount(df.format(modelBean.getUnitprice()*6*0.9));
-			break;
-		case 3://一年 八折
-			shoppingCart.setAccount(df.format(modelBean.getUnitprice()*12*0.8));
-			break;
-		case 4://永久
-			shoppingCart.setAccount(df.format(modelBean.getModelprice()));
-			break;
-		default:
-			break;
-		}	
+//		// TODO Auto-generated method stub
+//		ModelBean modelBean=fileMapper.queryModelById(shoppingCart.getMid());
+//		// 0代表前台 1代表模型端
+//		DecimalFormat df = new DecimalFormat("#.00");  
+//		switch (shoppingCart.getCycle()) {
+//		case 1://一个月
+//			shoppingCart.setAccount(df.format(modelBean.getUnitprice()));
+//			break;
+//		case 2://半年 九折
+//			shoppingCart.setAccount(df.format(modelBean.getUnitprice()*6*0.9));
+//			break;
+//		case 3://一年 八折
+//			shoppingCart.setAccount(df.format(modelBean.getUnitprice()*12*0.8));
+//			break;
+//		case 4://永久
+//			shoppingCart.setAccount(df.format(modelBean.getModelprice()));
+//			break;
+//		default:
+//			break;
+//		}	
 		
 		ShoppingCart shop=shoppingMapper.selectShopCartByUidAndMid(shoppingCart);
 		if(shop!=null) {

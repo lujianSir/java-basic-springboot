@@ -42,20 +42,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询购物车 -->
 	<select id="selectShoppingCartByUid" resultType="com.item.entity.ShoppingCart">
+			
 			SELECT
 			a.sid,
 			a.uid,
 			a.mid,
-			a.account,
 			a.cycle, 
 			case when a.cycle = 1 then '一个月' when  a.cycle = 2 then '半年'  when  a.cycle = 3 then '一年' else '永久' end  cyclename,
 			b.filePics filePics,
 			b.modelname modelname,
-			case  when c.username IS NULL then d.username else   c.username end  username
+			case  when c.username IS NULL then d.username else   c.username end  username,
+	 		case when a.cycle=1 then b.unitprice
+			when a.cycle=2 then b.unitprice*6*0.9
+			when a.cycle=3  then b.unitprice*12*0.8
+			else b.modelprice
+			end account
 			FROM
-				shoppingcart a
-			LEFT JOIN modelinfo b ON a.mid = b.mid
-			LEFT JOIN usermessage c ON b.userid = c.userid
+			shoppingcart a
+			LEFT JOIN modelinfo b ON a.mid = b.mid LEFT JOIN usermessage c ON b.userid = c.userid
 			LEFT JOIN userinfo d ON b.userid = d.userid
 			WHERE
 				a.status=0 and  a.uid = #{uid}
@@ -67,8 +71,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<!-- 查询勾选数量 -->
-	<select id="selectShoppingCartBySid" resultType="String">
-		select sum(account) from shoppingcart where sid in 
+	<select id="selectShoppingCartBySid" resultType="String">		
+			select sum(account) from (
+			select 
+						a.sid,
+				 		case when a.cycle=1 then b.unitprice
+						when a.cycle=2 then b.unitprice*6*0.9
+						when a.cycle=3  then b.unitprice*12*0.8
+						else b.modelprice
+						end account
+						
+			 from shoppingcart a  LEFT JOIN  modelinfo b  on  a.mid=b.mid
+			
+			) a where a.sid in  
 		<foreach item="item"  index="index" collection="array" open="(" separator="," close=")">
 				#{item}
 		</foreach>
