@@ -112,9 +112,10 @@ public class TagServiceImpl implements TagService {
 			num=tagMapper.updateType(tagBean);
 		}else {
 			num=tagMapper.insertType(tagBean);
+			num=tagBean.getId();
 		}		
 		if(num>0) {
-			return Result.success();
+			return Result.success(num);
 		}else {
 			return Result.error(500, "请求失败");
 		}

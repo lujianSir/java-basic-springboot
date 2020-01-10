@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <!-- 添加节点 -->
-    <insert id="insertType" parameterType="com.item.entity.TagBean">
+    <insert id="insertType" parameterType="com.item.entity.TagBean" useGeneratedKeys="true" keyProperty="id">
     	insert into alltype (pid,typeclass,typename,content) values (#{pid},#{typeclass},#{typename},#{content})
     </insert>
     
