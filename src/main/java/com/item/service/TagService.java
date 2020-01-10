@@ -1,5 +1,6 @@
 package com.item.service;
 
+import com.item.entity.TagBean;
 import com.item.tool.Result;
 
 public interface TagService {
@@ -18,5 +19,11 @@ public interface TagService {
 	
 	//根据标签名称模糊查询
 	public Result<?> tagQuery(String tagname);
+	
+	//添加获取删除节点
+	public Result<?> insertOrUpdateType(TagBean tagBean);
+	
+	//删除节点
+	public Result<?> deleteTypeById(TagBean tagBean);
 	
 }

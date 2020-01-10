@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.item.entity.TagBean;
 import com.item.service.TagService;
 import com.item.tool.Result;
 
@@ -57,5 +58,24 @@ public class TagController {
 	public Result<?> tagSubquery(@RequestParam("tagname") String tagname){
 		return tagService.tagSubquery(tagname);
 	}
-
+	
+	/**
+	 * 添加或者修改节点
+	 * @param tagBean
+	 * @return
+	 */
+	@RequestMapping(value = "/insertOrUpdateType")
+	public Result<?> insertOrUpdateType(TagBean tagBean){
+		return tagService.insertOrUpdateType(tagBean);
+	}
+	
+	/**
+	 * 删除节点
+	 * @param tagBean
+	 * @return
+	 */
+	@RequestMapping(value = "/deleteTypeById")
+	public Result<?> deleteTypeById(TagBean tagBean){
+		return tagService.deleteTypeById(tagBean);
+	}
 }

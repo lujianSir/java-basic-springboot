@@ -103,4 +103,28 @@ public class TagServiceImpl implements TagService {
 		return Result.success(tagBean);
 	}
 
+	@Override
+	public Result<?> insertOrUpdateType(TagBean tagBean) {
+		// TODO Auto-generated method stub
+		int id=tagBean.getId();
+		int num=0;
+		if(id>0) {
+			num=tagMapper.updateType(tagBean);
+		}else {
+			num=tagMapper.insertType(tagBean);
+		}		
+		if(num>0) {
+			return Result.success();
+		}else {
+			return Result.error(500, "请求失败");
+		}
+		
+	}
+
+	@Override
+	public Result<?> deleteTypeById(TagBean tagBean) {
+		// TODO Auto-generated method stub
+		return Result.success(tagMapper.deleteTypeById(tagBean.getId()));
+	}
+
 }

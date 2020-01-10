@@ -27,4 +27,13 @@ public interface TagMapper {
 	
 	//通过ID查询父类
 	public  List<TagBean> queryTagFatherById(int id);
+	
+	//添加节点
+	public int insertType(TagBean tagBean);
+	
+	//修改节点
+	public int updateType(TagBean tagBean);
+	
+	//删除节点
+	public int deleteTypeById(int id);
 }

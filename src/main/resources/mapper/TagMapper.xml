@@ -31,8 +31,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	select *from alltype where id=#{id}
     </select>
     
+    <!-- 通过子类查询父类 -->
     <select id="queryTagFatherById" resultType="com.item.entity.TagBean"> 	
 		select * from (select id,pid,typeclass,typename from alltype where FIND_IN_SET(id,getParList(#{id}))) a ORDER BY typeclass
     </select>
     
+    <!-- 添加节点 -->
+    <insert id="insertType" parameterType="com.item.entity.TagBean">
+    	insert into alltype (pid,typeclass,typename,content) values (#{pid},#{typeclass},#{typename},#{content})
+    </insert>
+    
+    <!-- 修改节点 -->
+    <update id="updateType" parameterType="com.item.entity.TagBean">
+    	update alltype 
+    		<set>
+    			<if test="pid !=null and pid!=''">
+    				pid=#{pid},
+    			</if>
+    			<if test="typeclass !=null and typeclass!=''">
+    				typeclass=#{typeclass}，
+    			</if>
+    			<if test="typename !=null and typename!=''">
+    				typename=#{typename}，
+    			</if>
+    			<if test="content !=null and content!=''">
+    				content=#{content}，
+    			</if>
+    			
+    		</set>
+    	where id=#{id}
+    </update>
+    
+    <!-- 删除 -->
+    <delete id="deleteTypeById" parameterType="int">
+    	delete from alltype where id=#{id}  
+    </delete>
 </mapper>
