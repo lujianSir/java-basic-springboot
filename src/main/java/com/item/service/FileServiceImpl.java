@@ -218,8 +218,7 @@ public class FileServiceImpl implements FileService {
 		}
 		
 		ModelBean modelBean =fileMapper.queryModelById(num);	
-		String dateStr = new SimpleDateFormat("yyyy-MM-dd").format(modelBean.getCreatTime());
-		modelBean.setCreatTimeName(dateStr);
+		modelBean.setCreatTimeName(modelBean.getCreatTime());
 		modelBean.setFileModel("");
 		return Result.success(modelBean);
 	}
