@@ -150,6 +150,7 @@ public class OrderController {
 			String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"),"UTF-8");
 			//付款金额
 			String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"),"UTF-8");
+			
 			//通过订单号查询订单信息
 			OrderFlow orderFlow=payService.selectOrderFlowByOid(out_trade_no);
 			orderFlow.setOrderstatus(1);
@@ -166,19 +167,12 @@ public class OrderController {
 				flowModel.setMid(Integer.parseInt(str1));
 				flowModel.setEndaccount(total_amount);
 				flowModel.setCycle(orderFlow.getCycle());
-												
+				flowModel.setStarttime(JavaTool.getCurrent());			
+				flowModel.setEndtime(JavaTool.getTime(orderFlow.getCycle()));
+				payService.insertFlowModel(flowModel);				
 			}else if(str1.equals("2")){//多个支付 走购物车
 				
-			}
-			String mids=orderFlow.getMids();
-			String[] strs=mids.split(",");			
-			
-			for(int i=0;i<strs.length;i++) {
-				
-							
-			}
-			
-			
+			}						
 		}else {
 			log.info("支付, 验签失败...");
 		}

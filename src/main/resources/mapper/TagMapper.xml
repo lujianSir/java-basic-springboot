@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <!-- 根据标签输入模糊查询 -->
     <select id="tagQuery"  parameterType="string" resultType="com.item.entity.TagBean">
-         select id from alltype where typename   like  "%"#{typename}"%" ORDER BY typeclass
+         select id from alltype where typename   like  "%"#{typename}"%" ORDER BY id
     </select>
     
     <!-- 根据标签输入做子查询 -->
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
      <!-- 查询所有标签 -->
     <select id="tagAllQuery"   resultType="com.item.entity.TagBean">
-       	select * from (select id ,pid ,typeclass,typename from alltype where FIND_IN_SET(id,getChildList(0))) a ORDER BY typeclass
+       	select * from (select id ,pid ,typeclass,typename from alltype where FIND_IN_SET(id,getChildList(0))) a ORDER BY id
     </select>
     
     <select id="queryTagById" resultType="com.item.entity.TagBean">
@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- 通过子类查询父类 -->
     <select id="queryTagFatherById" resultType="com.item.entity.TagBean"> 	
-		select * from (select id,pid,typeclass,typename from alltype where FIND_IN_SET(id,getParList(#{id}))) a ORDER BY typeclass
+		select * from (select id,pid,typeclass,typename from alltype where FIND_IN_SET(id,getParList(#{id}))) a ORDER BY id
     </select>
     
     <!-- 添加节点 -->

@@ -8,6 +8,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -205,4 +209,41 @@ public class JavaTool {
  		return uuid;
  	}
  	
+ 	//获取当前时间
+ 	public static String getCurrent() {
+ 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式		
+ 		return df.format(new Date());
+ 	}
+ 	
+ 	//获取时间
+ 	public static String getTime(int num) {
+ 		String str="";
+ 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+ 		switch (num) {
+		case 1://一个月
+			c.setTime(new Date());
+	        c.add(Calendar.MONTH, 1);
+	        Date m = c.getTime();
+	        str = format.format(m);
+			break;
+		case 2://半年
+			 c.setTime(new Date());
+		     c.add(Calendar.MONTH, 6);
+		     Date m3 = c.getTime();
+		     str = format.format(m3);			
+			break;
+		case 3://一年
+			 c.setTime(new Date());
+		     c.add(Calendar.YEAR, 1);
+		     Date y = c.getTime();
+		     str = format.format(y);			
+			break;
+		case 4://永久			
+			break;
+		default:
+			break;
+		}	
+ 		return str;
+ 	}	
 }

@@ -31,10 +31,10 @@ public class FlowModel implements Serializable{
 	private int cycle; //一个月 1  半年 2  一年 3  永久 4
 	
 	//开始时间
-	private Date starttime;
+	private String starttime;
 		
 	//结束时间
-	private Date endtime;
+	private String endtime;
 
 	public String getFid() {
 		return fid;
@@ -77,21 +77,20 @@ public class FlowModel implements Serializable{
 		this.cycle = cycle;
 	}
 
-	public Date getStarttime() {
+	public String getStarttime() {
 		return starttime;
 	}
 
-	public void setStarttime(Date starttime) {
+	public void setStarttime(String starttime) {
 		this.starttime = starttime;
 	}
 
-	public Date getEndtime() {
+	public String getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(Date endtime) {
+	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
-	
 	
 }
