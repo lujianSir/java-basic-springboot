@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    					orderstatus=#{orderstatus},
    				</if>
    				<if test="paidtime!=null and paidtime!=''">
-   					paidtime={paidtime},
+   					paidtime=#{paidtime},
    				</if>
    			</set>
    			where oid=#{oid}

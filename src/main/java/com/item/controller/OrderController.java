@@ -166,7 +166,7 @@ public class OrderController {
 				FlowModel flowModel=new FlowModel();
 				flowModel.setFid(trade_no);
 				flowModel.setUid(orderFlow.getUid());
-				flowModel.setMid(Integer.parseInt(str1));
+				flowModel.setMid(Integer.parseInt(orderFlow.getMids()));
 				flowModel.setEndaccount(total_amount);
 				flowModel.setCycle(orderFlow.getCycle());
 				flowModel.setStarttime(JavaTool.getCurrent());			
@@ -178,9 +178,7 @@ public class OrderController {
 		}else {
 			log.info("支付, 验签失败...");
 		}
- 
-		return "success";
-
+ 		return "success";
     }
     
     
