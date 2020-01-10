@@ -219,6 +219,10 @@ public class FileServiceImpl implements FileService {
 		}
 		if(uid!=null && !uid.equals("")) {
 			modelBean=fileMapper.queryModelByIdAndUserId(num, uid);
+			if(modelBean==null) {
+				modelBean =fileMapper.queryModelById(num);	
+				modelBean.setStatus(0);
+			}
 		}else {
 			modelBean =fileMapper.queryModelById(num);	
 			modelBean.setStatus(0);

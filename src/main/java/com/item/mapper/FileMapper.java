@@ -41,7 +41,7 @@ public interface FileMapper {
 	public ModelBean queryModelById(int mid);
 	
 	//通过用户和模型ID查询
-	public ModelBean queryModelByIdAndUserId(int mid,String uid);
+	public ModelBean queryModelByIdAndUserId(@Param("mid")int mid,@Param("uid")String uid);
 	
 	//通过模型ID修改下载量以及评分
 	public void updateStarAndDownById(ModelBean model);
