@@ -1,7 +1,6 @@
 package com.item.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Entity;
 
@@ -56,6 +55,7 @@ public class ModelBean implements Serializable{
 	//上传用户名称
 	private String username;
 	
+	private int status;//该用户是否已经购买(到期)  0  未到期  1
 	
 	public String getModelname() {
 		return modelname;
@@ -157,6 +157,12 @@ public class ModelBean implements Serializable{
 	}
 	public void setCreatTimeName(String creatTimeName) {
 		this.creatTimeName = creatTimeName;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	
 	

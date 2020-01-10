@@ -136,6 +136,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.*,b.username from 	modelinfo a LEFT JOIN usermessage b  on a.userid=b.userid where  a.mid=#{mid}
 	</select>
 	
+	<!-- 通过用户和模型ID查询 -->
+	<select id="queryModelByIdAndUserId" resultType="com.item.entity.ModelBean">
+			SELECT
+				a.endtime, b.*,
+				case when a.endtime ='' then  1 
+						 when a.endtime >=DATE_FORMAT(NOW(),'%Y-%m-%d') then  1 
+						else 0  end status
+			FROM
+				flowmodel a
+			LEFT JOIN modelinfo b ON a.mid = b.mid
+			WHERE
+			a.uid = #{uid}  and b.mid=#{mid}					
+	</select>
+	
+	
 	<!-- 通过ID更改星级以及下载量 -->
 	<update id="updateStarAndDownById" parameterType="com.item.entity.ModelBean">
 		update modelinfo 

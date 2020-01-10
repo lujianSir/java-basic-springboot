@@ -210,14 +210,19 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public Result<?> queryModelById(String mid) {
+	public Result<?> queryModelById(String mid,String uid) {
 		// TODO Auto-generated method stub
 		int num=0;
+		ModelBean modelBean=new ModelBean();
 		if(mid!=null && !mid.equals("")) {
 			num=Integer.parseInt(mid);
 		}
-		
-		ModelBean modelBean =fileMapper.queryModelById(num);	
+		if(uid!=null && !uid.equals("")) {
+			modelBean=fileMapper.queryModelByIdAndUserId(num, uid);
+		}else {
+			modelBean =fileMapper.queryModelById(num);	
+			modelBean.setStatus(0);
+		}		
 		modelBean.setCreatTimeName(modelBean.getCreatTime());
 		modelBean.setFileModel("");
 		return Result.success(modelBean);

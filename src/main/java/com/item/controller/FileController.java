@@ -138,8 +138,8 @@ public class FileController {
 	 */
 	@RequestMapping("/queryModelById")
 	@ResponseBody
-	public Result<?> queryModelById(String  mid){
-		return fileService.queryModelById(mid);
+	public Result<?> queryModelById(String  mid,String uid){
+		return fileService.queryModelById(mid,uid);
 	}
 	
 	

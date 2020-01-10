@@ -35,6 +35,8 @@ public class FlowModel implements Serializable{
 		
 	//结束时间
 	private String endtime;
+	
+	private int status;//0 到期  1未到期
 
 	public String getFid() {
 		return fid;
@@ -92,5 +94,14 @@ public class FlowModel implements Serializable{
 	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
 	
 }

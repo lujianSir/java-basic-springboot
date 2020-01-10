@@ -49,13 +49,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     				pid=#{pid},
     			</if>
     			<if test="typeclass !=null and typeclass!=''">
-    				typeclass=#{typeclass}，
+    				typeclass=#{typeclass},
     			</if>
     			<if test="typename !=null and typename!=''">
-    				typename=#{typename}，
+    				typename=#{typename},
     			</if>
     			<if test="content !=null and content!=''">
-    				content=#{content}，
+    				content=#{content},
     			</if>
     			
     		</set>

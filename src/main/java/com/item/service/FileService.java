@@ -33,6 +33,6 @@ public interface FileService {
 	public Result<?> queryModels(ModelBean modelBean,Page page,String startPrice ,String endPrice,String orderBy);
 	
 	//通过ID查询模型的信息
-	public Result<?> queryModelById(String  mid);
+	public Result<?> queryModelById(String  mid,String uid);
 	
 }
