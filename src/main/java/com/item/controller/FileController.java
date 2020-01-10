@@ -1,10 +1,13 @@
 package com.item.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +29,9 @@ public class FileController {
 	@Autowired
 	private FileService fileService;
 
+	@Value("${disk-path}")
+	private String rootPath;
+	
 	@RequestMapping("/test1")
 	public String file() {
 		return "/file";
@@ -46,6 +52,24 @@ public class FileController {
 		return fileService.fileUpload(file, request, catalog, role);
 	}
 
+	/**
+	 * 文件下载
+	 * @param response
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/download", method= RequestMethod.GET)
+	@ResponseBody
+	public Result<?> fileDownload(HttpServletResponse response,HttpServletRequest request,String fileModel) {	
+		// 文件存放服务端的位置
+		String path = rootPath+"web/模型源文件/";
+		String s = path + fileModel;	
+		JavaTool.download(s, response);
+		return Result.success();
+	}
+	
+	
+	
 	/**
 	 * 通过ID删除文件
 	 * @param id
