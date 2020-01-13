@@ -1,5 +1,7 @@
 package com.item.mapper;
 
+import java.util.List;
+
 import com.item.alipay.FlowModel;
 import com.item.alipay.OrderFlow;
 
@@ -19,4 +21,7 @@ public interface PayMapper {
     
   //添加流水信息
     public void insertFlowModel(FlowModel flowModel);
+    
+    //通过用户ID查询已购买的模型
+    public List<FlowModel>  selectFlowModelByUserId(String uid);
 }

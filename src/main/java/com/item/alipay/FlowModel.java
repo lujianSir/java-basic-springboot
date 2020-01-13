@@ -30,6 +30,9 @@ public class FlowModel implements Serializable{
 	//周期
 	private int cycle; //一个月 1  半年 2  一年 3  永久 4
 	
+	//周期名称
+	private String cyclename;//
+	
 	//开始时间
 	private String starttime;
 		
@@ -37,6 +40,15 @@ public class FlowModel implements Serializable{
 	private String endtime;
 	
 	private int status;//0 到期  1未到期
+
+		
+	public String getCyclename() {
+		return cyclename;
+	}
+
+	public void setCyclename(String cyclename) {
+		this.cyclename = cyclename;
+	}
 
 	public String getFid() {
 		return fid;

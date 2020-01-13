@@ -1,5 +1,7 @@
 package com.item.service;
 
+import java.util.List;
+
 import com.alipay.api.AlipayApiException;
 import com.item.alipay.AlipayBean;
 import com.item.alipay.FlowModel;
@@ -36,4 +38,7 @@ public interface PayService {
     
     //添加流水信息
     public void insertFlowModel(FlowModel flowModel);
+    
+  //通过用户ID查询已购买的模型
+    public List<FlowModel>  selectFlowModelByUserId(String uid);
 }

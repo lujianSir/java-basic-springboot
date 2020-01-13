@@ -33,4 +33,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <insert id="insertFlowModel" parameterType="com.item.alipay.FlowModel">
    		insert into flowmodel (fid ,uid,mid,endaccount,cycle,starttime,endtime)  values(#{fid},#{uid},#{mid},#{endaccount},#{cycle},#{starttime},#{endtime})
    </insert>
+   
+   <!-- 通过用户ID查询已购买的模型 -->
+   <select id="selectFlowModelByUserId" resultType="com.item.alipay.FlowModel">
+   		SELECT
+			a.*, b.modelname,
+			CASE
+		WHEN a.endtime = '' THEN
+			1
+		WHEN a.endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d') THEN
+			1
+		ELSE
+			0
+		END STATUS,
+		 CASE
+		WHEN a.cycle = 1 THEN
+			'一个月'
+		WHEN a.cycle = 2 THEN
+			'半年'
+		WHEN a.cycle = 3 THEN
+			'一年'
+		ELSE
+			'永久'
+		END cyclename
+		FROM
+			flowmodel a
+		LEFT JOIN modelinfo b ON a.mid = b.mid
+		WHERE
+			a.uid = #{uid}
+   
+   </select>
 </mapper>

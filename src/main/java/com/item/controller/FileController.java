@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.item.alipay.FlowModel;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
 import com.item.service.FileService;
+import com.item.service.PayService;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
 /**
@@ -34,6 +39,9 @@ public class FileController {
 
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private PayService payService;
 
 	@Value("${disk-path}")
 	private String rootPath;
@@ -193,6 +201,19 @@ public class FileController {
 		return fileService.queryModelById(mid,uid);
 	}
 	
-	
+	/**
+	 * 查询已购模型
+	 * @param uid
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping("/selectFlowModelByUserId")
+	@ResponseBody
+	public Result<?> selectFlowModelByUserId(String uid,Page page){		
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<FlowModel> list=payService.selectFlowModelByUserId(uid); 
+		PageInfo<FlowModel> pageInfo = new PageInfo<FlowModel>(list);		
+		return Result.success(pageInfo);
+	}
 	
 }
