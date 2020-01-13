@@ -1,5 +1,11 @@
 package com.item.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -58,13 +64,34 @@ public class FileController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/download", method= RequestMethod.GET)
+
+	@RequestMapping(value = "/download")
 	@ResponseBody
-	public Result<?> fileDownload(HttpServletResponse response,HttpServletRequest request,String fileModel) {	
-		// 文件存放服务端的位置
+	public Result<?> fileDownload(HttpServletResponse response,HttpServletRequest request,String fileModel) throws IOException  {	
+		// 文件存放服务端的位置		
 		String path = rootPath+"web/模型源文件/";
-		String s = path + fileModel;	
-		JavaTool.download(s, response);
+		String s = path + fileModel;
+		// path是指欲下载的文件的路径。
+	     File file = new File(s);
+	     // 取得文件名。
+	     String filename = file.getName();
+	     if(!file.exists()){
+             System.out.println("Have no such file!");
+             return Result.error(500, "文件不存在");
+         }
+	     FileInputStream fileInputStream = new FileInputStream(file);
+         //设置Http响应头告诉浏览器下载这个附件,下载的文件名也是在这里设置的
+         response.setHeader("Content-Disposition", "attachment;Filename=" + URLEncoder.encode(filename, "UTF-8"));
+         OutputStream outputStream = response.getOutputStream();
+         byte[] bytes = new byte[2048];
+         int len = 0;
+         while ((len = fileInputStream.read(bytes))>0){
+             outputStream.write(bytes,0,len);
+         }
+         fileInputStream.close();
+         outputStream.close();
+         System.out.println("成功");
+		//JavaTool.download(s, response);
 		return Result.success();
 	}
 	

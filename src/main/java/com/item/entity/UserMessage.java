@@ -23,6 +23,9 @@ public class UserMessage extends User implements Serializable{
 	//购物车数量
 	private int shoppCount;
 	
+	//邮箱
+	private String email;
+	
 	public double getAccount() {
 		return account;
 	}
@@ -38,6 +41,13 @@ public class UserMessage extends User implements Serializable{
 	public void setShoppCount(int shoppCount) {
 		this.shoppCount = shoppCount;
 	}
-	
-	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+		
 }

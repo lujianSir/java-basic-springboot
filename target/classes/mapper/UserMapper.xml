@@ -60,9 +60,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 商城用户注册 -->
 	<insert id="userMessageRegister" parameterType="com.item.entity.UserMessage">
 		INSERT INTO usermessage
-		(`userid`,`nickname`,`username`,`password`,`status`,`registertime`,`account`)
+		(`userid`,`nickname`,`username`,`password`,`status`,`registertime`,`account`,`email`)
 		VALUES
-		(#{userid},#{nickname},#{username},#{password},#{status},#{registertime},#{account})
+		(#{userid},#{nickname},#{username},#{password},#{status},#{registertime},#{account},#{email})
 	</insert>
 	
 	<!-- 根据商城用户名去查询用户信息	 -->

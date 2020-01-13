@@ -26,4 +26,7 @@ public interface UserService {
 	//根据用户名密码登录(商城页面)
 	public Result<?> userMessageLogin(String username,String password);
 	
+	//发送邮件
+	public void sendSimpleMail(String to,String title,String content);
+	
 }
