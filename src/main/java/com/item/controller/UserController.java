@@ -71,15 +71,15 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("getCheckCode")
-    public String getCheckCode(String email){
+    public Result<?> getCheckCode(String email){
         String checkCode = String.valueOf(new Random().nextInt(899999) + 100000);
         String message = "您的注册验证码为："+checkCode;
         try {
         	userService.sendSimpleMail(email, "注册验证码", message);
         }catch (Exception e){
-            return "";
+            return Result.error(500, "失败");
         }
-        return checkCode;
+        return Result.success(checkCode);
     }
 
 	

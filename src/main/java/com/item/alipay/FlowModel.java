@@ -21,6 +21,10 @@ public class FlowModel implements Serializable{
 	//商城用户ID
 	private String uid;
 	
+	private String modelname;
+	
+	private String filePics;
+	
 	//模型ID
 	private int mid;
 	
@@ -113,6 +117,22 @@ public class FlowModel implements Serializable{
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getModelname() {
+		return modelname;
+	}
+
+	public void setModelname(String modelname) {
+		this.modelname = modelname;
+	}
+
+	public String getFilePics() {
+		return filePics;
+	}
+
+	public void setFilePics(String filePics) {
+		this.filePics = filePics;
 	}
 	
 	

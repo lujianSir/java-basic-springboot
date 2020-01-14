@@ -37,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <!-- 通过用户ID查询已购买的模型 -->
    <select id="selectFlowModelByUserId" resultType="com.item.alipay.FlowModel">
    		SELECT
-			a.*, b.modelname,
+			a.*, b.modelname,b.filePics,
 			CASE
 		WHEN a.endtime = '' THEN
 			1
