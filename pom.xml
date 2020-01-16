@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cn.java</groupId>
 	<artifactId>java-basic-springboot</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>java-basic-springboot Maven Webapp</name>
 	<url>http://maven.apache.org</url>
@@ -138,14 +138,13 @@
 	<build>
 		<finalName>java-basic-springboot</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
+		    <plugin>
+		        <groupId>org.springframework.boot</groupId>
+		        <artifactId>spring-boot-maven-plugin</artifactId>
+		        <configuration>
+		        <mainClass>com.item.Application</mainClass> 
+		        </configuration>
+		    </plugin>
 		</plugins>
 	</build>
 </project>

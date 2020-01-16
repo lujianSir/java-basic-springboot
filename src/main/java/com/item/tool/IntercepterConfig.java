@@ -28,17 +28,20 @@ public class IntercepterConfig implements WebMvcConfigurer{
     @Override
     public void addInterceptors(InterceptorRegistry registry){
 		
-		/*
-		 * List<String> excludePath = new ArrayList<>();
-		 * excludePath.add("/file/queryModels"); //商城页面
-		 * excludePath.add("/file/queryModelById"); //商城详情
-		 * excludePath.add("/file/upload"); //商城详情 excludePath.add("/assets/**"); //静态资源
-		 * excludePath.add("/user/**"); //用户登录、注册 excludePath.add("/static/**"); //静态资源
-		 * excludePath.add("/tag/**"); //帮助文档接口 excludePath.add("/image/web/模型封面/**");
-		 * //静态资源 registry.addInterceptor(tokenInterceptor) .addPathPatterns("/**")
-		 * .excludePathPatterns(excludePath);
-		 * WebMvcConfigurer.super.addInterceptors(registry);
-		 */
+		
+		  List<String> excludePath = new ArrayList<>();
+		  excludePath.add("/file/queryModels"); //商城页面
+		  excludePath.add("/file/queryModelById"); //商城详情
+		  excludePath.add("/file/download"); //下载
+		  excludePath.add("/file/upload"); //商城详情 
+		  excludePath.add("/assets/**"); //静态资源
+		  excludePath.add("/user/**"); //用户登录、注册 
+		  excludePath.add("/static/**"); //静态资源
+		  excludePath.add("/tag/**"); //帮助文档接口 
+		  excludePath.add("/image/web/模型封面/**");
+		  //静态资源 
+		  registry.addInterceptor(tokenInterceptor) .addPathPatterns("/**").excludePathPatterns(excludePath);
+		 
 		 
     }
 }
