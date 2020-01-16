@@ -77,7 +77,9 @@ public class FileController {
 	@ResponseBody
 	public Result<?> fileDownload(HttpServletResponse response,HttpServletRequest request,String fileModel) throws IOException  {	
 		// 文件存放服务端的位置		
+		//String path = "/usr/local/jar/"+rootPath+"web/模型源文件/";
 		String path = rootPath+"web/模型源文件/";
+		System.out.println(path);
 		String s = path + fileModel;
 		// path是指欲下载的文件的路径。
 	     File file = new File(s);
