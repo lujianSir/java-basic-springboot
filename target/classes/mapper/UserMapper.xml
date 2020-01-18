@@ -46,6 +46,44 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from userinfo where role > #{role}
 	</select>
 	
+	<!-- 通过用户名或者手机号查询(管理页面) -->
+	<select id="queryUserBeanByStr" parameterType="String" resultType="com.item.entity.UserBean">
+		select * from userinfo  where username like CONCAT('%',#{str},'%') or phone like CONCAT('%',#{str},'%') 
+	</select>
+	
+	<!-- 通过ID删除管理 -->
+	<delete id="deletUserBeanByUserId" parameterType="String">
+		delete from userinfo where userid=#{userid}
+	</delete>
+	
+	<!-- 通过ID编辑管理 -->
+	<update id="updateUserBeanByUserId" parameterType="com.item.entity.UserBean">
+		update userinfo 
+			<set>
+				<if test="nickname!=null and nickname!=''">
+					nickname=#{nickname},
+				</if>
+				<if test="username!=null and username!=''">
+					username=#{username},
+				</if>
+				<if test="password!=null and password!=''">
+					password=#{password},
+				</if>
+				<if test="status!=null and status!=''">
+					status=#{status},
+				</if>
+				<if test="role!=null and role!=''">
+					role=#{role},
+				</if>
+				<if test="phone!=null and phone!=''">
+					phone=#{phone},
+				</if>
+				<if test="registertime!=null and registertime!=''">
+					registertime=#{registertime},
+				</if>
+			</set>
+			where userid=#{userid}
+	</update>
 	
 	
 	
@@ -69,10 +107,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="userMessageLogin" parameterType="String" resultType="com.item.entity.UserMessage">
 		select * from usermessage where username = #{username}
 	</select>
-	
-	<!-- 通过用户名或者手机号查询(管理页面) -->
-	<select id="queryUserBeanByStr" parameterType="String" resultType="com.item.entity.UserBean">
-		select * from (select * from userinfo  where  role is not null ) a where username like CONCAT('%',#{str},'%') or phone like CONCAT('%',#{str},'%') 
-	</select>
-
+		
 </mapper>

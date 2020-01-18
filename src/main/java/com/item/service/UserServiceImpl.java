@@ -71,15 +71,20 @@ public class UserServiceImpl implements UserService {
 				// 获取user信息
 				UserBean user = userMapper.userLogin(username);
 				// 判断密码是否相等
-
-				if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
- 
-					// 清除密码消息
-					user.setPassword("");								
-					return Result.success(user);
-				} else {
-					return Result.error(50010, "用户密码错误");
+				if(user.getStatus()==1) {
+					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
+						 
+						// 清除密码消息
+						user.setPassword("");								
+						return Result.success(user);
+					} else {
+						return Result.error(50010, "用户密码错误");
+					}
+					
+				}else {
+					return Result.error(50030, "用户已被禁用");
 				}
+				
 			} else {
 				return Result.error(50020, "用户不存在");
 			}
@@ -104,8 +109,7 @@ public class UserServiceImpl implements UserService {
 				user.setUserid(JavaTool.getUserId());
 				if(user.getNickname()==null || user.getNickname().endsWith("")) {
 					user.setNickname(user.getUsername());
-				}
-				user.setStatus(1);
+				}				
 				user.setRegistertime(JavaTool.getCurrent());
 				userMapper.userRegister(user);
 				return Result.success();
@@ -151,18 +155,23 @@ public class UserServiceImpl implements UserService {
 			if (num>0) {
 				// 获取user信息
 				UserMessage user = userMapper.userMessageLogin(username);
-				// 判断密码是否相等
-				if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
-					
-					String token = TokenUtil.sign(user);
-					// 将token放在密码带出去
-					user.setPassword(token);
-					int shoppCount=shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
-					user.setShoppCount(shoppCount);
-					return Result.success(user);
-				} else {
-					return Result.error(50010, "用户密码错误");
+				if(user.getStatus()==1) {
+					// 判断密码是否相等
+					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
+						
+						String token = TokenUtil.sign(user);
+						// 将token放在密码带出去
+						user.setPassword(token);
+						int shoppCount=shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
+						user.setShoppCount(shoppCount);
+						return Result.success(user);
+					} else {
+						return Result.error(50010, "用户密码错误");
+					}
+				}else {
+					return Result.error(50030, "用户已被禁用");
 				}
+				
 			} else {
 				return Result.error(50020, "用户不存在");
 			}
@@ -189,6 +198,19 @@ public class UserServiceImpl implements UserService {
 	public List<UserBean> queryUserBeanByStr(String str) {
 		// TODO Auto-generated method stub
 		return userMapper.queryUserBeanByStr(str);
+	}
+
+	@Override
+	public int deletUserBeanByUserId(String userid) {
+		// TODO Auto-generated method stub
+		return userMapper.deletUserBeanByUserId(userid);
+	}
+
+	@Override
+	public int updateUserBeanByUserId(UserBean user) {
+		// TODO Auto-generated method stub
+		user.setRegistertime(JavaTool.getCurrent());
+		return userMapper.updateUserBeanByUserId(user);
 	}
 
 }

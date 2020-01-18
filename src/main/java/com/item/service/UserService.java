@@ -22,6 +22,11 @@ public interface UserService {
 	//通过用户名或者手机号查询(管理页面)
 	public List<UserBean> queryUserBeanByStr(String str);
 	
+	//通过ID删除用户(管理页面)
+	public int deletUserBeanByUserId(String userid);
+	
+	//通过用户ID编辑(管理页面)
+	public int updateUserBeanByUserId(UserBean user);
 	
 	
 	

@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 查询用户的权限 -->
    <select id="queryPowerByUserId" resultType="com.item.entity.Power">
-   		select  a.* from power a LEFT JOIN user_power b on a.id=b.powerid LEFT JOIN userinfo c on b.userid=c.userid
+   		select  a.* from power a LEFT JOIN role_power b on a.id=b.powerid LEFT JOIN userinfo c on b.roleid=c.role
 		where c.userid=#{uid} and  c.`status`=1
    </select>
 	

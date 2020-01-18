@@ -1,11 +1,16 @@
 package com.item.controller;
 
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.item.alipay.FlowModel;
+import com.item.entity.Page;
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
 import com.item.service.UserService;
@@ -41,6 +46,65 @@ public class UserController {
 	public Result<?> userRegister(UserBean userBean) {
 		return userService.userRegister(userBean);
 	}
+	
+	
+	/**
+	 * 管理后台查询
+	 * @param str
+	 * @return
+	 */
+	@RequestMapping(value = "/queryUserBeanByStr")
+	public Result<?> queryUserBeanByStr(String str,Page page) {
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<UserBean> list=userService.queryUserBeanByStr(str);	
+		PageInfo<UserBean> pageInfo = new PageInfo<UserBean>(list);				
+		return Result.success(pageInfo);
+	}
+	
+	
+	/**
+	 * 通过用户ID删除管理用户
+	 * @param userid
+	 * @return
+	 */
+	@RequestMapping(value = "/deletUserBeanByUserId")
+	public Result<?> deletUserBeanByUserId(String userid) {
+		if(userid.equals("00da3c04c1b14519862301666987bfcd")) {
+			return Result.error(200, "超级管理员不能修改");
+		}else {
+			int num=userService.deletUserBeanByUserId(userid);	
+			if(num>0) {
+				return Result.success();
+			}else {
+				return Result.error(200, "删除失败");
+			}
+		}
+		
+		
+	}
+		
+	/**
+	 * 通过ID编辑管理用户
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/updateUserBeanByUserId")
+	public Result<?> updateUserBeanByUserId(UserBean user) {
+		if(user.getUserid().equals("00da3c04c1b14519862301666987bfcd")) {
+			return Result.error(200, "超级管理员不能修改");
+		}else {
+			int num=userService.updateUserBeanByUserId(user);	
+			if(num>0) {
+				return Result.success();
+			}else {
+				return Result.error(200, "编辑失败");
+			}
+		}
+		
+		
+	}
+	
+	
 	
 	
 	/**
@@ -82,5 +146,4 @@ public class UserController {
         return Result.success(checkCode);
     }
 
-	
 }
