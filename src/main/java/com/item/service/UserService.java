@@ -1,5 +1,7 @@
 package com.item.service;
 
+import java.util.List;
+
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
 import com.item.tool.Result;
@@ -16,6 +18,9 @@ public interface UserService {
 	
 	//用户注册(管理页面)
 	public Result<?> userRegister(UserBean user);
+	
+	//通过用户名或者手机号查询(管理页面)
+	public List<UserBean> queryUserBeanByStr(String str);
 	
 	
 	

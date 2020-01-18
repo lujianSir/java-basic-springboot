@@ -31,6 +31,9 @@ public interface UserMapper {
 	public List<UserBean> queryByRole(int role);
 	
 	
+	//通过用户名或者手机号查询(管理页面)
+	public List<UserBean> queryUserBeanByStr(String str);
+	
 		
 	
 	

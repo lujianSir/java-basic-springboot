@@ -70,5 +70,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from usermessage where username = #{username}
 	</select>
 	
+	<!-- 通过用户名或者手机号查询(管理页面) -->
+	<select id="queryUserBeanByStr" parameterType="String" resultType="com.item.entity.UserBean">
+		select * from (select * from userinfo  where  role is not null ) a where username like CONCAT('%',#{str},'%') or phone like CONCAT('%',#{str},'%') 
+	</select>
 
 </mapper>

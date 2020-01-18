@@ -1,5 +1,7 @@
 package com.item.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,6 +183,12 @@ public class UserServiceImpl implements UserService {
         message.setText(content);
         mailSender.send(message);
         LOG.info("邮件发送成功");
+	}
+
+	@Override
+	public List<UserBean> queryUserBeanByStr(String str) {
+		// TODO Auto-generated method stub
+		return userMapper.queryUserBeanByStr(str);
 	}
 
 }
