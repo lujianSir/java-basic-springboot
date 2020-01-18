@@ -70,13 +70,13 @@ public class UserController {
 	@RequestMapping(value = "/deletUserBeanByUserId")
 	public Result<?> deletUserBeanByUserId(String userid) {
 		if(userid.equals("00da3c04c1b14519862301666987bfcd")) {
-			return Result.error(200, "超级管理员不能修改");
+			return Result.error(201, "超级管理员不能修改");
 		}else {
 			int num=userService.deletUserBeanByUserId(userid);	
 			if(num>0) {
 				return Result.success();
 			}else {
-				return Result.error(200, "删除失败");
+				return Result.error(201, "删除失败");
 			}
 		}
 		
@@ -91,17 +91,11 @@ public class UserController {
 	@RequestMapping(value = "/updateUserBeanByUserId")
 	public Result<?> updateUserBeanByUserId(UserBean user) {
 		if(user.getUserid().equals("00da3c04c1b14519862301666987bfcd")) {
-			return Result.error(200, "超级管理员不能修改");
-		}else {
-			int num=userService.updateUserBeanByUserId(user);	
-			if(num>0) {
-				return Result.success();
-			}else {
-				return Result.error(200, "编辑失败");
-			}
+			return Result.error(201, "超级管理员不能修改");
+		}else {			
+			return userService.updateUserBeanByUserId(user);			
 		}
-		
-		
+				
 	}
 	
 	

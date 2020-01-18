@@ -27,6 +27,10 @@ public interface UserMapper {
 	//根据用户名称查询用户信息(管理页面)
 	public UserBean queryByName(String username);
 	
+	//通过ID查询用户(管理页面)
+	public UserBean queryByUserId(String userid);
+	
+	
 	//根据用户角色身份查询用户信息(管理页面)
 	public List<UserBean> queryByRole(int role);
 	

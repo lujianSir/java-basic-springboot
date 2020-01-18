@@ -26,7 +26,7 @@ public interface UserService {
 	public int deletUserBeanByUserId(String userid);
 	
 	//通过用户ID编辑(管理页面)
-	public int updateUserBeanByUserId(UserBean user);
+	public Result<?> updateUserBeanByUserId(UserBean user);
 	
 	
 	

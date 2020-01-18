@@ -41,6 +41,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	
+	<select id="queryByUserId" parameterType="String" resultType="com.item.entity.UserBean">
+		select * from userinfo where userid = #{userid}
+	</select>
+	
+	
 	<!-- 根据管理角色身份去查询用户信息 -->
 	<select id="queryByRole" parameterType="int" resultType="com.item.entity.UserBean">
 		select * from userinfo where role > #{role}

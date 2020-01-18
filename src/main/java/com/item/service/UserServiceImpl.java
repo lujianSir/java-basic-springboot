@@ -207,10 +207,35 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int updateUserBeanByUserId(UserBean user) {
+	public Result<?>  updateUserBeanByUserId(UserBean user) {
 		// TODO Auto-generated method stub
-		user.setRegistertime(JavaTool.getCurrent());
-		return userMapper.updateUserBeanByUserId(user);
+		//user.setRegistertime(JavaTool.getUserCurrent());		
+		if(user.getUsername()==null || user.getUsername().equals("")) {	//修改密码	
+			if(user.getPassword()!=null&& !user.getPassword().equals("")) {
+				user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
+			}
+			Result.success(userMapper.updateUserBeanByUserId(user));			
+		}else {
+			//UserBean oneUserBean =userMapper.queryByUserId(user.getUserid());//一定有
+			UserBean otherUserBean=userMapper.queryByName(user.getUsername());//不一定有
+			if(otherUserBean!=null) {
+				if(user.getUsername().equals(otherUserBean.getUsername())&& !user.getUserid().equals(otherUserBean.getUserid())) {
+					return Result.error(201, "用户名已经存在");
+				}else {
+					if(user.getPassword()!=null&& !user.getPassword().equals("")) {
+						user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
+					}
+					return Result.success(userMapper.updateUserBeanByUserId(user));
+				}	
+			}else {
+				if(user.getPassword()!=null&& !user.getPassword().equals("")) {
+					user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());					
+				}
+				return Result.success(userMapper.updateUserBeanByUserId(user));
+			}
+					
+		}
+		return Result.success();				
 	}
 
 }
