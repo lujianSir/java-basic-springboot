@@ -33,6 +33,10 @@ public interface FileMapper {
 	//商城主页信息模型加载
 	public List<FileBean> webStoreQuery();
 	
+	//查询所有的商城数据(后台)
+	public List<ModelBean> queryModelsByAdmin(ModelBean modelBean);
+	
+	
 	//查询商城所以的信息
 	public List<ModelBean> queryModels(@Param("modelBean")ModelBean modelBean,@Param("startPrice") Double startPrice,
 										@Param("endPrice")Double endPrice,@Param("orderBy")String orderBy);

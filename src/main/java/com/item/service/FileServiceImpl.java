@@ -114,6 +114,7 @@ public class FileServiceImpl implements FileService {
 				fileMapper.modelInfoUpdate(model);
 			}else {
 				// 模型信息录入
+				model.setModelstatus(1);
 				fileMapper.modelinfoAdd(model);
 			}			
 			return Result.success();
@@ -235,6 +236,12 @@ public class FileServiceImpl implements FileService {
 		}		
 		modelBean.setCreatTimeName(modelBean.getCreatTime());		
 		return Result.success(modelBean);
+	}
+
+	@Override
+	public List<ModelBean> queryModelsByAdmin(ModelBean modelBean) {
+		// TODO Auto-generated method stub
+		return fileMapper.queryModelsByAdmin(modelBean);
 	}
 
 }

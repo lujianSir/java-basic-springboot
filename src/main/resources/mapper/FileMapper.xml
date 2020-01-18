@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`)
+		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`,`modelstatus`)
 		VALUES
-		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid})
+		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid}，#{modelstatus})
 	</insert>
 	
 	<!-- 模型信息修改 -->
@@ -61,6 +61,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="userid!=null and userid!=''">
 				userid=#{userid},
 			</if>
+			<if test="modelstatus!=null and modelstatus!='' or modelstatus==0">
+				modelstatus=#{modelstatus},
+			</if>
+			
 		</set>	
 		where mid=#{mid}	
 	</update>
@@ -88,8 +92,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 查询商城所以的信息 -->
 	<select id="queryModels" resultType="com.item.entity.ModelBean">
-		select * from modelinfo 
-			<where>
+	
+		select * from modelinfo  where modelstatus=1
+			
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
 					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
 				</if>
@@ -114,21 +119,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="endPrice != -0.1">
 					and modelprice &lt;= #{endPrice}
 				</if>				
-			</where>
-			
-			<if test="orderBy=='' or orderBy== null">
-				order by download desc
-			</if>			
-			<if test="orderBy=='xiazai' and orderBy!='' and orderBy!= null ">
-				order by download desc
-			</if>	
-			<if test="orderBy=='xingji'  and orderBy!='' and orderBy!= null ">
-				order by starclass desc
-			</if>			
-			<if test="orderBy=='shijian'  and orderBy!='' and orderBy!= null ">
-				order by creatTime desc
-			</if>
+					
+				<if test="orderBy=='' or orderBy== null">
+					order by download desc
+				</if>			
+				<if test="orderBy=='xiazai' and orderBy!='' and orderBy!= null ">
+					order by download desc
+				</if>	
+				<if test="orderBy=='xingji'  and orderBy!='' and orderBy!= null ">
+					order by starclass desc
+				</if>			
+				<if test="orderBy=='shijian'  and orderBy!='' and orderBy!= null ">
+					order by creatTime desc
+				</if>
 						
+	</select>
+	
+	<!-- 查询后台商城 -->
+	<select id="queryModelsByAdmin" resultType="com.item.entity.ModelBean">
+			select * from modelinfo
+			<where>
+				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
+					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
+				</if>			
+			</where>
 	</select>
 
 	<!-- 通过ID查询模型的信息 -->
@@ -136,7 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.*,b.username from 	modelinfo a LEFT JOIN usermessage b  on a.userid=b.userid where  a.mid=#{mid}
 	</select>
 	
-	<!-- 通过用户和模型ID查询 -->
+	<!-- 通过用户和模型ID查询已购模型 -->
 	<select id="queryModelByIdAndUserId" resultType="com.item.entity.ModelBean">
 			SELECT
 				a.endtime, b.*,

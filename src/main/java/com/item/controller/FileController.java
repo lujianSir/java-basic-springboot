@@ -127,7 +127,7 @@ public class FileController {
 	@RequestMapping("/model")
 	@ResponseBody
 	public Result<?> modelUpload(String modelname,String resource_two, String modelprice,String unitprice,String buildtype, String resource_one,
-			 String describe, String filePics, String fileModel,String mid,String userid) {
+			 String describe, String filePics, String fileModel,String mid,String userid,String modelstatus) {
 		ModelBean model = new ModelBean();
 		model.setBuildtype(buildtype);
 		model.setDescribe(describe);
@@ -144,11 +144,30 @@ public class FileController {
 		model.setFileModel(fileModel);
 		model.setUserid(userid);
 		model.setCreatTime(JavaTool.getCurrent());
+		if(modelstatus!=null && !modelstatus.equals("")) {
+			model.setModelstatus(Integer.parseInt(modelstatus));
+		}
 		if(mid!=null && !mid.equals("")) {
 			model.setMid(Integer.parseInt(mid));
 		}
 		return fileService.modelUpload(model);
 	}
+	
+	/**
+	 * 后台查询所有的模型
+	 * @param modelBean
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping("/queryModelsByAdmin")
+	@ResponseBody
+	public Result<?> queryModelsByAdmin(ModelBean modelBean,Page page){	
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<ModelBean> list=fileService.queryModelsByAdmin(modelBean);
+		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(list);	
+		return Result.success(pageInfo);
+	}
+	
 
 	/**
 	 * 根据文件名称查询数据

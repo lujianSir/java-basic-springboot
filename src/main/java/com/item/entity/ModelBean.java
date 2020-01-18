@@ -20,6 +20,9 @@ public class ModelBean implements Serializable{
 	// 模型总价格
 	private double modelprice=-0.1;
 	
+	//模型状态(0 下架  1 上架)
+	private int modelstatus;
+	
 	//模型单价
 	private double unitprice;
 	
@@ -163,6 +166,12 @@ public class ModelBean implements Serializable{
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public int getModelstatus() {
+		return modelstatus;
+	}
+	public void setModelstatus(int modelstatus) {
+		this.modelstatus = modelstatus;
 	}
 	
 	

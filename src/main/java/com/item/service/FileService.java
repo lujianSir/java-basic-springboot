@@ -1,5 +1,7 @@
 package com.item.service;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +27,9 @@ public interface FileService {
 	
 	//文件信息删除
 	public Result<?> fileinfoDelete(String filename);
+	
+	//查询所有的商城数据(后台)
+	public List<ModelBean> queryModelsByAdmin(ModelBean modelBean);
 	
 	//查询商城中的所有数据
 	public Result<?> webStoreQuery();
