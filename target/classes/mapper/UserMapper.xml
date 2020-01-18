@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 通过用户名或者手机号查询(管理页面) -->
 	<select id="queryUserBeanByStr" parameterType="String" resultType="com.item.entity.UserBean">
-		select * from userinfo  where username like CONCAT('%',#{str},'%') or phone like CONCAT('%',#{str},'%') 
+		select * from userinfo  where username like CONCAT('%',#{str},'%') or phone like CONCAT('%',#{str},'%')  order by registertime
 	</select>
 	
 	<!-- 通过ID删除管理 -->
@@ -69,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="password!=null and password!=''">
 					password=#{password},
 				</if>
-				<if test="status!=null and status!=''">
+				<if test="status!=null and status!=''or status == 0">
 					status=#{status},
 				</if>
 				<if test="role!=null and role!=''">
@@ -87,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	
-	
+	                                                                                
 	
 	<!-- 检测商城用户是否存在 -->
 	<select id="userMessageExist" parameterType="string" resultType="int">

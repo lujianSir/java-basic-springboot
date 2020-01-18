@@ -51,17 +51,21 @@ public class FileServiceImpl implements FileService {
 
 				String filename = now + filesuffix;
 
+				String newrootPath=System.getProperty("user.dir")+"/upload";
+				
+				System.out.println(newrootPath);
+				
 				// 0代表前台 1代表模型端
 				switch (role) {
 				case 0:
 					if(catalog.equals("模型描述")) {
-						dir = new File(rootPath+File.separator + catalog);
+						dir = new File(newrootPath+File.separator + catalog);
 					}else {
-						dir = new File(rootPath + File.separator + "web" + File.separator + catalog);
+						dir = new File(newrootPath + File.separator + "web" + File.separator + catalog);
 					}						
 					break;
 				case 1:
-					dir = new File(rootPath + File.separator + "model" + File.separator + catalog);
+					dir = new File(newrootPath + File.separator + "model" + File.separator + catalog);
 					break;
 				default:
 					break;

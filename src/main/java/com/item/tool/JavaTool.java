@@ -221,6 +221,12 @@ public class JavaTool {
  		return df.format(new Date());
  	}
  	
+ 	//获取当前时间
+ 	 	public static String getUserCurrent() {
+ 	 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式		
+ 	 		return df.format(new Date());
+ 	 	}
+ 	
  	//获取时间
  	public static String getTime(int num) {
  		String str="";

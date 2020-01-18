@@ -18,8 +18,11 @@ public class WebMvcConfig implements WebMvcConfigurer{
      */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/image/模型描述/**").addResourceLocations("file:/D:/upload/模型描述/");
-		registry.addResourceHandler("/image/web/模型封面/**").addResourceLocations("file:/D:/upload/web/模型封面/");
+		String newrootPath=System.getProperty("user.dir")+"/upload";
+		newrootPath = newrootPath.replaceAll("\\\\", "/"); 
+		System.out.println("file:/"+newrootPath+"/模型描述/");
+		registry.addResourceHandler("/image/模型描述/**").addResourceLocations("file:/"+newrootPath+"/模型描述/");
+		registry.addResourceHandler("/image/web/模型封面/**").addResourceLocations("file:/"+newrootPath+"/web/模型封面/");
 		//registry.addResourceHandler("/image/模型描述/**").addResourceLocations("file:/usr/local/jar/D:/upload/模型描述/");//linux
 		//registry.addResourceHandler("/image/web/模型封面/**").addResourceLocations("file:/usr/local/jar/D:/upload/web/模型封面/");//linux
 		WebMvcConfigurer.super.addResourceHandlers(registry);
