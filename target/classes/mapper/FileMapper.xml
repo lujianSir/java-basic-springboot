@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO modelinfo
 		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`,`modelstatus`)
 		VALUES
-		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid}，#{modelstatus})
+		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid},#{modelstatus})
 	</insert>
 	
 	<!-- 模型信息修改 -->
