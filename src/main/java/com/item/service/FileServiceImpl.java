@@ -1,7 +1,6 @@
 package com.item.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,18 +50,18 @@ public class FileServiceImpl implements FileService {
 
 				String filename = now + filesuffix;
 
-				String newrootPath=System.getProperty("user.dir")+"/upload";
-				
+				String newrootPath = System.getProperty("user.dir") + "/upload";
+
 				System.out.println(newrootPath);
-				
+
 				// 0代表前台 1代表模型端
 				switch (role) {
 				case 0:
-					if(catalog.equals("模型描述")) {
-						dir = new File(newrootPath+File.separator + catalog);
-					}else {
+					if (catalog.equals("模型描述")) {
+						dir = new File(newrootPath + File.separator + catalog);
+					} else {
 						dir = new File(newrootPath + File.separator + "web" + File.separator + catalog);
-					}						
+					}
 					break;
 				case 1:
 					dir = new File(newrootPath + File.separator + "model" + File.separator + catalog);
@@ -84,10 +83,10 @@ public class FileServiceImpl implements FileService {
 				FileBean fileinfo = new FileBean();
 				fileinfo.setCatalog(catalog);
 				fileinfo.setFileurl(filePath);
-				fileinfo.setRole(role);	
-				if(catalog.equals("模型描述")) {
-					String str="/image/模型描述/"+filename;
-					filename=str;
+				fileinfo.setRole(role);
+				if (catalog.equals("模型描述")) {
+					String str = "/image/模型描述/" + filename;
+					filename = str;
 				}
 				fileinfo.setId(filename);
 				fileinfo.setUploadtime(JavaTool.getCurrent());
@@ -110,13 +109,13 @@ public class FileServiceImpl implements FileService {
 	public Result<?> modelUpload(ModelBean model) {
 		try {
 			// 模型信息修改
-			if(model.getMid()>0) {
+			if (model.getMid() > 0) {
 				fileMapper.modelInfoUpdate(model);
-			}else {
+			} else {
 				// 模型信息录入
 				model.setModelstatus(1);
 				fileMapper.modelinfoAdd(model);
-			}			
+			}
 			return Result.success();
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
@@ -132,7 +131,7 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public Result<?> fileinfoDelete(String filename) {
 		try {
-			FileBean fileinfo =  new FileBean();
+			FileBean fileinfo = new FileBean();
 			// 根据名称查询数据,获取文件路径
 			fileinfo = fileMapper.fileinfoQuery(filename).get(0);
 			// 删除文件
@@ -152,16 +151,15 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public Result<?> webStoreQuery() {
 		try {
-			//对返回数据的地址做相应的处理  方便前端做加载
+			// 对返回数据的地址做相应的处理 方便前端做加载
 			List<FileBean> list = new ArrayList<FileBean>();
-			List<String> filesurl =  new ArrayList<String>();
+			List<String> filesurl = new ArrayList<String>();
 			String fileurl = "";
-			for(int i = 0 ; i < list.size() ; i++) {
-				//此处截取数据信息
-				
+			for (int i = 0; i < list.size(); i++) {
+				// 此处截取数据信息
+
 				fileurl = list.get(i).getFileurl();
-				
-				
+
 				filesurl.add(fileurl);
 			}
 			return Result.success(filesurl);
@@ -175,7 +173,7 @@ public class FileServiceImpl implements FileService {
 	public Result<?> fileDelete(String id) {
 		// TODO Auto-generated method stub
 		try {
-			FileBean fileinfo =  new FileBean();
+			FileBean fileinfo = new FileBean();
 			// 根据名称查询数据,获取文件路径
 			fileinfo = fileMapper.selectFileById(id);
 			// 删除文件
@@ -193,48 +191,48 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public Result<?> queryModels(ModelBean modelBean, Page page, String startPrice, String endPrice,String orderBy) {
+	public Result<?> queryModels(ModelBean modelBean, Page page, String startPrice, String endPrice, String orderBy) {
 		// TODO Auto-generated method stub
-		Double star=null;
-		Double end=null;
-		if(startPrice!=null&& !startPrice.equals("")) {
-			star=Double.parseDouble(startPrice);
-		}else {
-			star=-0.1;
+		Double star = null;
+		Double end = null;
+		if (startPrice != null && !startPrice.equals("")) {
+			star = Double.parseDouble(startPrice);
+		} else {
+			star = -0.1;
 		}
-		if(endPrice!=null&& !endPrice.equals("")) {
-			end=Double.parseDouble(endPrice);
-		}else {
-			end=-0.1;
+		if (endPrice != null && !endPrice.equals("")) {
+			end = Double.parseDouble(endPrice);
+		} else {
+			end = -0.1;
 		}
-		
+
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
-		List<ModelBean>  list=fileMapper.queryModels(modelBean, star, end,orderBy);	
-		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(list);				
+		List<ModelBean> list = fileMapper.queryModels(modelBean, star, end, orderBy);
+		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(list);
 		return Result.success(pageInfo);
 	}
 
 	@Override
-	public Result<?> queryModelById(String mid,String uid) {
+	public Result<?> queryModelById(String mid, String uid) {
 		// TODO Auto-generated method stub
-		int num=0;
-		ModelBean modelBean=new ModelBean();
-		if(mid!=null && !mid.equals("")) {
-			num=Integer.parseInt(mid);
+		int num = 0;
+		ModelBean modelBean = new ModelBean();
+		if (mid != null && !mid.equals("")) {
+			num = Integer.parseInt(mid);
 		}
-		if(uid!=null && !uid.equals("")) {
-			modelBean=fileMapper.queryModelByIdAndUserId(num, uid);
-			if(modelBean==null) {
-				modelBean =fileMapper.queryModelById(num);	
+		if (uid != null && !uid.equals("")) {
+			modelBean = fileMapper.queryModelByIdAndUserId(num, uid);
+			if (modelBean == null) {
+				modelBean = fileMapper.queryModelById(num);
 				modelBean.setStatus(0);
 				modelBean.setFileModel("");
 			}
-		}else {
-			modelBean =fileMapper.queryModelById(num);	
+		} else {
+			modelBean = fileMapper.queryModelById(num);
 			modelBean.setStatus(0);
 			modelBean.setFileModel("");
-		}		
-		modelBean.setCreatTimeName(modelBean.getCreatTime());		
+		}
+		modelBean.setCreatTimeName(modelBean.getCreatTime());
 		return Result.success(modelBean);
 	}
 
@@ -242,6 +240,18 @@ public class FileServiceImpl implements FileService {
 	public List<ModelBean> queryModelsByAdmin(ModelBean modelBean) {
 		// TODO Auto-generated method stub
 		return fileMapper.queryModelsByAdmin(modelBean);
+	}
+
+	@Override
+	public int deleteModelInfoByMid(ModelBean modelBean) {
+		// TODO Auto-generated method stub
+		return fileMapper.deleteModelInfoByMid(modelBean);
+	}
+
+	@Override
+	public ModelBean queryModelById(int mid) {
+		// TODO Auto-generated method stub
+		return fileMapper.queryModelById(mid);
 	}
 
 }

@@ -141,7 +141,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<where>
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
 					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
-				</if>			
+				</if>	
+				<if test="modelBean.userid !=null and modelBean.userid !=''">
+					and userid=#{modelBean.userid}
+				</if>		
 			</where>
 	</select>
 
@@ -178,5 +181,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</set>
 		where mid=#{mid}
 	</update>
+	
+	<!-- 删除模型 信息-->
+	<delete id="deleteModelInfoByMid" parameterType="com.item.entity.ModelBean">
+		delete from modelinfo where mid=#{mid}
+	</delete>
 
 </mapper>

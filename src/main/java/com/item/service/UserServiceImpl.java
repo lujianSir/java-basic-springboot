@@ -30,18 +30,18 @@ public class UserServiceImpl implements UserService {
 	private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
 	@Value("${spring.mail.username}")
-    private String from;
-    @Autowired
-    private JavaMailSender mailSender;
-	
+	private String from;
+	@Autowired
+	private JavaMailSender mailSender;
+
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	@Autowired
 	private ShoppingMapper shoppingMapper;
 
 	/**
-	 * 判断用户是否存在 
+	 * 判断用户是否存在
 	 * 
 	 */
 	@Override
@@ -71,20 +71,20 @@ public class UserServiceImpl implements UserService {
 				// 获取user信息
 				UserBean user = userMapper.userLogin(username);
 				// 判断密码是否相等
-				if(user.getStatus()==1) {
+				if (user.getStatus() == 1) {
 					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
-						 
+
 						// 清除密码消息
-						user.setPassword("");								
+						user.setPassword("");
 						return Result.success(user);
 					} else {
 						return Result.error(50010, "用户密码错误");
 					}
-					
-				}else {
+
+				} else {
 					return Result.error(50030, "用户已被禁用");
 				}
-				
+
 			} else {
 				return Result.error(50020, "用户不存在");
 			}
@@ -107,9 +107,9 @@ public class UserServiceImpl implements UserService {
 			} else {
 				user.setPassword(JavaTool.string2MD5(user.getPassword()));
 				user.setUserid(JavaTool.getUserId());
-				if(user.getNickname()==null || user.getNickname().endsWith("")) {
+				if (user.getNickname() == null || user.getNickname().equals("")) {
 					user.setNickname(user.getUsername());
-				}				
+				}
 				user.setRegistertime(JavaTool.getUserCurrent());
 				userMapper.userRegister(user);
 				return Result.success();
@@ -125,14 +125,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Result<?> userMessageRegister(UserMessage userMessage) {
 		// TODO Auto-generated method stub
-		int num=userMapper.userMessageExist(userMessage.getUsername());
+		int num = userMapper.userMessageExist(userMessage.getUsername());
 		try {
-			if (num>0) {
+			if (num > 0) {
 				return Result.error(50010, "用户已存在");
 			} else {
 				userMessage.setPassword(JavaTool.string2MD5(userMessage.getPassword()));
 				userMessage.setUserid(JavaTool.getUserId());
-				if(userMessage.getNickname()==null || userMessage.getNickname().endsWith("")) {
+				if (userMessage.getNickname() == null || userMessage.getNickname().equals("")) {
 					userMessage.setNickname(userMessage.getUsername());
 				}
 				userMessage.setStatus(1);
@@ -150,28 +150,28 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Result<?> userMessageLogin(String username, String password) {
 		// TODO Auto-generated method stub
-		int num=userMapper.userMessageExist(username);
+		int num = userMapper.userMessageExist(username);
 		try {
-			if (num>0) {
+			if (num > 0) {
 				// 获取user信息
 				UserMessage user = userMapper.userMessageLogin(username);
-				if(user.getStatus()==1) {
+				if (user.getStatus() == 1) {
 					// 判断密码是否相等
 					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
-						
+
 						String token = TokenUtil.sign(user);
 						// 将token放在密码带出去
 						user.setPassword(token);
-						int shoppCount=shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
+						int shoppCount = shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
 						user.setShoppCount(shoppCount);
 						return Result.success(user);
 					} else {
 						return Result.error(50010, "用户密码错误");
 					}
-				}else {
+				} else {
 					return Result.error(50030, "用户已被禁用");
 				}
-				
+
 			} else {
 				return Result.error(50020, "用户不存在");
 			}
@@ -186,12 +186,12 @@ public class UserServiceImpl implements UserService {
 	public void sendSimpleMail(String to, String title, String content) {
 		// TODO Auto-generated method stub
 		SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from);
-        message.setTo(to);
-        message.setSubject(title);
-        message.setText(content);
-        mailSender.send(message);
-        LOG.info("邮件发送成功");
+		message.setFrom(from);
+		message.setTo(to);
+		message.setSubject(title);
+		message.setText(content);
+		mailSender.send(message);
+		LOG.info("邮件发送成功");
 	}
 
 	@Override
@@ -207,35 +207,73 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Result<?>  updateUserBeanByUserId(UserBean user) {
+	public Result<?> updateUserBeanByUserId(UserBean user) {
 		// TODO Auto-generated method stub
-		//user.setRegistertime(JavaTool.getUserCurrent());		
-		if(user.getUsername()==null || user.getUsername().equals("")) {	//修改密码	
-			if(user.getPassword()!=null&& !user.getPassword().equals("")) {
+		// user.setRegistertime(JavaTool.getUserCurrent());
+		if (user.getUsername() == null || user.getUsername().equals("")) { // 修改密码
+			if (user.getPassword() != null && !user.getPassword().equals("")) {
 				user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
 			}
-			Result.success(userMapper.updateUserBeanByUserId(user));			
-		}else {
-			//UserBean oneUserBean =userMapper.queryByUserId(user.getUserid());//一定有
-			UserBean otherUserBean=userMapper.queryByName(user.getUsername());//不一定有
-			if(otherUserBean!=null) {
-				if(user.getUsername().equals(otherUserBean.getUsername())&& !user.getUserid().equals(otherUserBean.getUserid())) {
+			Result.success(userMapper.updateUserBeanByUserId(user));
+		} else {
+			// UserBean oneUserBean =userMapper.queryByUserId(user.getUserid());//一定有
+			UserBean otherUserBean = userMapper.queryByName(user.getUsername());// 不一定有
+			if (otherUserBean != null) {
+				if (user.getUsername().equals(otherUserBean.getUsername())
+						&& !user.getUserid().equals(otherUserBean.getUserid())) {
 					return Result.error(201, "用户名已经存在");
-				}else {
-					if(user.getPassword()!=null&& !user.getPassword().equals("")) {
+				} else {
+					if (user.getPassword() != null && !user.getPassword().equals("")) {
 						user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
 					}
 					return Result.success(userMapper.updateUserBeanByUserId(user));
-				}	
-			}else {
-				if(user.getPassword()!=null&& !user.getPassword().equals("")) {
-					user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());					
+				}
+			} else {
+				if (user.getPassword() != null && !user.getPassword().equals("")) {
+					user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
 				}
 				return Result.success(userMapper.updateUserBeanByUserId(user));
 			}
-					
+
 		}
-		return Result.success();				
+		return Result.success();
+	}
+
+	@Override
+	public List<UserMessage> queryUserMessages(String str) {
+		// TODO Auto-generated method stub
+		return userMapper.queryUserMessages(str);
+	}
+
+	@Override
+	public int deleteUserMessageByUserId(UserMessage userMessage) {
+		// TODO Auto-generated method stub
+		return userMapper.deleteUserMessageByUserId(userMessage);
+	}
+
+	@Override
+	public Result<?> insertOrUpdateUserMessage(UserMessage userMessage) {
+		// TODO Auto-generated method stub
+		if (userMessage.getUserid() != null && !userMessage.getUserid().equals("")) {// 编辑
+			userMapper.updateUserMessage(userMessage);
+			return Result.success();
+		} else {// 添加
+			int num = userMapper.userMessageExist(userMessage.getUsername());
+			if (num > 0) {
+				return Result.error(500, "用户已存在");
+			} else {
+				if (userMessage.getPassword() != null && !userMessage.getPassword().equals("")) {
+					userMessage.setPassword(JavaTool.string2MD5(userMessage.getPassword()));
+				}
+				userMessage.setUserid(JavaTool.getUserId());
+				if (userMessage.getNickname() == null || userMessage.getNickname().equals("")) {
+					userMessage.setNickname(userMessage.getUsername());
+				}
+				userMessage.setRegistertime(JavaTool.getUserCurrent());
+				userMapper.insertUserMessage(userMessage);
+				return Result.success();
+			}
+		}
 	}
 
 }

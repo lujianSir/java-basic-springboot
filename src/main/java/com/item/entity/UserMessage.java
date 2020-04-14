@@ -6,26 +6,37 @@ import javax.persistence.Entity;
 
 /**
  * 商城用户
+ * 
  * @author Administrator
  *
  */
 @Entity
-public class UserMessage extends User implements Serializable{
+public class UserMessage extends User implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;		
-	
-	//账户余额
+	private static final long serialVersionUID = 1L;
+
+	// 账户余额
 	private double account;
-	
-	//购物车数量
+
+	private String accountStr;// 余额
+
+	// 购物车数量
 	private int shoppCount;
-	
-	//邮箱
+
+	// 邮箱
 	private String email;
-	
+
+	public String getAccountStr() {
+		return accountStr;
+	}
+
+	public void setAccountStr(String accountStr) {
+		this.accountStr = accountStr;
+	}
+
 	public double getAccount() {
 		return account;
 	}
@@ -49,5 +60,5 @@ public class UserMessage extends User implements Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-		
+
 }

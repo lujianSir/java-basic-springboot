@@ -1,29 +1,41 @@
 package com.item.entity;
 
 import java.io.Serializable;
+
 /**
  * 后台管理模块目录结构
+ * 
  * @author Administrator
  *
  */
-public class Power implements Serializable{
+public class Power implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	//id
-	private int  id;
-	
-	//父ID
+	// id
+	private int id;
+
+	// 父ID
 	private int pid;
-	
-	//名称
+
+	// 名称
 	private String name;
-	
-	//地址
+
+	// 地址
 	private String url;
+
+	private int status;// 状态
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	public int getId() {
 		return id;
@@ -56,6 +68,5 @@ public class Power implements Serializable{
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
-	
+
 }

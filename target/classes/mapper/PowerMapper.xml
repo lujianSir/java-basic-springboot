@@ -10,5 +10,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    		select  a.* from power a LEFT JOIN role_power b on a.id=b.powerid LEFT JOIN userinfo c on b.roleid=c.role
 		where c.userid=#{uid} and  c.`status`=1
    </select>
-	
+   
+	<!-- 查询该角色对应的权限 -->
+	<select id="queryPowersByRid" resultType="com.item.entity.Power">
+		SELECT
+			*,
+			case when id in(select powerid from role_power where roleid=#{id}) then 1 else 0 end status
+		FROM
+			power	
+	</select>
 </mapper>

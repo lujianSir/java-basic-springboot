@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace： 1. namespace必须和Mapper接口类路径一致 -->
+<mapper namespace="com.item.mapper.RoleMapper">
+
+	<!--查询所有的角色  -->
+	<select id="queryRoles" resultType="com.item.entity.Role">
+		select * from role order by creattime
+	</select>
+	
+	<!-- 添加角色 -->
+	<insert id="insertRole" parameterType="com.item.entity.Role">
+		insert into role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	   		<if test="name != null and name!=''">
+				name,
+			</if>
+			<if test="remark != null and remark !=''">
+				remark,
+			</if>	
+			<if test="creattime != null and creattime !=''">
+				creattime,
+			</if>						
+   		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+	   		<if test="name != null and name!=''">
+				#{name},
+			</if>
+			<if test="remark != null and remark !=''">
+				#{remark},
+			</if>
+			<if test="creattime != null and creattime !=''">
+				#{creattime},
+			</if>					
+   		</trim>
+	</insert>
+	
+	<!-- 编辑角色 -->
+	<update id="updateRole" parameterType="com.item.entity.Role">
+		update role 
+		<set>
+   			<if test="name != null and name!=''">
+				name=#{name},
+			</if>
+			<if test="remark != null and remark !=''">
+				remark=#{remark},
+			</if>
+					
+   		</set>
+   		where id=#{id}
+	</update>
+	
+	<!-- 删除角色 -->
+	<delete id="deleteRoleById" parameterType="com.item.entity.Role">
+		delete from role where id=#{id}
+	</delete>
+	
+	<!-- 查询改角色下面是否有用户 -->
+	<select id="queryCountUserBeanByRoleId" resultType="int">
+		select COUNT(*) from userinfo where role=#{id} 
+	</select>
+	
+	<!-- 通过角色ID删除所有的权限 -->
+	<delete id="deleteRolePowerByRid" parameterType="int">
+		delete from  role_power  where roleid=#{roleid}
+	</delete>
+	
+	<!-- 批量添加权限 -->
+	<insert id="insertRolePower" parameterType="java.util.List">
+		insert into role_power (roleid,powerid)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+    				(
+    					#{item.roleid},
+    					#{item.powerid}					
+    				)
+    		     </foreach>		
+	</insert>
+</mapper>

@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 通过用户名或者手机号查询(管理页面) -->
 	<select id="queryUserBeanByStr" parameterType="String" resultType="com.item.entity.UserBean">
-		select * from userinfo  where username like CONCAT('%',#{str},'%') or phone like CONCAT('%',#{str},'%')  order by registertime
+		select a.*,b.name rname from userinfo a LEFT JOIN role b on a.role=b.id  where a.username like CONCAT('%',#{str},'%') or a.phone like CONCAT('%',#{str},'%')  order by a.registertime
 	</select>
 	
 	<!-- 通过ID删除管理 -->
@@ -113,4 +113,98 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from usermessage where username = #{username}
 	</select>
 		
+		
+	<!-- 查询所有的商城用户 -->	
+	<select id="queryUserMessages" resultType="com.item.entity.UserMessage">
+		select userid,nickname, username, status,registertime,account,email from usermessage  where username like CONCAT('%',#{str},'%') or email like CONCAT('%',#{str},'%')  order by registertime
+	</select>
+	
+	<!-- 通过商城用户ID删除用户 -->
+	<delete id="deleteUserMessageByUserId" parameterType="com.item.entity.UserMessage">
+		delete from usermessage where userid=#{userid}
+	</delete>
+	
+	<!-- 修改商城用户信息 -->
+	<update id="updateUserMessage" parameterType="com.item.entity.UserMessage">
+		update usermessage	
+		<set>
+   			<if test="nickname != null and nickname !=''">
+				nickname=#{nickname},
+			</if>
+			<if test="username != null and username !=''">
+				username=#{username},
+			</if>
+			<if test="password != null and password !=''">
+				password=#{password},
+			</if>
+			<if test="status != null and status !=''">
+				status=#{status},
+			</if>
+			<if test="account != null and account !=''">
+				account=#{account},
+			</if>
+			<if test="email != null and email !=''">
+				email=#{email},
+			</if>
+					
+   		</set>
+		where userid=#{userid}
+	</update>
+	
+	<!-- 添加商城用户信息 -->
+	<insert id="insertUserMessage" parameterType="com.item.entity.UserMessage">
+		insert into usermessage
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+	   		<if test="userid != null and userid !=''">
+				userid,
+			</if>
+			<if test="nickname != null and nickname !=''">
+				nickname,
+			</if>	
+			<if test="username != null and username !=''">
+				username,
+			</if>
+			<if test="password != null and password !=''">
+				password,
+			</if>
+			<if test="status != null and status !=''">
+				status,
+			</if>
+			<if test="registertime != null and registertime !=''">
+				registertime,
+			</if>
+			<if test="account != null and account !=''">
+				account,
+			</if>
+			<if test="email != null and email !=''">
+				email,
+			</if>							
+   		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null and userid !=''">
+				#{userid},
+			</if>
+			<if test="nickname != null and nickname !=''">
+				#{nickname},
+			</if>	
+			<if test="username != null and username !=''">
+				#{username},
+			</if>
+			<if test="password != null and password !=''">
+				#{password},
+			</if>
+			<if test="status != null and status !=''">
+				#{status},
+			</if>
+			<if test="registertime != null and registertime !=''">
+				#{registertime},
+			</if>
+			<if test="account != null and account !=''">
+				#{account},
+			</if>
+			<if test="email != null and email !=''">
+				#{email},
+			</if>					
+   		</trim>
+	</insert>
 </mapper>
