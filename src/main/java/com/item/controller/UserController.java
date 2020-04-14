@@ -168,7 +168,7 @@ public class UserController {
 	}
 
 	/**
-	 * 添加或者修改商城用户信息
+	 * 添加或者修改商城用户信息1
 	 * 
 	 * @param userMessage
 	 * @return
