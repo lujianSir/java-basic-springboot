@@ -25,6 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
 		//registry.addResourceHandler("/image/web/模型封面/**").addResourceLocations("file:/"+newrootPath+"/web/模型封面/");
 		registry.addResourceHandler("/image/web/模型封面/**").addResourceLocations("file:/www/javaweb/shop/upload/web/模型封面/");//linux
 		registry.addResourceHandler("/image/web/模型源文件/**").addResourceLocations("file:/www/javaweb/shop/upload/web/模型源文件/");//linux
+		registry.addResourceHandler("/image/模型描述/**").addResourceLocations("file:/www/javaweb/shop/upload/模型描述/");//linux
 		WebMvcConfigurer.super.addResourceHandlers(registry);
 	}
 
