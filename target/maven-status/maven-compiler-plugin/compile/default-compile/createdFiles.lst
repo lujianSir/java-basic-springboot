@@ -1,4 +1,5 @@
 com\item\mapper\FileMapper.class
+com\item\mapper\RoleMapper.class
 com\item\controller\OrderController.class
 com\item\entity\TagBean.class
 com\item\mapper\TagMapper.class
@@ -8,6 +9,7 @@ com\item\service\PowerService.class
 com\item\entity\UserMessage.class
 com\item\alipay\AlipayProperties.class
 com\item\alipay\FlowModel.class
+com\item\service\RoleService.class
 com\item\alipay\PropertiesListener.class
 com\item\entity\UserBean.class
 com\item\service\ShoppingServiceImpl.class
@@ -28,7 +30,9 @@ com\item\tool\CorsFilter.class
 com\item\service\TagService.class
 com\item\service\FlowServiceImpl.class
 com\item\entity\FlowBean.class
+com\item\entity\RolePower.class
 com\item\service\UserService.class
+com\item\entity\Role.class
 com\item\controller\FileController.class
 com\item\entity\ShoppingCart.class
 com\item\service\FlowService.class
@@ -39,13 +43,16 @@ com\item\tool\TokenInterceptor.class
 com\item\service\TagServiceImpl.class
 com\item\service\ShoppingService.class
 com\item\mapper\UserMapper.class
+com\item\controller\RoleController.class
 com\item\entity\Power.class
 com\item\service\FileService.class
 com\item\test\Test.class
 com\item\Application.class
 com\item\mapper\FlowMapper.class
 com\item\tool\TokenUtil.class
+com\item\tool\Utils.class
 com\item\controller\UserController.class
+com\item\service\RoleServiceImpl.class
 com\item\tool\JavaTool.class
 com\item\service\PayServiceImpl.class
 com\item\mapper\PowerMapper.class

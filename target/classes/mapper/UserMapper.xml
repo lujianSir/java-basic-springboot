@@ -137,7 +137,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="password != null and password !=''">
 				password=#{password},
 			</if>
-			<if test="status != null and status !=''">
+			<if test="status != null and status !='' or status == 0 ">
 				status=#{status},
 			</if>
 			<if test="account != null and account !=''">
@@ -167,7 +167,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="password != null and password !=''">
 				password,
 			</if>
-			<if test="status != null and status !=''">
+			<if test="status != null and status !='' or status == 0 ">
 				status,
 			</if>
 			<if test="registertime != null and registertime !=''">
@@ -193,7 +193,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="password != null and password !=''">
 				#{password},
 			</if>
-			<if test="status != null and status !=''">
+			<if test="status != null and status !='' or status == 0">
 				#{status},
 			</if>
 			<if test="registertime != null and registertime !=''">

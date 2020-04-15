@@ -130,10 +130,13 @@ public class UserController {
 	 */
 	@RequestMapping("getCheckCode")
 	public Result<?> getCheckCode(String email) {
+		System.out.println("进入服务器");
 		String checkCode = String.valueOf(new Random().nextInt(899999) + 100000);
 		String message = "您的注册验证码为：" + checkCode;
+		System.out.println(message);
 		try {
 			userService.sendSimpleMail(email, "注册验证码", message);
+			System.out.println("已发送");
 		} catch (Exception e) {
 			return Result.error(500, "失败");
 		}
@@ -168,7 +171,7 @@ public class UserController {
 	}
 
 	/**
-	 * 添加或者修改商城用户信息1
+	 * 添加或者修改商城用户信息
 	 * 
 	 * @param userMessage
 	 * @return

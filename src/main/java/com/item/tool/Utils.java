@@ -174,18 +174,37 @@ public class Utils {
 	}
 
 	public static void main(String[] args) throws Exception {
-		String startday = "2020-03-13";// 到期时间
-		String endday = "2020-03-13";// 当前时间
-		Map<String, Object> DistanceDays = getDistanceDays(startday, endday);// 两个时间之间相差距离多少天
-		System.out.println(DistanceDays);
-//		String timeStamp = timeStamp();
-//		String date = timeStampDate(timeStamp, null);
-//		String date2 = timeStampDate2(timeStamp, null);
+//		String startday = "2020-03-13";// 到期时间
+//		String endday = "2020-03-13";// 当前时间
+//		Map<String, Object> DistanceDays = getDistanceDays(startday, endday);// 两个时间之间相差距离多少天
+//		System.out.println(DistanceDays);
+////		String timeStamp = timeStamp();
+////		String date = timeStampDate(timeStamp, null);
+////		String date2 = timeStampDate2(timeStamp, null);
+////		System.out.println(date);
+////		System.out.println(date2);
+//		String timeStemp = timeToStampshot("2020-03");
+//		String date = timeStampDateChineseshot(timeStemp, null);
+//		System.out.println(timeStemp);
 //		System.out.println(date);
-//		System.out.println(date2);
-		String timeStemp = timeToStampshot("2020-03");
-		String date = timeStampDateChineseshot(timeStemp, null);
-		System.out.println(timeStemp);
-		System.out.println(date);
+
+		if (java.awt.Desktop.isDesktopSupported()) {
+			try {
+				// 创建一个URI实例
+				java.net.URI uri = java.net.URI.create("https://www.baidu.com/");
+				// 获取当前系统桌面扩展
+				java.awt.Desktop dp = java.awt.Desktop.getDesktop();
+				// 判断系统桌面是否支持要执行的功能
+				if (dp.isSupported(java.awt.Desktop.Action.BROWSE)) {
+					// 获取系统默认浏览器打开链接
+					dp.browse(uri);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
+
 }
