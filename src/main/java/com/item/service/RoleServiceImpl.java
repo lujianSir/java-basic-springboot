@@ -61,10 +61,14 @@ public class RoleServiceImpl implements RoleService {
 		// TODO Auto-generated method stub
 		if (role.getId() == 1) {
 			return Result.error(500, "不能删除超级管理员");
+		} else if (role.getId() == 31) {
+			return Result.error(501, "不能删除模型管理员");
+		} else if (role.getId() == 3) {
+			return Result.error(502, "不能删除用户角色");
 		} else {
 			int num = roleMapper.queryCountUserBeanByRoleId(role);
 			if (num > 0) {
-				return Result.error(501, "该角色有绑定人员");
+				return Result.error(503, "该角色有绑定人员");
 			} else {
 				num = roleMapper.deleteRoleById(role);
 				return Result.success(num);

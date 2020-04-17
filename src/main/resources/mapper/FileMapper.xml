@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`,`modelstatus`)
+		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`,`modelstatus`,`examine`)
 		VALUES
-		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid},#{modelstatus})
+		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid},#{modelstatus},#{examine})
 	</insert>
 	
 	<!-- 模型信息修改 -->
@@ -63,8 +63,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="modelstatus!=null and modelstatus!='' or modelstatus==0">
 				modelstatus=#{modelstatus},
+			</if>		
+			<if test="examine !=null and examine!='' or examine==0">
+				examine=#{examine},
 			</if>
-			
 		</set>	
 		where mid=#{mid}	
 	</update>
@@ -137,13 +139,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询后台商城 -->
 	<select id="queryModelsByAdmin" resultType="com.item.entity.ModelBean">
-			select * from modelinfo
+			select a.*,b.username from modelinfo a LEFT JOIN userinfo  b on  a.userid=b.userid
 			<where>
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
-					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
+					and a.modelname like  CONCAT('%',#{modelBean.modelname},'%')
 				</if>	
-				<if test="modelBean.userid !=null and modelBean.userid !=''">
-					and userid=#{modelBean.userid}
+				<if test="modelBean.userid !=null and modelBean.userid !='' and roleid !=1 and roleid !=31 ">
+					and a.userid=#{modelBean.userid}
 				</if>		
 			</where>
 	</select>

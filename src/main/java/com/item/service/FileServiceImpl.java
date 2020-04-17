@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ import com.github.pagehelper.PageInfo;
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
+import com.item.entity.UserBean;
 import com.item.mapper.FileMapper;
+import com.item.mapper.UserMapper;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
 
@@ -29,6 +32,9 @@ public class FileServiceImpl implements FileService {
 
 	@Autowired
 	private FileMapper fileMapper;
+
+	@Autowired
+	private UserMapper userMapper;
 
 	@Value("${disk-path}")
 	private String rootPath;
@@ -170,8 +176,34 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public Result<?> fileDelete(String id) {
+	public Result<?> fileDelete(String id, String mid) {
 		// TODO Auto-generated method stub
+		if (mid != null && !mid.equals("")) {
+			List<String> list = new ArrayList<String>();
+			ModelBean modelBean = fileMapper.queryModelById(Integer.parseInt(mid));
+			String filepics = modelBean.getFilePics();
+			if (filepics != null && !filepics.equals("")) {
+				String[] pics = filepics.split(",");
+				for (int i = 0; i < pics.length; i++) {
+					String pic = pics[i];
+					list.add(pic);
+				}
+			}
+
+			for (int j = 0; j < list.size(); j++) {
+				if (list.get(j).equals(id)) {
+					list.remove(j);
+				}
+			}
+			if (list.size() > 0) {
+				filepics = StringUtils.strip(list.toString(), "[]");
+			}
+			ModelBean model = new ModelBean();
+			model.setMid(Integer.parseInt(mid));
+			model.setFilePics(filepics);
+			fileMapper.modelInfoUpdate(model);
+		}
+
 		try {
 			FileBean fileinfo = new FileBean();
 			// 根据名称查询数据,获取文件路径
@@ -181,6 +213,7 @@ public class FileServiceImpl implements FileService {
 			if (file.exists()) {
 				file.delete();
 			}
+
 			// 删除记录
 			fileMapper.fileinfoDelete(fileinfo.getId());
 			return Result.success(fileinfo.getId());
@@ -239,7 +272,9 @@ public class FileServiceImpl implements FileService {
 	@Override
 	public List<ModelBean> queryModelsByAdmin(ModelBean modelBean) {
 		// TODO Auto-generated method stub
-		return fileMapper.queryModelsByAdmin(modelBean);
+		UserBean userBean = userMapper.queryByUserId(modelBean.getUserid());
+		int roleid = userBean.getRole();
+		return fileMapper.queryModelsByAdmin(modelBean, roleid);
 	}
 
 	@Override

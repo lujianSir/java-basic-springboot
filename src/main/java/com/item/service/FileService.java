@@ -16,7 +16,7 @@ public interface FileService {
 	public Result<?> fileUpload(MultipartFile file, HttpServletRequest request, String catalog, int role);
 
 	// 通过id删除文件
-	public Result<?> fileDelete(String id);
+	public Result<?> fileDelete(String id, String mid);
 
 	// 模型信息录入、修改
 	public Result<?> modelUpload(ModelBean model);

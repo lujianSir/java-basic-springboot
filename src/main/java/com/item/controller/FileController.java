@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.item.alipay.FlowModel;
+import com.item.entity.Image;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
 import com.item.service.FileService;
@@ -118,8 +120,8 @@ public class FileController {
 	 */
 	@RequestMapping("/deleteFileById")
 	@ResponseBody
-	public Result<?> fileDelete(String id) {
-		return fileService.fileDelete(id);
+	public Result<?> fileDelete(String id, String mid) {
+		return fileService.fileDelete(id, mid);
 	}
 
 	/**
@@ -129,7 +131,7 @@ public class FileController {
 	@ResponseBody
 	public Result<?> modelUpload(String modelname, String resource_two, String modelprice, String unitprice,
 			String buildtype, String resource_one, String describe, String filePics, String fileModel, String mid,
-			String userid, String modelstatus) {
+			String userid, String modelstatus, String stype) {
 		ModelBean model = new ModelBean();
 		model.setBuildtype(buildtype);
 		model.setDescribe(describe);
@@ -149,9 +151,16 @@ public class FileController {
 		if (modelstatus != null && !modelstatus.equals("")) {
 			model.setModelstatus(Integer.parseInt(modelstatus));
 		}
+
 		if (mid != null && !mid.equals("")) {
 			model.setMid(Integer.parseInt(mid));
+			if (Integer.parseInt(mid) == 0) {
+				model.setExamine(-1);
+			} else if (Integer.parseInt(mid) == 1) {
+				model.setExamine(0);
+			}
 		}
+
 		return fileService.modelUpload(model);
 	}
 
@@ -167,6 +176,19 @@ public class FileController {
 	public Result<?> queryModelsByAdmin(ModelBean modelBean, Page page) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<ModelBean> list = fileService.queryModelsByAdmin(modelBean);
+		for (int i = 0; i < list.size(); i++) {
+			List<Image> images = new ArrayList<Image>();
+			String pics = list.get(i).getFilePics();
+			if (pics != null && !pics.equals("")) {
+				String[] ps = pics.split(",");
+				for (int j = 0; j < ps.length; j++) {
+					Image image = new Image();
+					image.setPic(ps[j]);
+					images.add(image);
+				}
+				list.get(i).setImages(images);
+			}
+		}
 		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(list);
 		return Result.success(pageInfo);
 	}

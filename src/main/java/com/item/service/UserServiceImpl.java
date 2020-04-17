@@ -137,7 +137,18 @@ public class UserServiceImpl implements UserService {
 				}
 				userMessage.setStatus(1);
 				userMessage.setRegistertime(JavaTool.getUserCurrent());
-				userMapper.userMessageRegister(userMessage);
+				userMapper.userMessageRegister(userMessage);// 注册商城用户
+
+				UserBean userBean = new UserBean();
+				userBean.setUserid(userMessage.getUserid());
+				userBean.setNickname(userMessage.getNickname());
+				userBean.setUsername(userMessage.getUsername());
+				userBean.setPassword(userMessage.getPassword());
+				userBean.setRegistertime(userMessage.getRegistertime());
+				userBean.setRole(3);
+				userBean.setStatus(1);
+				userMapper.userRegister(userBean);// 同时注册后台用户 默认为一般用户
+
 				return Result.success();
 			}
 		} catch (Exception e) {
@@ -203,6 +214,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int deletUserBeanByUserId(String userid) {
 		// TODO Auto-generated method stub
+		UserMessage userMessage = new UserMessage();
+		userMessage.setUserid(userid);
+		userMapper.deleteUserMessageByUserId(userMessage);
 		return userMapper.deletUserBeanByUserId(userid);
 	}
 
@@ -210,33 +224,27 @@ public class UserServiceImpl implements UserService {
 	public Result<?> updateUserBeanByUserId(UserBean user) {
 		// TODO Auto-generated method stub
 		// user.setRegistertime(JavaTool.getUserCurrent());
-		if (user.getUsername() == null || user.getUsername().equals("")) { // 修改密码
+		int row = userMapper.userExist(user.getUserid());// 不一定有
+		if (row > 0) {
+			return Result.error(201, "用户名已经存在");
+		} else {
+			UserMessage userMessage = new UserMessage();
 			if (user.getPassword() != null && !user.getPassword().equals("")) {
 				user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
+				userMessage.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
 			}
-			Result.success(userMapper.updateUserBeanByUserId(user));
-		} else {
-			// UserBean oneUserBean =userMapper.queryByUserId(user.getUserid());//一定有
-			UserBean otherUserBean = userMapper.queryByName(user.getUsername());// 不一定有
-			if (otherUserBean != null) {
-				if (user.getUsername().equals(otherUserBean.getUsername())
-						&& !user.getUserid().equals(otherUserBean.getUserid())) {
-					return Result.error(201, "用户名已经存在");
-				} else {
-					if (user.getPassword() != null && !user.getPassword().equals("")) {
-						user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
-					}
-					return Result.success(userMapper.updateUserBeanByUserId(user));
-				}
-			} else {
-				if (user.getPassword() != null && !user.getPassword().equals("")) {
-					user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
-				}
-				return Result.success(userMapper.updateUserBeanByUserId(user));
+			if (user.getNickname() == null || user.getNickname().equals("")) {
+				user.setNickname(user.getUsername());
+				userMessage.setNickname(user.getUsername());
 			}
 
+			userMessage.setUserid(user.getUserid());
+			userMessage.setStatus(user.getStatus());
+			userMessage.setUsername(user.getUsername());
+			userMapper.updateUserMessage(userMessage);// 修改商城管理人员
+			return Result.success(userMapper.updateUserBeanByUserId(user));// 修改后台管理人员
 		}
-		return Result.success();
+
 	}
 
 	@Override
@@ -248,6 +256,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int deleteUserMessageByUserId(UserMessage userMessage) {
 		// TODO Auto-generated method stub
+		userMapper.deletUserBeanByUserId(userMessage.getUserid());
 		return userMapper.deleteUserMessageByUserId(userMessage);
 	}
 
@@ -255,7 +264,21 @@ public class UserServiceImpl implements UserService {
 	public Result<?> insertOrUpdateUserMessage(UserMessage userMessage) {
 		// TODO Auto-generated method stub
 		if (userMessage.getUserid() != null && !userMessage.getUserid().equals("")) {// 编辑
-			userMapper.updateUserMessage(userMessage);
+			UserBean user = new UserBean();
+			if (userMessage.getPassword() != null && !userMessage.getPassword().equals("")) {
+				userMessage.setPassword(JavaTool.string2MD5(userMessage.getPassword()));
+				user.setPassword(JavaTool.string2MD5(userMessage.getPassword()));
+			}
+			if (userMessage.getNickname() == null || userMessage.getNickname().equals("")) {
+				userMessage.setNickname(userMessage.getUsername());
+				user.setNickname(userMessage.getUsername());
+			}
+			user.setUsername(userMessage.getUsername());
+			user.setUserid(userMessage.getUserid());
+			user.setStatus(userMessage.getStatus());
+			userMapper.updateUserBeanByUserId(user);// 修改后台管理人
+
+			userMapper.updateUserMessage(userMessage);// 修改商城管理人员
 			return Result.success();
 		} else {// 添加
 			int num = userMapper.userMessageExist(userMessage.getUsername());
