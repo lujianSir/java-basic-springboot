@@ -30,6 +30,9 @@ public interface FileService {
 	// 查询所有的商城数据(后台)
 	public List<ModelBean> queryModelsByAdmin(ModelBean modelBean);
 
+	// 查询需要审核的模型审核
+	public List<ModelBean> queryModelsExamine(ModelBean modelBean);
+
 	// 根据模型ID查询模型信息
 	public ModelBean queryModelById(int mid);
 

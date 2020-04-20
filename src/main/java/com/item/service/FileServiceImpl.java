@@ -289,4 +289,20 @@ public class FileServiceImpl implements FileService {
 		return fileMapper.queryModelById(mid);
 	}
 
+	@Override
+	public List<ModelBean> queryModelsExamine(ModelBean modelBean) {
+		// TODO Auto-generated method stub
+		UserBean userBean = userMapper.queryByUserId(modelBean.getUserid());
+		int roleid = userBean.getRole();
+		List<ModelBean> list = fileMapper.queryModelsExamine(modelBean, roleid);
+		for (int i = 0; i < list.size(); i++) {
+			if (roleid == 1 || roleid == 31) {
+				list.get(i).setFlag(true);
+			} else {
+				list.get(i).setFlag(false);
+			}
+		}
+		return list;
+	}
+
 }

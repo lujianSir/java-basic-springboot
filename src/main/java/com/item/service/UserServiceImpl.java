@@ -299,4 +299,10 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public UserMessage queryUserMessageByUserId(String userid) {
+		// TODO Auto-generated method stub
+		return userMapper.queryUserMessageByUserId(userid);
+	}
+
 }

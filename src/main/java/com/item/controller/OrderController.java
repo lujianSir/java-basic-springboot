@@ -24,7 +24,6 @@ import com.item.alipay.AlipayProperties;
 import com.item.alipay.FlowModel;
 import com.item.alipay.OrderFlow;
 import com.item.entity.ModelBean;
-import com.item.service.FileService;
 import com.item.service.FlowServiceImpl;
 import com.item.service.PayService;
 import com.item.tool.JavaTool;
@@ -44,9 +43,6 @@ public class OrderController {
 	@Autowired
 	private PayService payService;
 
-	@Autowired
-	private FileService fileService;
-
 	private static final Logger log = LoggerFactory.getLogger(FlowServiceImpl.class);
 
 	// 测试
@@ -56,7 +52,7 @@ public class OrderController {
 	}
 
 	/**
-	 * 单个支付
+	 * 单个支付(支付宝)
 	 * 
 	 * @return
 	 */
@@ -92,6 +88,50 @@ public class OrderController {
 		orderFlow.setCycle(Integer.parseInt(cycle));
 		orderFlow.setCreatetime(JavaTool.getCurrent());
 		return Result.success(payService.aliPayOne(orderFlow));
+	}
+
+	/**
+	 * 单个支付(商城币)
+	 * 
+	 * @param uid
+	 * @param mid
+	 * @param cycle
+	 * @param paidmethod
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	@RequestMapping(value = "orderByThree")
+	@ResponseBody
+	public Result<?> orderByThree(String uid, String mid, String cycle, String paidmethod) throws AlipayApiException {
+		ModelBean modelBean = payService.queryModelById(Integer.parseInt(mid));
+		OrderFlow orderFlow = new OrderFlow();
+		orderFlow.setOid(JavaTool.getUserId());
+		orderFlow.setOrderstatus(0);
+		orderFlow.setUid(uid);
+		DecimalFormat df = new DecimalFormat("#.00");
+		switch (Integer.parseInt(cycle)) {// 商城币在原来的基础上*10
+		case 1:// 一个月
+			orderFlow.setOrderamount(df.format(modelBean.getUnitprice() * 10));
+			break;
+		case 2:// 半年 九折
+			orderFlow.setOrderamount(df.format(modelBean.getUnitprice() * 6 * 0.9 * 10));
+			break;
+		case 3:// 一年 八折
+			orderFlow.setOrderamount(df.format(modelBean.getUnitprice() * 12 * 0.8 * 10));
+			break;
+		case 4:// 永久
+			orderFlow.setOrderamount(df.format(modelBean.getModelprice() * 10));
+			break;
+		default:
+			break;
+		}
+		orderFlow.setMids(mid);
+		orderFlow.setPaidmethod(Integer.parseInt(paidmethod));
+		orderFlow.setMname(modelBean.getModelname());
+		orderFlow.setStr1("1");// 走单个支付
+		orderFlow.setCycle(Integer.parseInt(cycle));
+		orderFlow.setCreatetime(JavaTool.getCurrent());
+		return payService.orderByThree(orderFlow);
 	}
 
 	/**

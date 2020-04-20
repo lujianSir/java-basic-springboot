@@ -130,11 +130,11 @@ public class FileController {
 	@RequestMapping("/model")
 	@ResponseBody
 	public Result<?> modelUpload(String modelname, String resource_two, String modelprice, String unitprice,
-			String buildtype, String resource_one, String describe, String filePics, String fileModel, String mid,
-			String userid, String modelstatus, String stype) {
+			String buildtype, String resource_one, String mdescribe, String filePics, String fileModel, String mid,
+			String userid, String modelstatus, String examine, String examinepeople, String examineremark) {
 		ModelBean model = new ModelBean();
 		model.setBuildtype(buildtype);
-		model.setDescribe(describe);
+		model.setMdescribe(mdescribe);
 		model.setModelname(modelname);
 		if (modelprice != null && !modelprice.equals("")) {
 			model.setModelprice(Double.parseDouble(modelprice));
@@ -148,19 +148,24 @@ public class FileController {
 		model.setFileModel(fileModel);
 		model.setUserid(userid);
 		model.setCreatTime(JavaTool.getCurrent());
+		model.setExamineremark(examineremark);
 		if (modelstatus != null && !modelstatus.equals("")) {
 			model.setModelstatus(Integer.parseInt(modelstatus));
 		}
 
 		if (mid != null && !mid.equals("")) {
 			model.setMid(Integer.parseInt(mid));
-			if (Integer.parseInt(mid) == 0) {
-				model.setExamine(-1);
-			} else if (Integer.parseInt(mid) == 1) {
-				model.setExamine(0);
-			}
+		} else {
+			model.setExamine(0);
+		}
+		if (examine != null && !examine.equals("")) {
+			model.setExamine(Integer.parseInt(examine));
 		}
 
+		if (examinepeople != null && !examinepeople.equals("")) {
+			model.setExaminepeople(examinepeople);
+			model.setExaminetime(JavaTool.getCurrent());
+		}
 		return fileService.modelUpload(model);
 	}
 
@@ -176,6 +181,38 @@ public class FileController {
 	public Result<?> queryModelsByAdmin(ModelBean modelBean, Page page) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<ModelBean> list = fileService.queryModelsByAdmin(modelBean);
+		for (int i = 0; i < list.size(); i++) {
+			List<Image> images = new ArrayList<Image>();
+			String pics = list.get(i).getFilePics();
+			if (pics != null && !pics.equals("")) {
+				String[] ps = pics.split(",");
+				for (int j = 0; j < ps.length; j++) {
+					Image image = new Image();
+					image.setPic(ps[j]);
+					images.add(image);
+				}
+				list.get(i).setImages(images);
+			}
+		}
+		PageInfo<ModelBean> pageInfo = new PageInfo<ModelBean>(list);
+		return Result.success(pageInfo);
+	}
+
+	/**
+	 * 模型审核
+	 * 
+	 * @param modelBean
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping("/queryModelsExamine")
+	@ResponseBody
+	public Result<?> queryModelsExamine(ModelBean modelBean, Page page, String examinename) {
+		if (examinename != null && !examinename.equals("")) {
+			modelBean.setExamine(Integer.parseInt(examinename));
+		}
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<ModelBean> list = fileService.queryModelsExamine(modelBean);
 		for (int i = 0; i < list.size(); i++) {
 			List<Image> images = new ArrayList<Image>();
 			String pics = list.get(i).getFilePics();

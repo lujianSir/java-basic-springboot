@@ -22,7 +22,7 @@ public class ModelBean implements Serializable {
 	private double modelprice = -0.1;
 
 	// 模型单价
-	private double unitprice;
+	private double unitprice = -0.1;
 
 	// 构建类型
 	private String buildtype;
@@ -39,7 +39,7 @@ public class ModelBean implements Serializable {
 	private String fileModel;
 
 	// 模型描述
-	private String describe;
+	private String mdescribe;
 
 	// 下载数量
 	private int download;
@@ -65,7 +65,75 @@ public class ModelBean implements Serializable {
 
 	private String modelstatusname;// 状态名称
 
-	private int examine;// 审核 待审核 0 已审核是 1 未通过 2
+	private int examine = -1;// 审核 待审核 0 已审核是 1 未通过 2
+
+	private String examinename;// s审核名称
+
+	private boolean flag;// 判断是否能审核
+
+	private String examinepeople;// 审核人的ID
+
+	private String examinepeoplename;// 审核人名称
+
+	private String examinetime;// 审核时间
+
+	private String examineremark;// 备注
+
+	public String getExamineremark() {
+		return examineremark;
+	}
+
+	public void setExamineremark(String examineremark) {
+		this.examineremark = examineremark;
+	}
+
+	public String getExaminepeoplename() {
+		return examinepeoplename;
+	}
+
+	public void setExaminepeoplename(String examinepeoplename) {
+		this.examinepeoplename = examinepeoplename;
+	}
+
+	public String getExaminetime() {
+		return examinetime;
+	}
+
+	public void setExaminetime(String examinetime) {
+		this.examinetime = examinetime;
+	}
+
+	public String getMdescribe() {
+		return mdescribe;
+	}
+
+	public void setMdescribe(String mdescribe) {
+		this.mdescribe = mdescribe;
+	}
+
+	public String getExaminepeople() {
+		return examinepeople;
+	}
+
+	public void setExaminepeople(String examinepeople) {
+		this.examinepeople = examinepeople;
+	}
+
+	public boolean isFlag() {
+		return flag;
+	}
+
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
+	public String getExaminename() {
+		return examinename;
+	}
+
+	public void setExaminename(String examinename) {
+		this.examinename = examinename;
+	}
 
 	public List<Image> getImages() {
 		return images;
@@ -149,14 +217,6 @@ public class ModelBean implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	public String getDescribe() {
-		return describe;
-	}
-
-	public void setDescribe(String describe) {
-		this.describe = describe;
 	}
 
 	public int getMid() {

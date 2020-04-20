@@ -10,6 +10,7 @@ com\item\entity\UserMessage.class
 com\item\alipay\AlipayProperties.class
 com\item\alipay\FlowModel.class
 com\item\service\RoleService.class
+com\item\entity\Image.class
 com\item\alipay\PropertiesListener.class
 com\item\entity\UserBean.class
 com\item\service\ShoppingServiceImpl.class

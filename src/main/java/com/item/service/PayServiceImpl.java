@@ -15,8 +15,12 @@ import com.item.alipay.AlipayProperties;
 import com.item.alipay.FlowModel;
 import com.item.alipay.OrderFlow;
 import com.item.entity.ModelBean;
+import com.item.entity.UserMessage;
 import com.item.mapper.FileMapper;
 import com.item.mapper.PayMapper;
+import com.item.mapper.UserMapper;
+import com.item.tool.JavaTool;
+import com.item.tool.Result;
 
 @Service
 public class PayServiceImpl implements PayService {
@@ -26,6 +30,9 @@ public class PayServiceImpl implements PayService {
 
 	@Autowired
 	private PayMapper payMapper;
+
+	@Autowired
+	private UserMapper userMapper;
 
 	@Override
 	public String aliPay(AlipayBean alipayBean) throws AlipayApiException {
@@ -121,6 +128,38 @@ public class PayServiceImpl implements PayService {
 	public List<FlowModel> selectFlowModelByUserId(String uid) {
 		// TODO Auto-generated method stub
 		return payMapper.selectFlowModelByUserId(uid);
+	}
+
+	@Override
+	public Result<?> orderByThree(OrderFlow orderFlow) {
+		// TODO Auto-generated method stub
+		payMapper.insertOrderFlow(orderFlow); // 生成订单
+		UserMessage userMessage = userMapper.queryUserMessageByUserId(orderFlow.getUid());
+		Double obj1 = Double.parseDouble(orderFlow.getOrderamount());// 需要的钱
+		Double obj2 = userMessage.getAccount();// 本身的钱
+		int retval = obj1.compareTo(obj2);
+		if (retval > 0) {// 需要的钱多
+			return Result.error(500, "商城币不够");
+		} else {// 本身的钱多或者刚刚好
+			Double dou = JavaTool.sub(obj2, obj1);// 剩余的钱
+			orderFlow.setOrderstatus(1);
+			// 修改订单信息
+			orderFlow.setPaidtime(JavaTool.getCurrent());
+			payMapper.updateOrderFlow(orderFlow);// 修改订单信息
+			userMessage.setAccount(dou);
+			userMapper.updateUserMessage(userMessage);// 修改用户钱的信息
+
+			FlowModel flowModel = new FlowModel();
+			flowModel.setFid(orderFlow.getOid());
+			flowModel.setUid(orderFlow.getUid());
+			flowModel.setMid(Integer.parseInt(orderFlow.getMids()));
+			flowModel.setEndaccount(obj1.toString());
+			flowModel.setCycle(orderFlow.getCycle());
+			flowModel.setStarttime(JavaTool.getCurrent());
+			flowModel.setEndtime(JavaTool.getTime(orderFlow.getCycle()));
+			payMapper.insertFlowModel(flowModel);
+			return Result.success();
+		}
 	}
 
 }

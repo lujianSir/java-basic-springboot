@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`describe`,`creatTime`,`userid`,`modelstatus`,`examine`)
+		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`mdescribe`,`creatTime`,`userid`,`modelstatus`,`examine`,`examinepeople`,`examinetime`)
 		VALUES
-		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{describe},#{creatTime},#{userid},#{modelstatus},#{examine})
+		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{mdescribe},#{creatTime},#{userid},#{modelstatus},#{examine},#{examinepeople},#{examinetime})
 	</insert>
 	
 	<!-- 模型信息修改 -->
@@ -34,10 +34,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="modelname!=null and modelname!=''">
 			modelname=#{modelname},
 			</if>
-			<if test="modelprice!=null and modelprice!=''">
+			<if test="modelprice!=null and modelprice!='' and modelprice gt 0  or modelprice==0 ">
 				modelprice=#{modelprice},
 			</if>
-			<if test="unitprice!=null and unitprice!=''">
+			<if test="unitprice!=null and unitprice!='' and modelprice gt 0  or unitprice==0">
 				unitprice=#{unitprice},
 			</if>
 			<if test="buildtype!=null and buildtype!=''">
@@ -55,8 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="fileModel!=null and fileModel!=''">
 				fileModel=#{fileModel},	
 			</if>
-			<if test="describe!=null and describe!=''">
-				describe=#{describe},
+			<if test="mdescribe !=null">
+				mdescribe=#{mdescribe},
 			</if>
 			<if test="userid!=null and userid!=''">
 				userid=#{userid},
@@ -64,8 +64,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="modelstatus!=null and modelstatus!='' or modelstatus==0">
 				modelstatus=#{modelstatus},
 			</if>		
-			<if test="examine !=null and examine!='' or examine==0">
+			<if test="examine !=null and examine!='' and examine gt 0 or examine==0">
 				examine=#{examine},
+			</if>
+			<if test="examinepeople !=null and examinepeople!=''">
+				examinepeople=#{examinepeople},
+			</if>
+			<if test="examinetime !=null and examinetime!=''">
+				examinetime=#{examinetime},
+			</if>
+			<if test="examineremark !=null and examineremark!=''">
+				examineremark=#{examineremark},
 			</if>
 		</set>	
 		where mid=#{mid}	
@@ -95,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 查询商城所以的信息 -->
 	<select id="queryModels" resultType="com.item.entity.ModelBean">
 	
-		select * from modelinfo  where modelstatus=1
+		select * from modelinfo  where modelstatus=1 and examine=1
 			
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
 					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
@@ -148,6 +157,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					and a.userid=#{modelBean.userid}
 				</if>		
 			</where>
+	</select>
+	
+	<!-- 审核 -->
+	<select id="queryModelsExamine" resultType="com.item.entity.ModelBean">
+				SELECT a.*, b.username,c.username examinepeoplename,
+					case when a.examine=0 then '审核中' when  a.examine=1 then '审核通过' else '不通过' end examinename
+				FROM
+					modelinfo a
+				LEFT JOIN userinfo b ON a.userid = b.userid
+				LEFT JOIN userinfo c on a.examinepeople=c.userid
+				WHERE
+					a.modelstatus = 1
+				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
+					and a.modelname like  CONCAT('%',#{modelBean.modelname},'%')
+				</if>	
+				<if test="modelBean.userid !=null and modelBean.userid !='' and roleid !=1 and roleid !=31 ">
+					and a.userid=#{modelBean.userid}
+				</if>	
+				<if test="modelBean.examine !=null and modelBean.examine !='' and modelBean.examine gt 0 or modelBean.examine==0 ">
+					and a.examine=#{modelBean.examine}
+				</if>
+				<if test="modelBean.mid !=null and modelBean.mid !=''">
+					and a.mid =#{modelBean.mid}
+				</if>		
+				order by a.creatTime desc
 	</select>
 
 	<!-- 通过ID查询模型的信息 -->

@@ -183,4 +183,16 @@ public class UserController {
 		}
 		return userService.insertOrUpdateUserMessage(userMessage);
 	}
+
+	/**
+	 * 通过ID查询商城用户信息
+	 * 
+	 * @param userid
+	 * @return
+	 */
+	@RequestMapping(value = "/queryUserMessageByUserId")
+	public Result<?> queryUserMessageByUserId(String userid) {
+		UserMessage userMessage = userService.queryUserMessageByUserId(userid);
+		return Result.success(userMessage);
+	}
 }

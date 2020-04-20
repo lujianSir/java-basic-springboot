@@ -207,4 +207,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>					
    		</trim>
 	</insert>
+	
+	<select id="queryUserMessageByUserId" resultType="com.item.entity.UserMessage">
+		select * from usermessage where userid=#{userid}
+	</select>
 </mapper>

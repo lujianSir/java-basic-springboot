@@ -44,4 +44,7 @@ public interface UserService {
 	// 添加或者修改商城用户信息
 	Result<?> insertOrUpdateUserMessage(UserMessage userMessage);
 
+	// 通过ID查询信息
+	UserMessage queryUserMessageByUserId(String userid);
+
 }

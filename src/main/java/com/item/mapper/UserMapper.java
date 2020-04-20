@@ -62,4 +62,8 @@ public interface UserMapper {
 
 	// 修改用户信息
 	int updateUserMessage(UserMessage userMessage);
+
+	// 通过用户的ID查询商城币
+	UserMessage queryUserMessageByUserId(String userid);
+
 }

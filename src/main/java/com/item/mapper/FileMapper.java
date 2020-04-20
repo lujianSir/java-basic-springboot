@@ -35,6 +35,9 @@ public interface FileMapper {
 	// 查询所有的商城数据(后台)
 	public List<ModelBean> queryModelsByAdmin(@Param("modelBean") ModelBean modelBean, @Param("roleid") int roleid);
 
+	// 查询需要审核的模型审核
+	public List<ModelBean> queryModelsExamine(@Param("modelBean") ModelBean modelBean, @Param("roleid") int roleid);
+
 	// 通过模型ID删除模型以及对应的图片
 	int deleteModelInfoByMid(ModelBean modelBean);
 
