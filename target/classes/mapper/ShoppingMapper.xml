@@ -52,11 +52,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			b.filePics filePics,
 			b.modelname modelname,
 			case  when c.username IS NULL then d.username else   c.username end  username,
-	 		case when a.cycle=1 then b.unitprice
+	 		FORMAT(	case when a.cycle=1 then b.unitprice
 			when a.cycle=2 then b.unitprice*6*0.9
 			when a.cycle=3  then b.unitprice*12*0.8
-			else b.modelprice
-			end account
+			else b.modelprice end,2) account,
+			b.unitprice,
+			b.modelprice
 			FROM
 			shoppingcart a
 			LEFT JOIN modelinfo b ON a.mid = b.mid LEFT JOIN usermessage c ON b.userid = c.userid
@@ -88,5 +89,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				#{item}
 		</foreach>
 	</select>
+	
+	<!-- 通过ID查询购物车信息 -->
+	<select id="queryShoppingCartBySid" resultType="com.item.entity.ShoppingCart">
+		select * from shoppingcart where sid=#{sid}
+	</select>
+	
+	<delete id="deleteShopCartByUserIdAndMid" parameterType="com.item.alipay.OrderFlow">
+		delete from shoppingcart where uid=#{uid} and mid=#{mids}
+	</delete>
 	
 </mapper>

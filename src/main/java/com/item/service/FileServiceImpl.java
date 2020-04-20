@@ -119,7 +119,6 @@ public class FileServiceImpl implements FileService {
 				fileMapper.modelInfoUpdate(model);
 			} else {
 				// 模型信息录入
-				model.setModelstatus(1);
 				fileMapper.modelinfoAdd(model);
 			}
 			return Result.success();

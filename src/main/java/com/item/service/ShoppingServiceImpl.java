@@ -1,7 +1,5 @@
 package com.item.service;
 
-import java.io.File;
-import java.text.DecimalFormat;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,22 +7,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.item.entity.ModelBean;
+import com.item.alipay.OrderFlow;
 import com.item.entity.ShoppingCart;
 import com.item.mapper.FileMapper;
 import com.item.mapper.ShoppingMapper;
 import com.item.tool.JavaTool;
+
 @Service
-public class ShoppingServiceImpl implements ShoppingService{
+public class ShoppingServiceImpl implements ShoppingService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(FlowServiceImpl.class);
-	
+
 	@Autowired
 	private ShoppingMapper shoppingMapper;
-	
+
 	@Autowired
 	private FileMapper fileMapper;
-	
+
 	@Override
 	public int insertOrUpdateShopCart(ShoppingCart shoppingCart) {
 //		// TODO Auto-generated method stub
@@ -47,19 +46,19 @@ public class ShoppingServiceImpl implements ShoppingService{
 //		default:
 //			break;
 //		}	
-		
-		ShoppingCart shop=shoppingMapper.selectShopCartByUidAndMid(shoppingCart);
-		if(shop!=null) {
+
+		ShoppingCart shop = shoppingMapper.selectShopCartByUidAndMid(shoppingCart);
+		if (shop != null) {
 			shoppingCart.setSid(shop.getSid());
-		}	
-		if(shoppingCart.getSid()!=null && !shoppingCart.getSid().equals("")) {
+		}
+		if (shoppingCart.getSid() != null && !shoppingCart.getSid().equals("")) {
 			return shoppingMapper.updateShopCart(shoppingCart);
-		}else{
-			String sid=JavaTool.getUserId();
+		} else {
+			String sid = JavaTool.getUserId();
 			shoppingCart.setSid(sid);
 			return shoppingMapper.insertShopCart(shoppingCart);
 		}
-			
+
 	}
 
 	@Override
@@ -84,6 +83,18 @@ public class ShoppingServiceImpl implements ShoppingService{
 	public String selectShoppingCartBySid(String[] st) {
 		// TODO Auto-generated method stub
 		return shoppingMapper.selectShoppingCartBySid(st);
+	}
+
+	@Override
+	public ShoppingCart queryShoppingCartBySid(String sid) {
+		// TODO Auto-generated method stub
+		return shoppingMapper.queryShoppingCartBySid(sid);
+	}
+
+	@Override
+	public int deleteShopCartByUserIdAndMid(OrderFlow orderFlow) {
+		// TODO Auto-generated method stub
+		return shoppingMapper.deleteShopCartByUserIdAndMid(orderFlow);
 	}
 
 }

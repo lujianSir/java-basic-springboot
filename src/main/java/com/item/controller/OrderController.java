@@ -24,10 +24,13 @@ import com.item.alipay.AlipayProperties;
 import com.item.alipay.FlowModel;
 import com.item.alipay.OrderFlow;
 import com.item.entity.ModelBean;
+import com.item.entity.ShoppingCart;
 import com.item.service.FlowServiceImpl;
 import com.item.service.PayService;
+import com.item.service.ShoppingService;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
+import com.item.tool.Utils;
 
 /**
  * 订单接口
@@ -42,6 +45,9 @@ public class OrderController {
 
 	@Autowired
 	private PayService payService;
+
+	@Autowired
+	private ShoppingService shoppingService;
 
 	private static final Logger log = LoggerFactory.getLogger(FlowServiceImpl.class);
 
@@ -58,7 +64,40 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "orderByOne")
 	@ResponseBody
-	public Result<?> orderByOne(String uid, String mid, String cycle, String paidmethod) throws AlipayApiException {
+	public Result<?> orderByOne(String uid, String mid, String cycle, String paidmethod, String str, String sid)
+			throws AlipayApiException {
+		if (str.equals("1")) {
+			OrderFlow orderFlow = changeOrderFlow(uid, mid, cycle, paidmethod);
+			orderFlow.setStr1(str);// 走单个支付
+			return Result.success(payService.aliPayOne(orderFlow));
+		} else {// 购物车支付
+			List<OrderFlow> list = new ArrayList<OrderFlow>();
+			if (sid != null && !sid.equals("")) {
+				String[] sids = sid.split(",");
+				for (int i = 0; i < sids.length; i++) {
+					String s = sids[i];
+					ShoppingCart shoppingCart = shoppingService.queryShoppingCartBySid(s);
+					OrderFlow orderFlow = changeOrderFlow(uid, shoppingCart.getMid() + "", shoppingCart.getCycle() + "",
+							paidmethod);
+					orderFlow.setStr1(str);
+					list.add(orderFlow);
+				}
+			}
+			return Result.success(payService.aliPayMany(list));
+		}
+
+	}
+
+	/**
+	 * 生成订单状态
+	 * 
+	 * @param uid
+	 * @param mid
+	 * @param cycle
+	 * @param paidmethod
+	 * @return
+	 */
+	public OrderFlow changeOrderFlow(String uid, String mid, String cycle, String paidmethod) {
 		ModelBean modelBean = payService.queryModelById(Integer.parseInt(mid));
 		OrderFlow orderFlow = new OrderFlow();
 		orderFlow.setOid(JavaTool.getUserId());
@@ -84,10 +123,9 @@ public class OrderController {
 		orderFlow.setMids(mid);
 		orderFlow.setPaidmethod(Integer.parseInt(paidmethod));
 		orderFlow.setMname(modelBean.getModelname());
-		orderFlow.setStr1("1");// 走单个支付
 		orderFlow.setCycle(Integer.parseInt(cycle));
 		orderFlow.setCreatetime(JavaTool.getCurrent());
-		return Result.success(payService.aliPayOne(orderFlow));
+		return orderFlow;
 	}
 
 	/**
@@ -196,36 +234,49 @@ public class OrderController {
 			String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
 			// 支付宝交易号
 			String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
+
+			String body = new String(request.getParameter("body").getBytes("ISO-8859-1"), "UTF-8");
 			// 付款金额
-			String total_amount = new String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
+			// String total_amount = new
+			// String(request.getParameter("total_amount").getBytes("ISO-8859-1"), "UTF-8");
 
-			// 通过订单号查询订单信息
-			OrderFlow orderFlow = payService.selectOrderFlowByOid(out_trade_no);
-			orderFlow.setOrderstatus(1);
-			// 修改订单信息
-			orderFlow.setPaidtime(JavaTool.getCurrent());
-			payService.updateOrderFlow(orderFlow);
+			if (body != null && !body.equals("")) {
+				String[] out_trade_nos = body.split(",");
+				for (int i = 0; i < out_trade_nos.length; i++) {
+					String out_trade = out_trade_nos[i];
+					// 通过订单号查询订单信息
+					OrderFlow orderFlow = payService.selectOrderFlowByOid(out_trade);
+					orderFlow.setOrderstatus(1);
+					orderFlow.setPaidtime(JavaTool.getCurrent());
+					payService.updateOrderFlow(orderFlow);
+					// 批量添加流水信息
+					FlowModel flowModel = changeFlowModel(orderFlow, trade_no);
+					payService.insertFlowModel(flowModel);
 
-			// 批量添加流水信息
-			String str1 = orderFlow.getStr1();
-			List<FlowModel> list = new ArrayList<FlowModel>();
-			if (str1.equals("1")) {// 单个支付
-				FlowModel flowModel = new FlowModel();
-				flowModel.setFid(trade_no);
-				flowModel.setUid(orderFlow.getUid());
-				flowModel.setMid(Integer.parseInt(orderFlow.getMids()));
-				flowModel.setEndaccount(total_amount);
-				flowModel.setCycle(orderFlow.getCycle());
-				flowModel.setStarttime(JavaTool.getCurrent());
-				flowModel.setEndtime(JavaTool.getTime(orderFlow.getCycle()));
-				payService.insertFlowModel(flowModel);
-			} else if (str1.equals("2")) {// 多个支付 走购物车
+					// 删除购物的信息
+					shoppingService.deleteShopCartByUserIdAndMid(orderFlow);
 
+				}
 			}
+
 		} else {
 			log.info("支付, 验签失败...");
 		}
 		return "success";
+	}
+
+	public FlowModel changeFlowModel(OrderFlow orderFlow, String trade_no) {
+		FlowModel flowModel = new FlowModel();
+		flowModel.setFid(trade_no);
+		flowModel.setUid(orderFlow.getUid());
+		flowModel.setMid(Integer.parseInt(orderFlow.getMids()));
+		flowModel.setEndaccount(orderFlow.getOrderamount());
+		flowModel.setCycle(orderFlow.getCycle());
+		flowModel.setStarttime(JavaTool.getCurrent());
+		flowModel.setEndtime(JavaTool.getTime(orderFlow.getCycle()));
+		flowModel.setSaynew(1);
+		flowModel.setCreattime(Utils.getCurrent());
+		return flowModel;
 	}
 
 	/**
@@ -275,6 +326,18 @@ public class OrderController {
 //			log.info("支付, 验签失败...");
 //		}
 		// return "支付你好";
+	}
+
+	/**
+	 * 修改已购状态
+	 * 
+	 * @param orderFlow
+	 * @return
+	 */
+	@RequestMapping(value = "/updateFlowModelByUserIdAndMid")
+	public Result<?> updateFlowModelByUserIdAndMid(OrderFlow orderFlow) {
+		payService.updateFlowModelByUserIdAndMid(orderFlow);
+		return Result.success();
 	}
 
 }

@@ -33,6 +33,15 @@ public interface PayService {
 	public String aliPayOne(OrderFlow orderFlow) throws AlipayApiException;
 
 	/**
+	 * 购物车支付
+	 * 
+	 * @param orderFlow
+	 * @return
+	 * @throws AlipayApiException
+	 */
+	public String aliPayMany(List<OrderFlow> list) throws AlipayApiException;
+
+	/**
 	 * 单个商品支付(商品币支付)
 	 * 
 	 * @param orderFlow
@@ -51,4 +60,7 @@ public interface PayService {
 
 	// 通过用户ID查询已购买的模型
 	public List<FlowModel> selectFlowModelByUserId(String uid);
+
+	// 修改状态
+	public void updateFlowModelByUserIdAndMid(OrderFlow orderFlow);
 }

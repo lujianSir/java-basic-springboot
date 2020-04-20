@@ -1,64 +1,98 @@
 package com.item.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 购物车实体
+ * 
  * @author Administrator
  *
  */
-public class ShoppingCart implements Serializable{
+public class ShoppingCart implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	//购物车id
-	private String sid; 
 
-	//商城用户ID
+	// 购物车id
+	private String sid;
+
+	// 商城用户ID
 	private String uid;
-	
-	//模型ID
-	private int mid;
-	
-	//模型名称
-	private String modelname;
-	
-	//模型图片
-	private String  filePics;
-	
-	//模型上传的人名称
-	private String username;
-			
-	//模型价格(计算可得)
-	private String account;
-	
-	//周期
-	private int cycle; //一个月 1  半年 2  一年 3  永久 4
-	
-	//显示周期
-	private String cyclename;
-	
-	//状态
-	private int status; //是否支付   0是未支付  1是支付
 
-	//开始时间
+	// 模型ID
+	private int mid;
+
+	// 模型名称
+	private String modelname;
+
+	// 模型图片
+	private String filePics;
+
+	// 模型上传的人名称
+	private String username;
+
+	// 模型价格(计算可得)
+	private String account;
+
+	// 周期
+	private int cycle; // 一个月 1 半年 2 一年 3 永久 4
+
+	// 显示周期
+	private String cyclename;
+
+	// 状态
+	private int status; // 是否支付 0是未支付 1是支付
+
+	// 开始时间
 	private String starttime;
-	
-	//结束时间
+
+	// 结束时间
 	private String endtime;
-	
-	//预留字段一
+
+	// 预留字段一
 	private String str1;
-	
-	//预留字段一
+
+	// 预留字段一
 	private String str2;
-		
-	//预留字段一
+
+	// 预留字段一
 	private String str3;
+
+	private int str4;
+
+	private String unitprice; // 单价
+
+	private String modelprice;// 模型总价
+
+	public int getStr4() {
+		return str4;
+	}
+
+	public void setStr4(int str4) {
+		this.str4 = str4;
+	}
+
+	public String getUnitprice() {
+		return unitprice;
+	}
+
+	public void setUnitprice(String unitprice) {
+		this.unitprice = unitprice;
+	}
+
+	public String getModelprice() {
+		return modelprice;
+	}
+
+	public void setModelprice(String modelprice) {
+		this.modelprice = modelprice;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	public String getSid() {
 		return sid;
@@ -179,5 +213,5 @@ public class ShoppingCart implements Serializable{
 	public void setAccount(String account) {
 		this.account = account;
 	}
-			
+
 }

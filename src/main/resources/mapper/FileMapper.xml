@@ -181,7 +181,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="modelBean.mid !=null and modelBean.mid !=''">
 					and a.mid =#{modelBean.mid}
 				</if>		
-				order by a.creatTime desc
+				order by a.creatTime desc ,  a.mid desc
 	</select>
 
 	<!-- 通过ID查询模型的信息 -->

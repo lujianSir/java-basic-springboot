@@ -7,8 +7,8 @@
 <body>
 </body>
 <script type="text/javascript">
-	var id=getUrlParam("id");
-	window.location.href="http://134.175.21.43:8080/dist/#/goodsdetails?id="+id
+	var id=getUrlParam("uid");
+	window.location.href="http://134.175.21.43:8080/dist/#/purchased?uid="+uid+"&pageNumber=1&pageSize=15"
 	function getUrlParam(name) { //封装方法
 	    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
 	    var r = window.location.search.substr(1).match(reg); //匹配目标参数

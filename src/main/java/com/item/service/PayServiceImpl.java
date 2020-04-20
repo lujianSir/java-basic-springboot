@@ -1,5 +1,6 @@
 package com.item.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class PayServiceImpl implements PayService {
 		alipayBean.setOut_trade_no(orderFlow.getOid());
 		alipayBean.setSubject(orderFlow.getMname());
 		alipayBean.setTotal_amount(orderFlow.getOrderamount());
-		alipayBean.setBody("");
+		alipayBean.setBody(orderFlow.getOid());
 		// 1、获得初始化的AlipayClient
 		String serverUrl = AlipayProperties.getGatewayUrl();
 		String appId = AlipayProperties.getAppId();
@@ -160,6 +161,74 @@ public class PayServiceImpl implements PayService {
 			payMapper.insertFlowModel(flowModel);
 			return Result.success();
 		}
+	}
+
+	@Override
+	public String aliPayMany(List<OrderFlow> list) throws AlipayApiException {
+		// TODO Auto-generated method stub
+		for (int m = 0; m < list.size(); m++) {
+			OrderFlow orderFlow = list.get(m);
+			payMapper.insertOrderFlow(orderFlow); // 生成订单并且调用支付宝支付
+		}
+		AlipayBean alipayBean = new AlipayBean();
+		String out_trade_no = list.get(0).getOid();
+		String subject = "已购商品如下：";
+		String total_amount = "";
+		String body = "";
+		List<String> accounttotal = new ArrayList<String>();
+		if (list != null && list.size() > 0) {
+			for (int i = 0; i < list.size(); i++) {
+				OrderFlow orderFlow = list.get(i);
+				accounttotal.add(orderFlow.getOrderamount());
+				body += orderFlow.getOid();
+				subject += orderFlow.getMname();
+				if (i < list.size() - 1) {
+					body += ",";
+					subject += ",";
+				} else {
+					break;
+				}
+
+			}
+		}
+
+		total_amount = JavaTool.f(accounttotal, 0).toString();// 获取总的价格
+		alipayBean.setOut_trade_no(out_trade_no);
+		alipayBean.setSubject(subject);
+		alipayBean.setTotal_amount(total_amount);
+		alipayBean.setBody(body);
+		// 1、获得初始化的AlipayClient
+		String serverUrl = AlipayProperties.getGatewayUrl();
+		String appId = AlipayProperties.getAppId();
+		String privateKey = AlipayProperties.getPrivateKey();
+		String format = "json";
+		String charset = AlipayProperties.getCharset();
+		String alipayPublicKey = AlipayProperties.getPublicKey();
+		String signType = AlipayProperties.getSignType();
+		String returnUrl = AlipayProperties.getReturnUrl();
+		String notifyUrl = AlipayProperties.getNotifyUrl();
+		AlipayClient alipayClient = new DefaultAlipayClient(serverUrl, appId, privateKey, format, charset,
+				alipayPublicKey, signType);
+		// 2、设置请求参数
+		AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
+		returnUrl = returnUrl + "?uid=" + list.get(0).getUid();
+		// 页面跳转同步通知页面路径
+		alipayRequest.setReturnUrl(returnUrl);
+		// 服务器异步通知页面路径
+		alipayRequest.setNotifyUrl(notifyUrl);
+		// 封装参数
+		alipayRequest.setBizContent(JSON.toJSONString(alipayBean));
+		// 3、请求支付宝进行付款，并获取支付结果
+		String result = alipayClient.pageExecute(alipayRequest).getBody();
+		// 返回付款信息
+		System.out.println(result);
+		return result;
+	}
+
+	@Override
+	public void updateFlowModelByUserIdAndMid(OrderFlow orderFlow) {
+		// TODO Auto-generated method stub
+		payMapper.updateFlowModelByUserIdAndMid(orderFlow);
 	}
 
 }

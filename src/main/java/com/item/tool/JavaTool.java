@@ -15,10 +15,12 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -306,6 +308,36 @@ public class JavaTool {
 		BigDecimal bd1 = new BigDecimal(Double.toString(d1));
 		BigDecimal bd2 = new BigDecimal(Double.toString(d2));
 		return bd1.subtract(bd2).doubleValue();
+	}
+
+	// 两个字符串相加
+	public static BigDecimal add(String str1, String str2) {
+		BigDecimal num1 = new BigDecimal(str1);
+		BigDecimal num2 = new BigDecimal(str2);
+		BigDecimal result = num1.add(num2);
+		return result;
+	}
+
+	public static BigDecimal f(List<String> arr, int begin) {
+		// 找出口
+		if (begin == arr.size() - 1) {
+			BigDecimal num1 = new BigDecimal(arr.get(begin));
+			return num1;
+		} else {// 找重复
+			BigDecimal str1 = new BigDecimal(arr.get(begin));
+			BigDecimal str2 = f(arr, begin + 1);
+			BigDecimal result = str1.add(str2);
+			return result;
+		}
+
+	}
+
+	public static void main(String[] args) {
+		List<String> arr = new ArrayList<String>();
+		arr.add("123");
+		arr.add("3");
+		arr.add("0.33");
+		System.out.println(f(arr, 0));
 	}
 
 }

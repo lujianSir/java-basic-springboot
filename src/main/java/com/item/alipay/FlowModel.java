@@ -1,51 +1,70 @@
 package com.item.alipay;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 已购模型
+ * 
  * @author Administrator
  *
  */
-public class FlowModel implements Serializable{
+public class FlowModel implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	//id
+
+	// id
 	private String fid;
 
-	//商城用户ID
+	// 商城用户ID
 	private String uid;
-	
-	private String modelname;
-	
-	private String filePics;
-	
-	//模型ID
-	private int mid;
-	
-	//最终交易的钱
-	private String endaccount;
-	
-	//周期
-	private int cycle; //一个月 1  半年 2  一年 3  永久 4
-	
-	//周期名称
-	private String cyclename;//
-	
-	//开始时间
-	private String starttime;
-		
-	//结束时间
-	private String endtime;
-	
-	private int status;//0 到期  1未到期
 
-		
+	private String modelname;
+
+	private String filePics;
+
+	// 模型ID
+	private int mid;
+
+	// 最终交易的钱
+	private String endaccount;
+
+	// 周期
+	private int cycle; // 一个月 1 半年 2 一年 3 永久 4
+
+	// 周期名称
+	private String cyclename;//
+
+	// 开始时间
+	private String starttime;
+
+	// 结束时间
+	private String endtime;
+
+	private int saynew;// 是否是新的
+
+	private String creattime;// 创建的时间
+
+	private int status;// 0 到期 1未到期
+
+	public String getCreattime() {
+		return creattime;
+	}
+
+	public void setCreattime(String creattime) {
+		this.creattime = creattime;
+	}
+
+	public int getSaynew() {
+		return saynew;
+	}
+
+	public void setSaynew(int saynew) {
+		this.saynew = saynew;
+	}
+
 	public String getCyclename() {
 		return cyclename;
 	}
@@ -77,7 +96,6 @@ public class FlowModel implements Serializable{
 	public void setMid(int mid) {
 		this.mid = mid;
 	}
-
 
 	public String getEndaccount() {
 		return endaccount;
@@ -134,6 +152,5 @@ public class FlowModel implements Serializable{
 	public void setFilePics(String filePics) {
 		this.filePics = filePics;
 	}
-	
-	
+
 }

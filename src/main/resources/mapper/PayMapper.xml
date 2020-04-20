@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    
    <!-- 添加流水信息 -->  
    <insert id="insertFlowModel" parameterType="com.item.alipay.FlowModel">
-   		insert into flowmodel (fid ,uid,mid,endaccount,cycle,starttime,endtime)  values(#{fid},#{uid},#{mid},#{endaccount},#{cycle},#{starttime},#{endtime})
+   		insert into flowmodel (fid ,uid,mid,endaccount,cycle,starttime,endtime,saynew,creattime)  values(#{fid},#{uid},#{mid},#{endaccount},#{cycle},#{starttime},#{endtime},#{saynew},#{creattime})
    </insert>
    
    <!-- 通过用户ID查询已购买的模型 -->
@@ -61,6 +61,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LEFT JOIN modelinfo b ON a.mid = b.mid
 		WHERE
 			a.uid = #{uid}
-   
+   		order by  a.saynew ,a.creattime desc 
    </select>
+   
+   <update id="updateFlowModelByUserIdAndMid" parameterType="com.item.alipay.FlowModel">
+   		update flowmodel set saynew =2 where uid=#{uid} and mid=#{mid} 
+   </update>
 </mapper>
