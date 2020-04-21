@@ -49,11 +49,6 @@ public class FileController {
 	@Value("${disk-path}")
 	private String rootPath;
 
-	@RequestMapping("/test1")
-	public String file() {
-		return "/file";
-	}
-
 	@RequestMapping("/test2")
 	public String multiFile() {
 		return "/multifile";

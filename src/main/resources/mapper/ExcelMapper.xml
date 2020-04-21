@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace： 1. namespace必须和Mapper接口类路径一致 -->
+<mapper namespace="com.item.mapper.ExcelMapper">
+	
+	<!-- 添加excel 内容 -->
+	<insert id="insertExcelContent" parameterType="java.util.List">
+    	insert into excelcontent (eid, str1,str2, str3, str4,str5, str6)
+   		 values
+	    <foreach collection="list" item="item" index="index" separator=",">
+	      (#{item.eid}, #{item.str1}, #{item.str2},#{item.str3}, #{item.str4},
+	      #{item.str5}, #{item.str6})
+	    </foreach>
+	</insert>
+	
+	<!-- 添加excel数据 -->
+	<insert id="insertExcelManage" parameterType="com.item.entity.ExcelManage">
+		insert into excelmanage (eid,excelname,uid,creattime,realpath) values (#{eid},#{excelname},#{uid},#{creattime},#{realpath})
+	</insert>
+	
+	<!-- 查询所得提交信息 -->
+	<select id="queryExcelManage" resultType="com.item.entity.ExcelManage">
+		select a.*,b.username from excelmanage  a LEFT JOIN userinfo b on a.uid=b.userid 
+		<where>
+			<if test="eid !=null and eid !='' ">
+				a.eid=#{eid}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 查询表单所有的信息 -->
+	<select id="queryExcelContentByEid" resultType="com.item.entity.ExcelContent">
+		SELECT
+			case when a.str3 is null then a.str1 else (select str1 from excelcontent where str3=a.str3   limit   1) end  str1,
+			a.str2,
+			a.str3,
+			a.str4,
+			a.str5,
+			a.str6,
+			id
+		
+		FROM
+			excelcontent  a
+		WHERE
+			a.eid = #{eid}
+	</select>
+	
+	<!-- 通过ID删除表单信息 -->
+	<delete id="deleteExcelManageByEid" parameterType="java.lang.String">
+		delete from excelmanage where eid=#{eid}
+	</delete>
+	
+	<!-- 通过ID删除内容 -->
+	<delete id="deleteExcelContentByEid" parameterType="java.lang.String">
+		delete from excelcontent where eid=#{eid}
+	</delete>
+</mapper>
