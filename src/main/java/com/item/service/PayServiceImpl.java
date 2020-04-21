@@ -226,9 +226,9 @@ public class PayServiceImpl implements PayService {
 	}
 
 	@Override
-	public void updateFlowModelByUserIdAndMid(OrderFlow orderFlow) {
+	public void updateFlowModelByUserIdAndMid(FlowModel flowModel) {
 		// TODO Auto-generated method stub
-		payMapper.updateFlowModelByUserIdAndMid(orderFlow);
+		payMapper.updateFlowModelByUserIdAndMid(flowModel);
 	}
 
 }

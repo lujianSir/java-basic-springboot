@@ -335,8 +335,8 @@ public class OrderController {
 	 * @return
 	 */
 	@RequestMapping(value = "/updateFlowModelByUserIdAndMid")
-	public Result<?> updateFlowModelByUserIdAndMid(OrderFlow orderFlow) {
-		payService.updateFlowModelByUserIdAndMid(orderFlow);
+	public Result<?> updateFlowModelByUserIdAndMid(FlowModel flowModel) {
+		payService.updateFlowModelByUserIdAndMid(flowModel);
 		return Result.success();
 	}
 

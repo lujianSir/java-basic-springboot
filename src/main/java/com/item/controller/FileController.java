@@ -307,6 +307,10 @@ public class FileController {
 	@RequestMapping("/queryModelById")
 	@ResponseBody
 	public Result<?> queryModelById(String mid, String uid) {
+		FlowModel flowModel = new FlowModel();
+		flowModel.setMid(Integer.parseInt(mid));
+		flowModel.setUid(uid);
+		payService.updateFlowModelByUserIdAndMid(flowModel);
 		return fileService.queryModelById(mid, uid);
 	}
 

@@ -62,5 +62,5 @@ public interface PayService {
 	public List<FlowModel> selectFlowModelByUserId(String uid);
 
 	// 修改状态
-	public void updateFlowModelByUserIdAndMid(OrderFlow orderFlow);
+	public void updateFlowModelByUserIdAndMid(FlowModel flowModel);
 }
