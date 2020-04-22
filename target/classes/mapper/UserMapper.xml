@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 4. resultType必须和接口方法返回值类型一致 -->
 
 	<sql id="Base_Column_List">
-		userid,nickname, username,password, status, role,phone,registertime
+		userid,nickname, username,password, status, role,phone,registertime,oldip
 	</sql>
 
 	<!-- 检测用户是否存在 -->
@@ -85,6 +85,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</if>
 				<if test="registertime!=null and registertime!=''">
 					registertime=#{registertime},
+				</if>
+				<if test="oldip!=null and oldip!=''">
+					oldip=#{oldip},
 				</if>
 			</set>
 			where userid=#{userid}

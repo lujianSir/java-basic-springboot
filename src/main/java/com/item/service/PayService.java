@@ -49,6 +49,14 @@ public interface PayService {
 	 */
 	public Result<?> orderByThree(OrderFlow orderFlow);
 
+	/**
+	 * 购物车支付(商城币支付)
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public Result<?> orderByThreeMany(List<OrderFlow> list);
+
 	// 通过ID查询订单信息
 	public OrderFlow selectOrderFlowByOid(String oid);
 

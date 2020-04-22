@@ -73,9 +73,15 @@ public class UserServiceImpl implements UserService {
 				// 判断密码是否相等
 				if (user.getStatus() == 1) {
 					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
-
+						String ip = JavaTool.getIp();
+						UserBean u = new UserBean();
+						u.setUserid(user.getUserid());
+						u.setOldip(ip);
+						u.setStatus(user.getStatus());
+						userMapper.updateUserBeanByUserId(u);
 						// 清除密码消息
 						user.setPassword("");
+						user.setNewip(ip);
 						return Result.success(user);
 					} else {
 						return Result.error(50010, "用户密码错误");

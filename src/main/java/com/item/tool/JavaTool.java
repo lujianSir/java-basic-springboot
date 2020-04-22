@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -340,4 +341,16 @@ public class JavaTool {
 		System.out.println(f(arr, 0));
 	}
 
+	public static String getIp() {
+		try {
+			InetAddress ia = InetAddress.getLocalHost();
+//        String localname=ia.getHostName();
+			String localip = ia.getHostAddress();
+			return localip;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "500";
+		}
+	}
 }

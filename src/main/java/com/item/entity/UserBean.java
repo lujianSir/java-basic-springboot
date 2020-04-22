@@ -23,6 +23,30 @@ public class UserBean extends User implements Serializable {
 
 	private String rname;
 
+	private String oldip;// 上次IP地址
+
+	private String newip;// 本次IP
+
+	public String getOldip() {
+		return oldip;
+	}
+
+	public void setOldip(String oldip) {
+		this.oldip = oldip;
+	}
+
+	public String getNewip() {
+		return newip;
+	}
+
+	public void setNewip(String newip) {
+		this.newip = newip;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public String getRname() {
 		return rname;
 	}

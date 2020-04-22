@@ -140,14 +140,37 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "orderByThree")
 	@ResponseBody
-	public Result<?> orderByThree(String uid, String mid, String cycle, String paidmethod) throws AlipayApiException {
+	public Result<?> orderByThree(String uid, String mid, String cycle, String paidmethod, String str, String sid)
+			throws AlipayApiException {
+		if (str.equals("1")) {
+			OrderFlow orderFlow = changeOrderFlowShop(uid, mid, cycle, paidmethod);
+			orderFlow.setStr1(str);// 走单个支付
+			return payService.orderByThree(orderFlow);
+		} else {// 购物车支付
+			List<OrderFlow> list = new ArrayList<OrderFlow>();
+			if (sid != null && !sid.equals("")) {
+				String[] sids = sid.split(",");
+				for (int i = 0; i < sids.length; i++) {
+					String s = sids[i];
+					ShoppingCart shoppingCart = shoppingService.queryShoppingCartBySid(s);
+					OrderFlow orderFlow = changeOrderFlowShop(uid, shoppingCart.getMid() + "",
+							shoppingCart.getCycle() + "", paidmethod);
+					orderFlow.setStr1(str);
+					list.add(orderFlow);
+				}
+			}
+			return Result.success(payService.orderByThreeMany(list));
+		}
+	}
+
+	public OrderFlow changeOrderFlowShop(String uid, String mid, String cycle, String paidmethod) {
 		ModelBean modelBean = payService.queryModelById(Integer.parseInt(mid));
 		OrderFlow orderFlow = new OrderFlow();
 		orderFlow.setOid(JavaTool.getUserId());
 		orderFlow.setOrderstatus(0);
 		orderFlow.setUid(uid);
 		DecimalFormat df = new DecimalFormat("#.00");
-		switch (Integer.parseInt(cycle)) {// 商城币在原来的基础上*10
+		switch (Integer.parseInt(cycle)) {
 		case 1:// 一个月
 			orderFlow.setOrderamount(df.format(modelBean.getUnitprice() * 10));
 			break;
@@ -166,10 +189,9 @@ public class OrderController {
 		orderFlow.setMids(mid);
 		orderFlow.setPaidmethod(Integer.parseInt(paidmethod));
 		orderFlow.setMname(modelBean.getModelname());
-		orderFlow.setStr1("1");// 走单个支付
 		orderFlow.setCycle(Integer.parseInt(cycle));
 		orderFlow.setCreatetime(JavaTool.getCurrent());
-		return payService.orderByThree(orderFlow);
+		return orderFlow;
 	}
 
 	/**
