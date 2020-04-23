@@ -129,6 +129,68 @@ public class OrderController {
 	}
 
 	/**
+	 * 获取钱
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "getMoney")
+	@ResponseBody
+	public Result<?> getMoney(String mid, String cycle, String paidmethod) {
+		String money = "";
+		ModelBean modelBean = payService.queryModelById(Integer.parseInt(mid));
+		String st = "";
+		if (cycle.equals("4")) {
+			st = modelBean.getModelprice() + "";
+		} else {
+			st = modelBean.getUnitprice() + "";
+		}
+
+		if (st.equals("0.0")) {
+			money = 0 + "";
+		} else {
+			DecimalFormat df = new DecimalFormat("#.00");
+
+			if (paidmethod.equals("3")) {
+				switch (Integer.parseInt(cycle)) {
+				case 1:// 一个月
+					money = df.format(modelBean.getUnitprice() * 10);
+					break;
+				case 2:// 半年 九折
+					money = df.format(modelBean.getUnitprice() * 6 * 0.9 * 10);
+					break;
+				case 3:// 一年 八折
+					money = df.format(modelBean.getUnitprice() * 12 * 0.8 * 10);
+					break;
+				case 4:// 永久
+					money = df.format(modelBean.getModelprice() * 10);
+					break;
+				default:
+					break;
+				}
+			} else {
+				switch (Integer.parseInt(cycle)) {
+				case 1:// 一个月
+					money = df.format(modelBean.getUnitprice());
+					break;
+				case 2:// 半年 九折
+					money = df.format(modelBean.getUnitprice() * 6 * 0.9);
+					break;
+				case 3:// 一年 八折
+					money = df.format(modelBean.getUnitprice() * 12 * 0.8);
+					break;
+				case 4:// 永久
+					money = df.format(modelBean.getModelprice());
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		return Result.success(money);
+	}
+
+	/**
 	 * 单个支付(商城币)
 	 * 
 	 * @param uid
@@ -159,7 +221,7 @@ public class OrderController {
 					list.add(orderFlow);
 				}
 			}
-			return Result.success(payService.orderByThreeMany(list));
+			return payService.orderByThreeMany(list);
 		}
 	}
 

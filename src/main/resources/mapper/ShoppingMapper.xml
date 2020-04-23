@@ -99,4 +99,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from shoppingcart where uid=#{uid} and mid=#{mids}
 	</delete>
 	
+	<!-- 加入购物车之前查询是否已经购买 -->
+	<select id="queryShoppingByUserIdAndMid" resultType="int">
+			select count(*) from flowmodel where uid=#{uid} and mid =#{mid}
+	</select>
 </mapper>

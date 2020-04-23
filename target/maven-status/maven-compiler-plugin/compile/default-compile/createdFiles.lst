@@ -16,6 +16,7 @@ com\item\entity\UserBean.class
 com\item\service\ShoppingServiceImpl.class
 com\item\service\FileServiceImpl.class
 com\item\mapper\ShoppingMapper.class
+com\item\mapper\ExcelMapper.class
 com\item\service\UserServiceImpl.class
 com\item\service\PayService.class
 com\item\tool\Result.class
@@ -24,10 +25,14 @@ com\item\entity\User.class
 com\item\controller\FlowController.class
 com\item\entity\ModelBean.class
 com\item\tool\IntercepterConfig.class
+com\item\service\ExcelServcieImpl.class
 com\item\alipay\OrderFlow.class
+com\item\entity\ExcelBean.class
+com\item\tool\ExcelUtil.class
 com\item\entity\Page.class
 com\item\controller\ShoppingController.class
 com\item\tool\CorsFilter.class
+com\item\controller\ExcelController.class
 com\item\service\TagService.class
 com\item\service\FlowServiceImpl.class
 com\item\entity\FlowBean.class
@@ -41,6 +46,7 @@ com\item\alipay\AlipayBean.class
 com\item\controller\PowerController.class
 com\item\controller\TagController.class
 com\item\tool\TokenInterceptor.class
+com\item\entity\ExcelManage.class
 com\item\service\TagServiceImpl.class
 com\item\service\ShoppingService.class
 com\item\mapper\UserMapper.class
@@ -53,9 +59,11 @@ com\item\mapper\FlowMapper.class
 com\item\tool\TokenUtil.class
 com\item\tool\Utils.class
 com\item\controller\UserController.class
+com\item\service\ExcelServcie.class
 com\item\service\RoleServiceImpl.class
 com\item\tool\JavaTool.class
 com\item\service\PayServiceImpl.class
 com\item\mapper\PowerMapper.class
 com\item\entity\ApproveBean.class
+com\item\entity\ExcelContent.class
 com\item\mapper\PayMapper.class

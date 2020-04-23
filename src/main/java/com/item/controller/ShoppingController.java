@@ -34,13 +34,19 @@ public class ShoppingController {
 	 */
 	@RequestMapping(value = "/insertOrUpdateShopCart")
 	public Result<?> insertOrUpdateShopCart(ShoppingCart shoppingCart) {
-		int num = shoppingService.insertOrUpdateShopCart(shoppingCart);
-		int totalShop = shoppingService.selectShoppingCartCountByUid(shoppingCart.getUid());
-		if (num > 0) {
-			return Result.success(totalShop);
+		int row = shoppingService.queryShoppingByUserIdAndMid(shoppingCart);
+		if (row > 0) {
+			return Result.error(501, "已经购买此商品");
 		} else {
-			return Result.error(500, "服务端错误");
+			int num = shoppingService.insertOrUpdateShopCart(shoppingCart);
+			int totalShop = shoppingService.selectShoppingCartCountByUid(shoppingCart.getUid());
+			if (num > 0) {
+				return Result.success(totalShop);
+			} else {
+				return Result.error(500, "服务端错误");
+			}
 		}
+
 	}
 
 	/**

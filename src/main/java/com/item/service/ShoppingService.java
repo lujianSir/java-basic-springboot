@@ -60,4 +60,12 @@ public interface ShoppingService {
 	 */
 	ShoppingCart queryShoppingCartBySid(String sid);
 
+	/**
+	 * 通过用户以及商品ID查询之前是否已经买了商品
+	 * 
+	 * @param shoppingCart
+	 * @return
+	 */
+	int queryShoppingByUserIdAndMid(ShoppingCart shoppingCart);
+
 }

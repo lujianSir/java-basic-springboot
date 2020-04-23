@@ -97,4 +97,10 @@ public class ShoppingServiceImpl implements ShoppingService {
 		return shoppingMapper.deleteShopCartByUserIdAndMid(orderFlow);
 	}
 
+	@Override
+	public int queryShoppingByUserIdAndMid(ShoppingCart shoppingCart) {
+		// TODO Auto-generated method stub
+		return shoppingMapper.queryShoppingByUserIdAndMid(shoppingCart);
+	}
+
 }
