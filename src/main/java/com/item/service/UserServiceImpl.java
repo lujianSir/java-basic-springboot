@@ -81,6 +81,9 @@ public class UserServiceImpl implements UserService {
 						userMapper.updateUserBeanByUserId(u);
 						// 清除密码消息
 						user.setPassword("");
+						String token = TokenUtil.sign(user);
+						// 将token放在密码带出去
+						user.setPassword(token);
 						user.setNewip(ip);
 						return Result.success(user);
 					} else {

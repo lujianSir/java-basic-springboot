@@ -186,7 +186,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 通过ID查询模型的信息 -->
 	<select id="queryModelById" resultType="com.item.entity.ModelBean">
-		select a.*,b.username from 	modelinfo a LEFT JOIN usermessage b  on a.userid=b.userid where  a.mid=#{mid}
+		select a.*,b.username from 	modelinfo a LEFT JOIN usermessage b  on a.userid=b.userid where  a.mid=#{mid}  group by a.mid
 	</select>
 	
 	<!-- 通过用户和模型ID查询已购模型 -->
@@ -200,7 +200,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				flowmodel a
 			LEFT JOIN modelinfo b ON a.mid = b.mid
 			WHERE
-			a.uid = #{uid}  and b.mid=#{mid}					
+			a.uid = #{uid}  and b.mid=#{mid}	group by a.mid				
 	</select>
 	
 	
