@@ -1,5 +1,6 @@
 package com.item.tool;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.auth0.jwt.JWT;
@@ -10,7 +11,7 @@ import com.item.entity.User;
 
 public class TokenUtil {
 
-	private static final long EXPIRE_TIME = 15 * 60 * 1000;
+	private static final long EXPIRE_TIME = 120 * 60 * 1000;
 	private static final String TOKEN_SECRET = "token123"; // 密钥盐
 
 	/**
@@ -49,6 +50,9 @@ public class TokenUtil {
 			System.out.println("issuer: " + jwt.getIssuer());
 			System.out.println("username: " + jwt.getClaim("username").asString());
 			System.out.println("过期时间：      " + jwt.getExpiresAt());
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String dateString = formatter.format(jwt.getExpiresAt());
+			System.out.println(dateString);
 			return true;
 		} catch (Exception e) {
 			return false;

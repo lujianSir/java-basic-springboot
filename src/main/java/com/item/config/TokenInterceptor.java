@@ -1,4 +1,4 @@
-package com.item.tool;
+package com.item.config;
 
 import java.io.PrintWriter;
 
@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+
+import com.item.tool.TokenUtil;
 
 /**
  * 拦截器

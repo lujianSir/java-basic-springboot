@@ -71,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <!--订单信息  -->
    <select id="getLoadBuy" resultType="com.item.alipay.OrderFlow">
    		SELECT
+   		a.oid,
 		a.orderamount,
 		a.paidtime,
 		b.modelname mname,

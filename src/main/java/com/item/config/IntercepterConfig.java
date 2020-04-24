@@ -1,4 +1,4 @@
-package com.item.tool;
+package com.item.config;
 
 import java.util.ArrayList;
 import java.util.List;
