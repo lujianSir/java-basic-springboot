@@ -67,4 +67,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <update id="updateFlowModelByUserIdAndMid" parameterType="com.item.alipay.FlowModel">
    		update flowmodel set saynew =2 where uid=#{uid} and mid=#{mid} 
    </update>
+   
+   <!--订单信息  -->
+   <select id="getLoadBuy" resultType="com.item.alipay.OrderFlow">
+   		SELECT
+		a.orderamount,
+		a.paidtime,
+		b.modelname mname,
+		c.username,
+		case when a.paidmethod =1 then '支付宝' when a.paidmethod =1 then '微信' else '商城币'  end  strname,
+		case when a.cycle =1 then '一个月' when a.cycle =2 then '半年' when a.cycle =3 then '一年' else '永久' end cyclename
+	FROM
+		orderflow a LEFT JOIN modelinfo b  on a.mids=b.mid   LEFT JOIN userinfo c on a.uid=c.userid 
+	WHERE
+		a.orderstatus =1   
+		<if test="uid !=null and uid !='' and uid !='00da3c04c1b14519862301666987bfcd'">
+				and a.uid=#{uid}
+		</if>
+		<if test="mname !=null and mname !=''">
+			  and b.modelname like CONCAT('%',#{mname},'%')  or c.username like CONCAT('%',#{mname},'%') 
+		</if>
+		ORDER BY a.paidtime desc 
+  
+   </select>
 </mapper>

@@ -28,4 +28,12 @@ public interface PayMapper {
 
 	// 修改状态不为new
 	public void updateFlowModelByUserIdAndMid(FlowModel flowModel);
+
+	/**
+	 * 购买记录
+	 * 
+	 * @param flowModel
+	 * @return
+	 */
+	public List<OrderFlow> getLoadBuy(OrderFlow rderFlow);
 }

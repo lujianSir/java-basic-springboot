@@ -278,7 +278,7 @@ public class PayServiceImpl implements PayService {
 				flowModel.setFid(orderFlow.getOid());
 				flowModel.setUid(orderFlow.getUid());
 				flowModel.setMid(Integer.parseInt(orderFlow.getMids()));
-				flowModel.setEndaccount(obj1.toString());
+				flowModel.setEndaccount(orderFlow.getOrderamount());
 				flowModel.setCycle(orderFlow.getCycle());
 				flowModel.setStarttime(JavaTool.getCurrent());
 				flowModel.setEndtime(JavaTool.getTime(orderFlow.getCycle()));
@@ -291,6 +291,12 @@ public class PayServiceImpl implements PayService {
 			}
 			return Result.success();
 		}
+	}
+
+	@Override
+	public List<OrderFlow> getLoadBuy(OrderFlow orderFlow) {
+		// TODO Auto-generated method stub
+		return payMapper.getLoadBuy(orderFlow);
 	}
 
 }

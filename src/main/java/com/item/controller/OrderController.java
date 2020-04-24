@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.item.alipay.AlipayBean;
 import com.item.alipay.AlipayProperties;
 import com.item.alipay.FlowModel;
 import com.item.alipay.OrderFlow;
 import com.item.entity.ModelBean;
+import com.item.entity.Page;
 import com.item.entity.ShoppingCart;
 import com.item.service.FlowServiceImpl;
 import com.item.service.PayService;
@@ -422,6 +425,22 @@ public class OrderController {
 	public Result<?> updateFlowModelByUserIdAndMid(FlowModel flowModel) {
 		payService.updateFlowModelByUserIdAndMid(flowModel);
 		return Result.success();
+	}
+
+	/**
+	 * 查询购买记录
+	 * 
+	 * @param orderFlow
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping(value = "/getLoadBuy")
+	@ResponseBody
+	public Result<?> getLoadBuy(OrderFlow orderFlow, Page page) {
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<OrderFlow> list = payService.getLoadBuy(orderFlow);
+		PageInfo<OrderFlow> pageInfo = new PageInfo<OrderFlow>(list);
+		return Result.success(pageInfo);
 	}
 
 }

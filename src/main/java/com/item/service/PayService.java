@@ -71,4 +71,12 @@ public interface PayService {
 
 	// 修改状态
 	public void updateFlowModelByUserIdAndMid(FlowModel flowModel);
+
+	/**
+	 * 购买记录
+	 * 
+	 * @param flowModel
+	 * @return
+	 */
+	public List<OrderFlow> getLoadBuy(OrderFlow orderFlow);
 }

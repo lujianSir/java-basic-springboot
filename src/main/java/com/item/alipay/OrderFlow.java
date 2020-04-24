@@ -1,50 +1,79 @@
 package com.item.alipay;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class OrderFlow implements Serializable{
+public class OrderFlow implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	//订单ID
+
+	// 订单ID
 	private String oid;
-	
-	//订单状态
-	private int orderstatus;  // 0 待付款  1 已支付
-	
-	//订单金额
+
+	// 订单状态
+	private int orderstatus; // 0 待付款 1 已支付
+
+	// 订单金额
 	private String orderamount;
-	
-	//购买用户
+
+	// 购买用户
 	private String uid;
-	
-	//模型ID
+
+	// 模型ID
 	private String mids;
-	
-	//周期
+
+	// 周期
 	private int cycle;
-	
-	//模型名称
+
+	private String cyclename;
+
+	// 模型名称
 	private String mname;
-	
-	//订单创建时间
+
+	// 订单创建时间
 	private String createtime;
-	
-	//支付时间
+
+	// 支付时间
 	private String paidtime;
-	
-	//支付方式
-	private int  paidmethod;//支付方式       1 支付宝  2 微信  3商城币    
-	
-	//预留字段
+
+	// 支付方式
+	private int paidmethod;// 支付方式 1 支付宝 2 微信 3商城币
+
+	// 预留字段
 	private String str1;
-	
-	//预留字段
+
+	// 预留字段
 	private String str2;
+
+	private String strname;// 支付方式
+
+	private String username;// 用户
+
+	public String getCyclename() {
+		return cyclename;
+	}
+
+	public void setCyclename(String cyclename) {
+		this.cyclename = cyclename;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getStrname() {
+		return strname;
+	}
+
+	public void setStrname(String strname) {
+		this.strname = strname;
+	}
 
 	public String getOid() {
 		return oid;
@@ -61,7 +90,6 @@ public class OrderFlow implements Serializable{
 	public void setOrderstatus(int orderstatus) {
 		this.orderstatus = orderstatus;
 	}
-
 
 	public int getCycle() {
 		return cycle;
@@ -87,7 +115,6 @@ public class OrderFlow implements Serializable{
 		this.mids = mids;
 	}
 
-	
 	public String getCreatetime() {
 		return createtime;
 	}
@@ -143,6 +170,5 @@ public class OrderFlow implements Serializable{
 	public void setMname(String mname) {
 		this.mname = mname;
 	}
-		
-	
+
 }
