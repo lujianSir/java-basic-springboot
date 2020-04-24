@@ -13,7 +13,7 @@ public class Vacation {
 	private String applyUser;// 申请人
 	private String reason;// 申请的原因
 	private Date applyTime;// 申请的时间
-	private String applyStatus;// 申请状态 正在申请或者申请结束
+	private String applyStatus;// 申请状态 正在申请或者申请结束 1、正在审批中 2. 审批成功 3.审批失败
 
 	/**
 	 * 审核人

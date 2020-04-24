@@ -50,6 +50,7 @@ public class VacationServiceImpl implements VacationService {
 		// 将得到的实例流程id值赋给之前设置的变量
 		processInstanceId = processInstance.getId();
 		System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
+		getTaskAndComplete(processInstanceId);
 		return true;
 	}
 
@@ -76,7 +77,7 @@ public class VacationServiceImpl implements VacationService {
 
 			if (taskName.equals("发起申请")) {// 职员节点
 				completeEmployeeTask(task);
-			} else if (taskName.equals("领导审批")) {// 领导节点
+			} else if (taskName.equals("部门负责人审批")) {// 领导节点
 				completeLeaderTask(task);
 			} else {// 经理节点
 				completeJingliTask(task);
@@ -105,6 +106,21 @@ public class VacationServiceImpl implements VacationService {
 		System.out.println("审核结束..........");
 	}
 
+	@Override
+	public Object getVac(String loginname) {
+		// 3.根据流程定义的key,负责人assignee来实现当前用户的任务列表查询
+		List<Task> taskList = taskService.createTaskQuery().processDefinitionKey(PROCESS_DEFINE_KEY)
+				.taskAssignee(loginname).list();
+		// 4.任务列表的展示
+		for (Task task : taskList) {
+			System.out.println("流程实例ID:" + task.getProcessInstanceId());
+			System.out.println("任务ID:" + task.getId());
+			System.out.println("任务负责人:" + task.getAssignee());
+			System.out.println("任务名称:" + task.getName());
+		}
+		return taskList;
+	}
+
 	/** 查询历史流程变量实例 */
 
 	public void findHistoryProcessVariables(String processInstanceId) {
@@ -126,7 +142,8 @@ public class VacationServiceImpl implements VacationService {
 		// 获取任务id
 		String taskId = task.getId();
 		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("leaveStatus", 1);
+		variables.put("applyStatus", 1);
+		variables.put("applyTime", "12312");
 		// 完成任务
 		taskService.complete(taskId);
 		System.out.println("职员已经提交申请.......");

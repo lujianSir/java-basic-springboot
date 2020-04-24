@@ -22,8 +22,8 @@ public class VacationController {
 	}
 
 	@RequestMapping(value = "/getVac")
-	public Result<?> getVac(Vacation vac) {
-		vacationService.startVac(vac);
+	public Result<?> getVac(String loginname) {
+		vacationService.getVac(loginname);
 		return null;
 	}
 
