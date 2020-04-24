@@ -150,7 +150,7 @@ public class PayServiceImpl implements PayService {
 			Double dou = JavaTool.sub(obj2, obj1);// 剩余的钱
 			orderFlow.setOrderstatus(1);
 			// 修改订单信息
-			orderFlow.setPaidtime(JavaTool.getCurrent());
+			orderFlow.setPaidtime(Utils.getCurrent());
 			payMapper.updateOrderFlow(orderFlow);// 修改订单信息
 			userMessage.setAccount(dou);
 			userMapper.updateUserMessage(userMessage);// 修改用户钱的信息

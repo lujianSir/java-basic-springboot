@@ -334,7 +334,7 @@ public class OrderController {
 					// 通过订单号查询订单信息
 					OrderFlow orderFlow = payService.selectOrderFlowByOid(out_trade);
 					orderFlow.setOrderstatus(1);
-					orderFlow.setPaidtime(JavaTool.getCurrent());
+					orderFlow.setPaidtime(Utils.getCurrent());
 					payService.updateOrderFlow(orderFlow);
 					// 批量添加流水信息
 					FlowModel flowModel = changeFlowModel(orderFlow, trade_no);
