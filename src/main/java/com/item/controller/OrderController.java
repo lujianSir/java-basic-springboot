@@ -92,7 +92,7 @@ public class OrderController {
 	}
 
 	/**
-	 * 生成订单状态
+	 * 生成订单状态1
 	 * 
 	 * @param uid
 	 * @param mid
