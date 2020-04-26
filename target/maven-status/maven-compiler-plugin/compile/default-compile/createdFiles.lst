@@ -1,9 +1,11 @@
 com\item\mapper\FileMapper.class
 com\item\mapper\RoleMapper.class
 com\item\controller\OrderController.class
+com\item\controller\VacationController.class
 com\item\entity\TagBean.class
 com\item\mapper\TagMapper.class
 com\item\service\PowerServiceImpl.class
+com\item\entity\Vacation.class
 com\item\service\PowerService.class
 com\item\entity\UserMessage.class
 com\item\alipay\AlipayProperties.class
@@ -15,6 +17,7 @@ com\item\config\TokenInterceptor.class
 com\item\entity\UserBean.class
 com\item\service\ShoppingServiceImpl.class
 com\item\service\FileServiceImpl.class
+com\item\service\VacationServiceImpl.class
 com\item\mapper\ShoppingMapper.class
 com\item\mapper\ExcelMapper.class
 com\item\service\UserServiceImpl.class
@@ -45,6 +48,7 @@ com\item\service\FlowService.class
 com\item\alipay\AlipayBean.class
 com\item\controller\PowerController.class
 com\item\controller\TagController.class
+com\item\service\VacationService.class
 com\item\config\WebMvcConfig.class
 com\item\entity\ExcelManage.class
 com\item\service\TagServiceImpl.class

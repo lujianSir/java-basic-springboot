@@ -195,4 +195,16 @@ public class UserController {
 		UserMessage userMessage = userService.queryUserMessageByUserId(userid);
 		return Result.success(userMessage);
 	}
+
+	/**
+	 * 查询后台用户信息
+	 * 
+	 * @param userid
+	 * @return
+	 */
+	@RequestMapping(value = "/queryUserBeanByUserId")
+	public Result<?> queryUserBeanByUserId(String userid) {
+		UserBean userBean = userService.queryUserBeanByUserId(userid);
+		return Result.success(userBean);
+	}
 }

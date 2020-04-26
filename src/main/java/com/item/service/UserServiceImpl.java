@@ -17,6 +17,7 @@ import com.item.mapper.UserMapper;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
 import com.item.tool.TokenUtil;
+import com.item.tool.Utils;
 
 /**
  * 用户相关方法，用来处理相关功能业务
@@ -85,6 +86,7 @@ public class UserServiceImpl implements UserService {
 						// 将token放在密码带出去
 						user.setPassword(token);
 						user.setNewip(ip);
+						user.setLogintime(Utils.getCurrent());
 						return Result.success(user);
 					} else {
 						return Result.error(50010, "用户密码错误");
@@ -312,6 +314,16 @@ public class UserServiceImpl implements UserService {
 	public UserMessage queryUserMessageByUserId(String userid) {
 		// TODO Auto-generated method stub
 		return userMapper.queryUserMessageByUserId(userid);
+	}
+
+	@Override
+	public UserBean queryUserBeanByUserId(String userid) {
+		// TODO Auto-generated method stub
+		UserBean user = userMapper.queryUserBeanByUserId(userid);
+		String ip = JavaTool.getIp();
+		user.setNewip(ip);
+		user.setLogintime(Utils.getCurrent());
+		return user;
 	}
 
 }

@@ -66,4 +66,7 @@ public interface UserMapper {
 	// 通过用户的ID查询商城币
 	UserMessage queryUserMessageByUserId(String userid);
 
+	// 通过ID查询后台信息
+	UserBean queryUserBeanByUserId(String userid);
+
 }

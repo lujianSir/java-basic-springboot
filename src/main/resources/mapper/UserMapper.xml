@@ -214,4 +214,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryUserMessageByUserId" resultType="com.item.entity.UserMessage">
 		select * from usermessage where userid=#{userid}
 	</select>
+	
+	<select id="queryUserBeanByUserId" resultType="com.item.entity.UserBean">
+		select * from userinfo where userid=#{userid}	
+	</select>
 </mapper>

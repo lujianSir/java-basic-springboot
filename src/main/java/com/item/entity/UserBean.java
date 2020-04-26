@@ -27,6 +27,16 @@ public class UserBean extends User implements Serializable {
 
 	private String newip;// 本次IP
 
+	private String logintime;// 登录时间
+
+	public String getLogintime() {
+		return logintime;
+	}
+
+	public void setLogintime(String logintime) {
+		this.logintime = logintime;
+	}
+
 	public String getOldip() {
 		return oldip;
 	}

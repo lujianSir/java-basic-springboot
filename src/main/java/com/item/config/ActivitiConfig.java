@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.sql.DataSource;
 
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.IdentityService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -71,4 +72,8 @@ public class ActivitiConfig {
 		return processEngine().getObject().getHistoryService();
 	}
 
+	@Bean
+	public IdentityService identityService() throws Exception {
+		return processEngine().getObject().getIdentityService();
+	}
 }

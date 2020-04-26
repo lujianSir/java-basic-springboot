@@ -47,4 +47,6 @@ public interface UserService {
 	// 通过ID查询信息
 	UserMessage queryUserMessageByUserId(String userid);
 
+	// 通过ID查询后台信息
+	UserBean queryUserBeanByUserId(String userid);
 }
