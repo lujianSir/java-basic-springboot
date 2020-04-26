@@ -326,6 +326,19 @@ public class FileController {
 	public Result<?> selectFlowModelByUserId(String uid, Page page) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<FlowModel> list = payService.selectFlowModelByUserId(uid);
+		for (int i = 0; i < list.size(); i++) {
+			List<Image> images = new ArrayList<Image>();
+			String filePics = list.get(i).getFilePics();
+			if (filePics != null && !filePics.equals("")) {
+				String[] pics = filePics.split(",");
+				for (int j = 0; j < pics.length; j++) {
+					Image image = new Image();
+					image.setPic(pics[j]);
+					images.add(image);
+				}
+			}
+			list.get(i).setImages(images);
+		}
 		PageInfo<FlowModel> pageInfo = new PageInfo<FlowModel>(list);
 		return Result.success(pageInfo);
 	}

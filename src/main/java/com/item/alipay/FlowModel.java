@@ -1,6 +1,9 @@
 package com.item.alipay;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.item.entity.Image;
 
 /**
  * 已购模型
@@ -25,6 +28,8 @@ public class FlowModel implements Serializable {
 
 	private String filePics;
 
+	private List<Image> images;// 所有的图片路径
+
 	// 模型ID
 	private int mid;
 
@@ -48,6 +53,14 @@ public class FlowModel implements Serializable {
 	private String creattime;// 创建的时间
 
 	private int status;// 0 到期 1未到期
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
 
 	public String getCreattime() {
 		return creattime;

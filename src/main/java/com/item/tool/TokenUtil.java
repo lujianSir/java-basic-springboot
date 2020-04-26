@@ -49,7 +49,7 @@ public class TokenUtil {
 			System.out.println("认证通过：");
 			System.out.println("issuer: " + jwt.getIssuer());
 			System.out.println("username: " + jwt.getClaim("username").asString());
-			System.out.println("过期时间：      " + jwt.getExpiresAt());
+			System.out.println("过期时间： " + jwt.getExpiresAt());
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = formatter.format(jwt.getExpiresAt());
 			System.out.println(dateString);

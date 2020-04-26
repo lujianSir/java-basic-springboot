@@ -1,5 +1,7 @@
 package com.item.service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +9,6 @@ import java.util.Map;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,20 +38,23 @@ public class VacationServiceImpl implements VacationService {
 	private static final String PROCESS_DEFINE_KEY = "vacationProcess";
 
 	@Override
-	public Object startVac(Vacation vac) {
+	public Object startVac(Vacation vac, String firstName, String secondName) {
 		// TODO Auto-generated method stub
 		// 将信息加入map,以便传入流程中
 		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("employeeName", vac.getApplyUser());
+		variables.put("applyUser", vac.getApplyUser());
 		variables.put("reason", vac.getReason());
-		variables.put("leadName", vac.getAuditor());
-
+		variables.put("firstName", firstName);
+		variables.put("secondName", secondName);
 		// 开启流程
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINE_KEY, variables);
 		// 将得到的实例流程id值赋给之前设置的变量
 		processInstanceId = processInstance.getId();
 		System.out.println("流程开启成功.......实例流程id:" + processInstanceId);
-		getTaskAndComplete(processInstanceId);
+		// getTaskAndComplete(processInstanceId);
+		// 查询当前任务
+		Task currentTask = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+		taskService.complete(currentTask.getId());
 		return true;
 	}
 
@@ -59,125 +63,27 @@ public class VacationServiceImpl implements VacationService {
 		System.out.println("成功");
 	}
 
-	// 开始走流程
-	// 1.获取当前任务,并且完成 根据实例ID进行操作
-
-	public void getTaskAndComplete(String processInstanceId) {
-
-		// 查询流程实例，如果走完了 ，应该是null,否则应该有当前任务
-		Object o = runtimeService.createProcessInstanceQuery()// 获取查询对象
-				.processInstanceId(processInstanceId)// 根据id查询流程实例
-				.singleResult();// 获取查询结果,如果为空,说明这个流程已经执行完毕,否则,获取任务并执行
-		if (o != null) {
-			// 通过流程实例ID，查询当前的任务
-			Task task = taskService.createTaskQuery()// 创建查询对象
-					.processInstanceId(processInstanceId)// 通过流程实例id来查询当前任务
-					.singleResult();// 获取单个查询结果
-			String taskName = task.getName();
-
-			if (taskName.equals("发起申请")) {// 职员节点
-				completeEmployeeTask(task);
-			} else if (taskName.equals("部门负责人审批")) {// 领导节点
-				completeLeaderTask(task);
-			} else {// 经理节点
-				completeJingliTask(task);
-			}
-		}
-
-		// 开始进行流程
-//			while(this.processEngine.getRuntimeService()
-//					.createProcessInstanceQuery()//获取查询对象
-//					.processInstanceId(processInstanceId)//根据id查询流程实例
-//					.singleResult()//获取查询结果,如果为空,说明这个流程已经执行完毕,否则,获取任务并执行
-//					!=null){
-//				Task task = taskService.createTaskQuery()//创建查询对象
-//					.processInstanceId(processInstanceId)//通过流程实例id来查询当前任务
-//					.singleResult();//获取单个查询结果
-//				String taskName = task.getName();
-//				if(taskName.equals("发起申请")){//职员节点
-//					completeEmployeeTask(task);
-//				}else if(taskName.equals("领导审批")){//领导节点
-//					completeLeaderTask(task);
-//				}else{//经理节点
-//					completeJingliTask(task);
-//				}
-//			}
-
-		System.out.println("审核结束..........");
-	}
-
 	@Override
-	public Object getVac(String loginname) {
-		// 3.根据流程定义的key,负责人assignee来实现当前用户的任务列表查询
-		List<Task> taskList = taskService.createTaskQuery().processDefinitionKey(PROCESS_DEFINE_KEY)
-				.taskAssignee(loginname).list();
-		// 4.任务列表的展示
-		for (Task task : taskList) {
-			System.out.println("流程实例ID:" + task.getProcessInstanceId());
-			System.out.println("任务ID:" + task.getId());
-			System.out.println("任务负责人:" + task.getAssignee());
-			System.out.println("任务名称:" + task.getName());
-		}
-		return taskList;
-	}
-
-	/** 查询历史流程变量实例 */
-
-	public void findHistoryProcessVariables(String processInstanceId) {
-		List<HistoricVariableInstance> list = historyService//
-				.createHistoricVariableInstanceQuery()// 创建一个历史的流程变量查询对象
-				.processInstanceId(processInstanceId)//
+	public Object myVac(String userName) {
+		List<ProcessInstance> instanceList = runtimeService.createProcessInstanceQuery().processInstanceName(userName)
 				.list();
-		if (list != null && list.size() > 0) {
-			for (HistoricVariableInstance hvi : list) {
-				System.out.println(hvi.getId() + "   " + hvi.getProcessInstanceId() + "   " + hvi.getVariableName()
-						+ "   " + hvi.getVariableTypeName() + "    " + hvi.getValue());
-				System.out.println("###############################################");
-			}
+		List<Vacation> vacList = new ArrayList<>();
+		for (ProcessInstance instance : instanceList) {
+			Vacation vac = getVac(instance);
+			vacList.add(vac);
 		}
+		return vacList;
 	}
 
-	// 职员提交申请
-	public void completeEmployeeTask(Task task) {
-		// 获取任务id
-		String taskId = task.getId();
-		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("applyStatus", 1);
-		variables.put("applyTime", "12312");
-		// 完成任务
-		taskService.complete(taskId);
-		System.out.println("职员已经提交申请.......");
-
-	}
-
-	// 领导审批
-	public void completeLeaderTask(Task task) {
-		// 获取任务id
-		String taskId = task.getId();
-
-		// 领导意见
-		Map<String, Object> variables = new HashMap<String, Object>();
-		// variables.put("day",4);
-		variables.put("leaderResult", 0);
-		variables.put("leaveStatus", 0);// 打回
-		// 完成任务
-		taskService.complete(taskId, variables);
-		System.out.println("领导审核完毕........");
-
-	}
-
-	// 经理审批
-	public void completeJingliTask(Task task) {
-		// 获取任务id
-		String taskId = task.getId();
-		String name = task.getName();
-		// 经理意见
-		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("result", 1);
-		// 完成任务
-		taskService.complete(taskId, variables);
-		System.out.println("经理审核完毕........,审核经理:" + name);
-
+	private Vacation getVac(ProcessInstance instance) {
+		String reason = runtimeService.getVariable(instance.getId(), "reason", String.class);
+		Vacation vac = new Vacation();
+		vac.setApplyUser(instance.getStartUserId());
+		vac.setReason(reason);
+		Date startTime = instance.getStartTime(); // activiti 6 才有
+		vac.setApplyTime(startTime);
+		vac.setApplyStatus(instance.isEnded() ? "申请结束" : "等待审批");
+		return vac;
 	}
 
 }

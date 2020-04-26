@@ -257,12 +257,10 @@ public class FileServiceImpl implements FileService {
 			if (modelBean == null) {
 				modelBean = fileMapper.queryModelById(num);
 				modelBean.setStatus(0);
-				modelBean.setFileModel("");
 			}
 		} else {
 			modelBean = fileMapper.queryModelById(num);
 			modelBean.setStatus(0);
-			modelBean.setFileModel("");
 		}
 		modelBean.setCreatTimeName(modelBean.getCreatTime());
 		return Result.success(modelBean);

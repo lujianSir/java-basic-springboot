@@ -16,14 +16,14 @@ public class VacationController {
 	private VacationService vacationService;
 
 	@RequestMapping(value = "/startVac")
-	public Result<?> userLogin(Vacation vac) {
-		vacationService.startVac(vac);
+	public Result<?> userLogin(Vacation vac, String firstName, String secondName) {
+		vacationService.startVac(vac, firstName, secondName);
 		return null;
 	}
 
-	@RequestMapping(value = "/getVac")
-	public Result<?> getVac(String loginname) {
-		vacationService.getVac(loginname);
+	@RequestMapping(value = "/myVac")
+	public Result<?> myVac(String userName) {
+		vacationService.myVac(userName);
 		return null;
 	}
 

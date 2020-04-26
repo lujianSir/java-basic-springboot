@@ -5,8 +5,8 @@ import com.item.entity.Vacation;
 public interface VacationService {
 
 	// 发起申请
-	public Object startVac(Vacation vac);
+	public Object startVac(Vacation vac, String firstName, String secondName);
 
-	// 获取任务
-	public Object getVac(String loginname);
+	// 正在申请的假
+	public Object myVac(String userName);
 }
