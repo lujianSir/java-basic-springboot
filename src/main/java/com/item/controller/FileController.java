@@ -336,8 +336,9 @@ public class FileController {
 					image.setPic(pics[j]);
 					images.add(image);
 				}
+				list.get(i).setImages(images);
 			}
-			list.get(i).setImages(images);
+
 		}
 		PageInfo<FlowModel> pageInfo = new PageInfo<FlowModel>(list);
 		return Result.success(pageInfo);

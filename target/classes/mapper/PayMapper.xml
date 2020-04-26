@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			flowmodel a
 		LEFT JOIN modelinfo b ON a.mid = b.mid
 		WHERE
-			a.uid = #{uid}
+			a.uid = #{uid}  and  b.filePics is not null
    		order by  a.saynew ,a.creattime desc 
    </select>
    
