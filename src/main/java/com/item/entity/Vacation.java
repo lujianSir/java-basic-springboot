@@ -19,6 +19,8 @@ public class Vacation {
 	private String firstName;// 第一审批人
 	private String secondName;// 第二审批人
 
+	private String processInstanceId;// 流程ID
+
 	/**
 	 * 审核人
 	 */
@@ -26,6 +28,14 @@ public class Vacation {
 	private String result;// 审核结果 审核拒绝或者审核通过
 	private Date auditTime;// 审核的时间
 	private String auditorremark;// 评论
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
 
 	public String getTitle() {
 		return title;

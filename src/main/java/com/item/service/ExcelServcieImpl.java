@@ -98,6 +98,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 		System.out.println(excelContentList);
 
 		excelMapper.insertExcelContent(excelContentList);
+		excelManage.setExcelstatus(1);
 		int row = excelMapper.insertExcelManage(excelManage);
 
 		return row;

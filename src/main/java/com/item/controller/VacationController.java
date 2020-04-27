@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.item.entity.VacComment;
 import com.item.entity.VacTask;
 import com.item.entity.Vacation;
 import com.item.service.VacationService;
@@ -28,14 +29,14 @@ public class VacationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/startVac")
-	public Result<?> userLogin(Vacation vac, String userName, String firstName, String secondName) {
+	public Result<?> userLogin(Vacation vac, String userName, String firstName, String secondName, String eid) {
 		if (userName.equals(firstName) || userName.equals(secondName) || firstName.equals(secondName)) {
 			return Result.error(501, "不能选择同一个人");
 		} else {
 			if (userName != null && !userName.equals("")) {
 				vac.setApplyUser(userName);
 			}
-			boolean flag = vacationService.startVac(vac, userName, firstName, secondName);
+			boolean flag = vacationService.startVac(vac, userName, firstName, secondName, eid);
 			if (flag) {
 				return Result.success();
 			} else {
@@ -113,4 +114,17 @@ public class VacationController {
 		List<Vacation> vacList = vacationService.myAuditRecord(userName);
 		return Result.success(vacList);
 	}
+
+	/**
+	 * 获取评论列表
+	 * 
+	 * @param processInstanceId
+	 * @return
+	 */
+	@RequestMapping(value = "/auditComment")
+	public Result<?> auditComment(String processInstanceId) {
+		List<VacComment> comments = vacationService.auditComment(processInstanceId);
+		return Result.success(comments);
+	}
+
 }

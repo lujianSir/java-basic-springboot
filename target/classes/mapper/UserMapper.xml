@@ -13,9 +13,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</sql>
 
 	<!-- 检测用户是否存在 -->
-	<select id="userExist" parameterType="string" resultType="int">
-		SELECT
-		count(*) FROM userinfo WHERE username=#{username}
+	<select id="userExist" parameterType="string" resultType="com.item.entity.UserBean">
+		SELECT * FROM userinfo WHERE username=#{username}
 	</select>
 
 	<!-- 管理用户登录 -->
@@ -53,7 +52,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 通过用户名或者手机号查询(管理页面) -->
 	<select id="queryUserBeanByStr" parameterType="String" resultType="com.item.entity.UserBean">
-		select a.*,b.name rname from userinfo a LEFT JOIN role b on a.role=b.id  where a.username like CONCAT('%',#{str},'%') or a.phone like CONCAT('%',#{str},'%')  order by a.registertime
+		select a.*,b.name rname from userinfo a LEFT JOIN role b on a.role=b.id 
+		<where>
+			<if test="str !=null and str != ''">
+				a.username like CONCAT('%',#{str},'%') or a.phone like CONCAT('%',#{str},'%') 
+			</if>
+		</where>
+			  order by a.registertime
 	</select>
 	
 	<!-- 通过ID删除管理 -->
@@ -216,6 +221,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="queryUserBeanByUserId" resultType="com.item.entity.UserBean">
-		select * from userinfo where userid=#{userid}	
+		select a.*,b.name rname from userinfo a  LEFT JOIN  role  b on a.role=b.id
+		where a.userid=#{userid}
 	</select>
 </mapper>

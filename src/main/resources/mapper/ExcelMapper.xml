@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 添加excel数据 -->
 	<insert id="insertExcelManage" parameterType="com.item.entity.ExcelManage">
-		insert into excelmanage (eid,excelname,uid,creattime,realpath) values (#{eid},#{excelname},#{uid},#{creattime},#{realpath})
+		insert into excelmanage (eid,excelname,uid,creattime,realpath,excelstatus) values (#{eid},#{excelname},#{uid},#{creattime},#{realpath},#{excelstatus})
 	</insert>
 	
 	<!-- 查询所得提交信息 -->
@@ -63,4 +63,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryExcelManageByExcelname" resultType="int">
 		select count(*) from excelmanage where excelname=#{excelname}
 	</select>
+	
+	<!-- 修改表单信息 -->
+	<update id="updateExcelManage" parameterType="com.item.entity.ExcelManage">
+		update excelmanage 
+			<set>
+				<if test="excelname!=null and excelname!=''">
+					excelname=#{excelname},
+				</if>
+				<if test="uid!=null and uid!=''">
+					uid=#{uid},
+				</if>
+				<if test="creattime!=null and creattime!=''">
+					creattime=#{creattime},
+				</if>		
+				<if test="realpath!=null and realpath!=''">
+					realpath=#{realpath},
+				</if>				
+				<if test="excelstatus!=null and excelstatus!=''">
+					excelstatus=#{excelstatus},
+				</if>
+				
+			</set>
+			where eid=#{eid}
+	</update>
 </mapper>

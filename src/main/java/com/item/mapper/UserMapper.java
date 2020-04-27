@@ -2,6 +2,7 @@ package com.item.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.item.entity.UserBean;
@@ -16,7 +17,7 @@ import com.item.entity.UserMessage;
 public interface UserMapper {
 
 	// 判断用户是否存在(管理页面)
-	public int userExist(String username);
+	public UserBean userExist(String username);
 
 	// 根据用户名密码登录(管理页面)
 	public UserBean userLogin(String username);
@@ -34,7 +35,7 @@ public interface UserMapper {
 	public List<UserBean> queryByRole(int role);
 
 	// 通过用户名或者手机号查询(管理页面)
-	public List<UserBean> queryUserBeanByStr(String str);
+	public List<UserBean> queryUserBeanByStr(@Param("str") String str);
 
 	// 通过ID删除用户
 	public int deletUserBeanByUserId(String userid);

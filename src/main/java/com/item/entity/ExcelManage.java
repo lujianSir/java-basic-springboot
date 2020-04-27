@@ -20,6 +20,16 @@ public class ExcelManage {
 
 	private String realpath;// 文件上传的实际路径
 
+	private int excelstatus;// 1 显示 2 不显示
+
+	public int getExcelstatus() {
+		return excelstatus;
+	}
+
+	public void setExcelstatus(int excelstatus) {
+		this.excelstatus = excelstatus;
+	}
+
 	public String getRealpath() {
 		return realpath;
 	}

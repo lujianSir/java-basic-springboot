@@ -63,4 +63,11 @@ public interface ExcelMapper {
 	 */
 	int queryExcelManageByExcelname(String excelname);
 
+	/**
+	 * 编辑表单信息
+	 * 
+	 * @param excelManage
+	 * @return
+	 */
+	int updateExcelManage(ExcelManage excelManage);
 }

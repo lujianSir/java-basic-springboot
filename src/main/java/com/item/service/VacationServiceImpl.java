@@ -13,17 +13,26 @@ import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.item.entity.ExcelManage;
+import com.item.entity.VacComment;
 import com.item.entity.VacTask;
 import com.item.entity.Vacation;
+import com.item.mapper.ExcelMapper;
 import com.item.tool.ActivitiUtil;
+import com.item.tool.Utils;
 
 @Service
 public class VacationServiceImpl implements VacationService {
+
+	@Autowired
+	private ExcelMapper excelMapper;
 
 	@Autowired
 	private RuntimeService runtimeService;
@@ -47,7 +56,7 @@ public class VacationServiceImpl implements VacationService {
 	private static final String PROCESS_DEFINE_KEY = "vacationProcess";
 
 	@Override
-	public boolean startVac(Vacation vac, String userName, String firstName, String secondName) {
+	public boolean startVac(Vacation vac, String userName, String firstName, String secondName, String eid) {
 		// TODO Auto-generated method stub
 
 		identityService.setAuthenticatedUserId(userName);
@@ -56,6 +65,7 @@ public class VacationServiceImpl implements VacationService {
 		variables.put("reason", vac.getReason());
 		variables.put("firstName", firstName);
 		variables.put("secondName", secondName);
+		variables.put("processInstanceId", processInstanceId);
 		// 开始流程
 		ProcessInstance vacationInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINE_KEY, variables);
 		// 查询当前任务
@@ -64,6 +74,11 @@ public class VacationServiceImpl implements VacationService {
 		taskService.claim(currentTask.getId(), userName);
 
 		taskService.complete(currentTask.getId(), variables);
+
+		ExcelManage excelManage = new ExcelManage();
+		excelManage.setEid(eid);
+		excelManage.setExcelstatus(2);
+		excelMapper.updateExcelManage(excelManage);
 
 		return true;
 	}
@@ -90,15 +105,21 @@ public class VacationServiceImpl implements VacationService {
 		String result = runtimeService.getVariable(instance.getId(), "result", String.class);
 		String auditor = runtimeService.getVariable(instance.getId(), "auditor", String.class);
 		String auditorremark = runtimeService.getVariable(instance.getId(), "auditorremark", String.class);
+		String firstName = runtimeService.getVariable(instance.getId(), "firstName", String.class);
+		String secondName = runtimeService.getVariable(instance.getId(), "secondName", String.class);
 		Vacation vac = new Vacation();
 		vac.setApplyUser(applyUser);
 		vac.setReason(reason);
 		vac.setAuditor(auditor);
 		vac.setAuditorremark(auditorremark);
-		vac.setResult(Integer.parseInt(result) == 1 ? "审批通过" : "审批驳回");
+		if (result != null) {
+			vac.setResult(Integer.parseInt(result) == 1 ? "审批通过" : "审批驳回");
+		}
 		Date startTime = instance.getStartTime(); // activiti 6 才有
 		vac.setApplyTime(startTime);
 		vac.setApplyStatus(instance.isEnded() ? "申请结束" : "等待审批");
+		vac.setFirstName(firstName);
+		vac.setSecondName(secondName);
 		return vac;
 	}
 
@@ -148,13 +169,26 @@ public class VacationServiceImpl implements VacationService {
 	public boolean passAudit(String userName, VacTask vacTask) {
 		// TODO Auto-generated method stub
 		String taskId = vacTask.getId();
+		// 使用任务id,获取任务对象，获取流程实例id
+		Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+		// 利用任务对象，获取流程实例id
+		String processInstancesId = task.getProcessInstanceId();
+
 		String result = vacTask.getVac().getResult();
 		Map<String, Object> vars = new HashMap<>();
 		vars.put("result", result);
 		vars.put("auditor", userName);
 		vars.put("auditTime", new Date());
 		vars.put("auditorremark", vacTask.getVac().getAuditorremark());
-		taskService.claim(taskId, userName);
+
+		Authentication.setAuthenticatedUserId(userName); // 添加批注时候的审核人，通常应该从session获取
+		if (vacTask.getVac().getAuditorremark() != null && !vacTask.getVac().getAuditorremark().equals("")) {
+			taskService.addComment(taskId, processInstancesId,
+					Utils.getCurrent() + "," + vacTask.getVac().getAuditorremark());// 添加审批的评论
+		} else {
+			taskService.addComment(taskId, processInstancesId, Utils.getCurrent());// 添加审批的评论
+		}
+
 		taskService.complete(taskId, vars);
 		return true;
 	}
@@ -193,6 +227,30 @@ public class VacationServiceImpl implements VacationService {
 			vacList.add(vacation);
 		}
 		return vacList;
+	}
+
+	@Override
+	public List<VacComment> auditComment(String processInstanceId) {
+		// TODO Auto-generated method stub
+		List<VacComment> vacComments = new ArrayList<VacComment>();
+		List<Comment> list = taskService.getProcessInstanceComments(processInstanceId);
+		for (int i = 0; i < list.size(); i++) {
+			Comment comment = list.get(i);
+			VacComment vacComment = new VacComment();
+			vacComment.setUsername(comment.getUserId());
+			String message = comment.getFullMessage();
+			if (message != null && !message.equals("")) {
+				String[] messages = message.split(",");
+				if (messages.length > 1) {
+					vacComment.setCommenttime(messages[0]);
+					vacComment.setComment(messages[1]);
+				} else {
+					vacComment.setCommenttime(messages[0]);
+				}
+			}
+			vacComments.add(vacComment);
+		}
+		return vacComments;
 	}
 
 }

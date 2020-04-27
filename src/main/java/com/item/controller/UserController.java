@@ -63,6 +63,18 @@ public class UserController {
 	}
 
 	/**
+	 * 查询所有人的信息
+	 * 
+	 * @param str
+	 * @return
+	 */
+	@RequestMapping(value = "/queryUserBean")
+	public Result<?> queryUserBean(String str) {
+		List<UserBean> list = userService.queryUserBeanByStr(str);
+		return Result.success(list);
+	}
+
+	/**
 	 * 通过用户ID删除管理用户
 	 * 
 	 * @param userid
@@ -206,5 +218,16 @@ public class UserController {
 	public Result<?> queryUserBeanByUserId(String userid) {
 		UserBean userBean = userService.queryUserBeanByUserId(userid);
 		return Result.success(userBean);
+	}
+
+	/**
+	 * 修改密码
+	 * 
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping(value = "/updatePassword")
+	public Result<?> updatePassword(UserBean user) {
+		return userService.updateUserBeanByUserId(user);
 	}
 }

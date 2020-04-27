@@ -49,9 +49,9 @@ public class UserServiceImpl implements UserService {
 	public boolean userExist(String username) {
 
 		// 获取user信息
-		int i = userMapper.userExist(username);
+		UserBean userBean = userMapper.userExist(username);
 
-		if (i == 1) {
+		if (userBean != null) {
 			return true;
 		} else {
 			return false;
@@ -235,26 +235,27 @@ public class UserServiceImpl implements UserService {
 	public Result<?> updateUserBeanByUserId(UserBean user) {
 		// TODO Auto-generated method stub
 		// user.setRegistertime(JavaTool.getUserCurrent());
-		int row = userMapper.userExist(user.getUserid());// 不一定有
-		if (row > 0) {
-			return Result.error(201, "用户名已经存在");
-		} else {
-			UserMessage userMessage = new UserMessage();
-			if (user.getPassword() != null && !user.getPassword().equals("")) {
-				user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
-				userMessage.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
+		if (user.getUsername() != null && !user.getUsername().equals("")) {
+			UserBean userBean = userMapper.userExist(user.getUsername());// 不一定有
+			if (userBean != null && !userBean.getUserid().equals(user.getUserid())) {
+				return Result.error(201, "登录名已经存在");
 			}
-			if (user.getNickname() == null || user.getNickname().equals("")) {
-				user.setNickname(user.getUsername());
-				userMessage.setNickname(user.getUsername());
-			}
-
-			userMessage.setUserid(user.getUserid());
-			userMessage.setStatus(user.getStatus());
-			userMessage.setUsername(user.getUsername());
-			userMapper.updateUserMessage(userMessage);// 修改商城管理人员
-			return Result.success(userMapper.updateUserBeanByUserId(user));// 修改后台管理人员
 		}
+		UserMessage userMessage = new UserMessage();
+		if (user.getPassword() != null && !user.getPassword().equals("")) {
+			user.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
+			userMessage.setPassword(JavaTool.string2MD5(user.getPassword()).trim());
+		}
+		if (user.getNickname() == null || user.getNickname().equals("")) {
+			user.setNickname(user.getUsername());
+			userMessage.setNickname(user.getUsername());
+		}
+
+		userMessage.setUserid(user.getUserid());
+		userMessage.setStatus(user.getStatus());
+		userMessage.setUsername(user.getUsername());
+		userMapper.updateUserMessage(userMessage);// 修改商城管理人员
+		return Result.success(userMapper.updateUserBeanByUserId(user));// 修改后台管理人员
 
 	}
 
