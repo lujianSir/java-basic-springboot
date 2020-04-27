@@ -29,11 +29,18 @@ public class VacationController {
 	 */
 	@RequestMapping(value = "/startVac")
 	public Result<?> userLogin(Vacation vac, String userName, String firstName, String secondName) {
-		boolean flag = vacationService.startVac(vac, userName, firstName, secondName);
-		if (flag) {
-			return Result.success();
+		if (userName.equals(firstName) || userName.equals(secondName) || firstName.equals(secondName)) {
+			return Result.error(501, "不能选择同一个人");
 		} else {
-			return Result.error(500, "申请失败，请重新发起");
+			if (userName != null && !userName.equals("")) {
+				vac.setApplyUser(userName);
+			}
+			boolean flag = vacationService.startVac(vac, userName, firstName, secondName);
+			if (flag) {
+				return Result.success();
+			} else {
+				return Result.error(500, "申请失败，请重新发起");
+			}
 		}
 
 	}
@@ -82,9 +89,10 @@ public class VacationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/passAudit")
-	public Result<?> passAudit(String userName, String result, VacTask vacTask) {
+	public Result<?> passAudit(String userName, String result, String auditorremark, VacTask vacTask) {
 		Vacation vac = new Vacation();
 		vac.setResult(result);
+		vac.setAuditorremark(auditorremark);
 		vacTask.setVac(vac);
 		boolean flag = vacationService.passAudit(userName, vacTask);
 		if (flag) {

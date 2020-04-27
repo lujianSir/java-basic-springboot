@@ -59,4 +59,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteExcelContentByEid" parameterType="java.lang.String">
 		delete from excelcontent where eid=#{eid}
 	</delete>
+	
+	<select id="queryExcelManageByExcelname" resultType="int">
+		select count(*) from excelmanage where excelname=#{excelname}
+	</select>
 </mapper>

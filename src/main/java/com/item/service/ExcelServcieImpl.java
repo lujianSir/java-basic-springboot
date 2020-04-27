@@ -133,4 +133,10 @@ public class ExcelServcieImpl implements ExcelServcie {
 		return row;
 	}
 
+	@Override
+	public int queryExcelManageByExcelname(String excelname) {
+		// TODO Auto-generated method stub
+		return excelMapper.queryExcelManageByExcelname(excelname);
+	}
+
 }

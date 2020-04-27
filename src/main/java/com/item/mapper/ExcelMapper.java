@@ -56,4 +56,11 @@ public interface ExcelMapper {
 	 */
 	int deleteExcelContentByEid(String eid);
 
+	/**
+	 * 通过表单名称进行查询
+	 * 
+	 * @return
+	 */
+	int queryExcelManageByExcelname(String excelname);
+
 }

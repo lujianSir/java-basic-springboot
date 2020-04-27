@@ -43,11 +43,19 @@ public class ExcelController {
 	@ResponseBody
 	public Result<?> impotr(@RequestParam("file") MultipartFile file, HttpServletRequest request,
 			ExcelManage excelManage) throws Exception {
-		InputStream in = file.getInputStream();
-		// 数据导入
-		int row = excelServcie.importExcelInfo(in, file, excelManage);
-		in.close();
-		return Result.success(row);
+
+		String filename = file.getOriginalFilename();
+		int total = excelServcie.queryExcelManageByExcelname(filename);
+		if (total > 0) {
+			return Result.error(500, "表格已存在");
+		} else {
+			InputStream in = file.getInputStream();
+			// 数据导入
+			int row = excelServcie.importExcelInfo(in, file, excelManage);
+			in.close();
+			return Result.success("导入成功");
+		}
+
 	}
 
 	/**

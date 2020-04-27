@@ -18,6 +18,7 @@ D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\PayS
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\FlowService.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\mapper\TagMapper.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\VacationServiceImpl.java
+D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\VacTask.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\ShoppingServiceImpl.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\TokenUtil.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\RoleServiceImpl.java
@@ -58,6 +59,7 @@ D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\mapper\UserM
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\Power.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\User.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\UserBean.java
+D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\ActivitiUtil.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\CorsFilter.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\config\WebMvcConfig.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\mapper\ExcelMapper.java

@@ -39,4 +39,11 @@ public interface ExcelServcie {
 	 */
 	int deleteExcelByEid(String eid);
 
+	/**
+	 * 通过表单名称进行查询
+	 * 
+	 * @return
+	 */
+	int queryExcelManageByExcelname(String excelname);
+
 }

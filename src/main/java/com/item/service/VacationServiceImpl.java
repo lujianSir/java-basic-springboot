@@ -87,9 +87,15 @@ public class VacationServiceImpl implements VacationService {
 	private Vacation getVac(ProcessInstance instance) {
 		String reason = runtimeService.getVariable(instance.getId(), "reason", String.class);
 		String applyUser = runtimeService.getVariable(instance.getId(), "applyUser", String.class);
+		String result = runtimeService.getVariable(instance.getId(), "result", String.class);
+		String auditor = runtimeService.getVariable(instance.getId(), "auditor", String.class);
+		String auditorremark = runtimeService.getVariable(instance.getId(), "auditorremark", String.class);
 		Vacation vac = new Vacation();
 		vac.setApplyUser(applyUser);
 		vac.setReason(reason);
+		vac.setAuditor(auditor);
+		vac.setAuditorremark(auditorremark);
+		vac.setResult(Integer.parseInt(result) == 1 ? "审批通过" : "审批驳回");
 		Date startTime = instance.getStartTime(); // activiti 6 才有
 		vac.setApplyTime(startTime);
 		vac.setApplyStatus(instance.isEnded() ? "申请结束" : "等待审批");
@@ -147,7 +153,7 @@ public class VacationServiceImpl implements VacationService {
 		vars.put("result", result);
 		vars.put("auditor", userName);
 		vars.put("auditTime", new Date());
-		vars.put("auditorremark", "多多努力学习!!");
+		vars.put("auditorremark", vacTask.getVac().getAuditorremark());
 		taskService.claim(taskId, userName);
 		taskService.complete(taskId, vars);
 		return true;
