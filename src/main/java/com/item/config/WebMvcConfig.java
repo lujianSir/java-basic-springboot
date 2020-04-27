@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
 	/**
-	 * 虚拟路径配置
+	 * 虚拟路径配置1
 	 * 
 	 * @param registry
 	 */
