@@ -1,15 +1,22 @@
 package com.item.service;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.FlowNode;
+import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.IdentityService;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
@@ -17,6 +24,7 @@ import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Comment;
 import org.activiti.engine.task.Task;
+import org.activiti.image.ProcessDiagramGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +54,14 @@ public class VacationServiceImpl implements VacationService {
 	@Autowired
 	private HistoryService historyService;
 
+	@Autowired
+	private RepositoryService repositoryService;
+
 	private static final String PROCESS_DEFINE_KEY = "vacationProcess";
+
+	// 获取默认的流程引擎
+	@Autowired
+	private ProcessEngine processEngine;
 
 	@Override
 	public boolean startVac(Vacation vac, String userName, String firstName, String secondName, String eid) {
@@ -248,6 +263,62 @@ public class VacationServiceImpl implements VacationService {
 			vacComments.add(vacComment);
 		}
 		return vacComments;
+	}
+
+	@Override
+	public InputStream getResourceDiagramInputStream(String id) {
+		// TODO Auto-generated method stub
+		try {
+			// 获取历史流程实例
+			HistoricProcessInstance historicProcessInstance = historyService.createHistoricProcessInstanceQuery()
+					.processInstanceId(id).singleResult();
+			// 获取流程中已经执行的节点，按照执行先后顺序排序
+			List<HistoricActivityInstance> historicActivityInstanceList = historyService
+					.createHistoricActivityInstanceQuery().processInstanceId(id).orderByHistoricActivityInstanceId()
+					.asc().list();
+			// 构造已执行的节点ID集合
+			List<String> executedActivityIdList = new ArrayList<String>();
+			for (HistoricActivityInstance activityInstance : historicActivityInstanceList) {
+				executedActivityIdList.add(activityInstance.getActivityId());
+			}
+			// 获取bpmnModel
+			BpmnModel bpmnModel = repositoryService.getBpmnModel(historicProcessInstance.getProcessDefinitionId());
+			// 获取流程已发生流转的线ID集合
+			List<String> flowIds = this.getExecutedFlows(bpmnModel, historicActivityInstanceList);
+			// 使用默认配置获得流程图表生成器，并生成追踪图片字符流
+			ProcessDiagramGenerator processDiagramGenerator = processEngine.getProcessEngineConfiguration()
+					.getProcessDiagramGenerator();
+			// 你也可以 new 一个
+			// DefaultProcessDiagramGenerator processDiagramGenerator = new
+			// DefaultProcessDiagramGenerator();
+			InputStream imageStream = processDiagramGenerator.generateDiagram(bpmnModel, "png", executedActivityIdList,
+					flowIds, "宋体", "微软雅黑", "黑体", null, 2.0);
+			return imageStream;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private List<String> getExecutedFlows(BpmnModel bpmnModel,
+			List<HistoricActivityInstance> historicActivityInstanceList) {
+		List<String> executedFlowIdList = new ArrayList<>();
+		for (int i = 0; i < historicActivityInstanceList.size() - 1; i++) {
+			HistoricActivityInstance hai = historicActivityInstanceList.get(i);
+			FlowNode flowNode = (FlowNode) bpmnModel.getFlowElement(hai.getActivityId());
+			List<SequenceFlow> sequenceFlows = flowNode.getOutgoingFlows();
+			if (sequenceFlows.size() > 1) {
+				HistoricActivityInstance nextHai = historicActivityInstanceList.get(i + 1);
+				sequenceFlows.forEach(sequenceFlow -> {
+					if (sequenceFlow.getTargetFlowElement().getId().equals(nextHai.getActivityId())) {
+						executedFlowIdList.add(sequenceFlow.getId());
+					}
+				});
+			} else if (sequenceFlows.size() == 1) {
+				executedFlowIdList.add(sequenceFlows.get(0).getId());
+			}
+		}
+		return executedFlowIdList;
 	}
 
 }

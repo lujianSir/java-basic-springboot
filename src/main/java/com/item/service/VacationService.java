@@ -1,5 +1,6 @@
 package com.item.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 import com.item.entity.VacComment;
@@ -28,4 +29,7 @@ public interface VacationService {
 
 	// 备注列表
 	List<VacComment> auditComment(String processInstanceId);
+
+	// 流程图
+	InputStream getResourceDiagramInputStream(String id);
 }

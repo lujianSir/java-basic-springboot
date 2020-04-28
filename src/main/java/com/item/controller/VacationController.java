@@ -1,8 +1,13 @@
 package com.item.controller;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -139,6 +144,16 @@ public class VacationController {
 	public Result<?> auditComment(String processInstanceId) {
 		List<VacComment> comments = vacationService.auditComment(processInstanceId);
 		return Result.success(comments);
+	}
+
+	/**
+	 * 查看实例流程图，根据流程实例ID获取流程图
+	 */
+	@RequestMapping(value = "/traceprocess")
+	public void traceprocess(HttpServletResponse response, String instanceId) throws Exception {
+		InputStream in = vacationService.getResourceDiagramInputStream(instanceId);
+		ServletOutputStream output = response.getOutputStream();
+		IOUtils.copy(in, output);
 	}
 
 }
