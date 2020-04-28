@@ -14,6 +14,8 @@ public class ExcelManage {
 
 	private String username;
 
+	private String nickname;
+
 	private String creattime;// 上传的时间
 
 	private String excelname;// 文件名称
@@ -21,6 +23,14 @@ public class ExcelManage {
 	private String realpath;// 文件上传的实际路径
 
 	private int excelstatus;// 1 显示 2 不显示
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 
 	public int getExcelstatus() {
 		return excelstatus;

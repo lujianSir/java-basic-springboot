@@ -2,6 +2,7 @@ package com.item.controller;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletOutputStream;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.item.entity.VacComment;
 import com.item.entity.VacTask;
+import com.item.entity.VacUser;
 import com.item.entity.Vacation;
 import com.item.service.VacationService;
 import com.item.tool.Result;
@@ -65,13 +67,43 @@ public class VacationController {
 		vacList.addAll(oldvacList);
 		for (int i = 0; i < vacList.size(); i++) {
 			Vacation vacation = vacList.get(i);
-			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			List<VacUser> vacUsers = new ArrayList<VacUser>();
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
 			if (vacation.getApplyTime() != null) {
 				vacList.get(i).setApplyTimename(ft.format(vacation.getApplyTime()));
 			}
 			if (vacation.getAuditTime() != null) {
 				vacList.get(i).setAuditTimename(ft.format(vacation.getAuditTime()));
 			}
+
+			String processInstanceId = vacation.getProcessInstanceId();
+			List<VacComment> comments = vacationService.auditComment(processInstanceId);
+			VacUser vacUser1 = new VacUser();
+			vacUser1.setNickname(vacation.getRealUserName());
+			vacUser1.setDatimename(vacation.getApplyTimename());
+			vacUser1.setFlag(true);
+
+			VacUser vacUser2 = new VacUser();
+			vacUser2.setNickname(vacation.getFirstName());
+
+			VacUser vacUser3 = new VacUser();
+			vacUser3.setNickname(vacation.getSecondName());
+			if (comments.size() > 0) {
+				VacComment comment = comments.get(0);
+				vacUser2.setDatimename(comment.getCommenttime().substring(0, 10));
+				vacUser2.setFlag(true);
+				comments.get(0).setUsername(vacUser2.getNickname());
+				if (comments.size() == 2) {
+					vacUser3.setDatimename(comments.get(1).getCommenttime().substring(0, 10));
+					vacUser3.setFlag(true);
+					comments.get(1).setUsername(vacUser3.getNickname());
+				}
+			}
+			vacUsers.add(vacUser1);
+			vacUsers.add(vacUser2);
+			vacUsers.add(vacUser3);
+			vacList.get(i).setVacUsers(vacUsers);
+			vacList.get(i).setVacComments(comments);
 
 		}
 		return Result.success(vacList);

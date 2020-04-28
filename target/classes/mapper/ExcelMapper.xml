@@ -22,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询所得提交信息 -->
 	<select id="queryExcelManage" resultType="com.item.entity.ExcelManage">
-		select a.*,b.username from excelmanage  a LEFT JOIN userinfo b on a.uid=b.userid 
+		select a.*,b.username,b.nickname  from excelmanage  a LEFT JOIN userinfo b on a.uid=b.userid 
 		<where>
 			<if test="eid !=null and eid !='' ">
 				a.eid=#{eid}

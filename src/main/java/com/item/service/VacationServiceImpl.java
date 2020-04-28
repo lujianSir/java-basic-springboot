@@ -1,6 +1,7 @@
 package com.item.service;
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,10 +30,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.item.entity.ExcelManage;
+import com.item.entity.UserBean;
 import com.item.entity.VacComment;
 import com.item.entity.VacTask;
 import com.item.entity.Vacation;
 import com.item.mapper.ExcelMapper;
+import com.item.mapper.UserMapper;
 import com.item.tool.ActivitiUtil;
 import com.item.tool.Utils;
 
@@ -57,6 +60,9 @@ public class VacationServiceImpl implements VacationService {
 	@Autowired
 	private RepositoryService repositoryService;
 
+	@Autowired
+	private UserMapper userMapper;
+
 	private static final String PROCESS_DEFINE_KEY = "vacationProcess";
 
 	// 获取默认的流程引擎
@@ -71,7 +77,11 @@ public class VacationServiceImpl implements VacationService {
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("applyUser", vac.getApplyUser());
 		variables.put("title", vac.getTitle());
-		variables.put("reason", vac.getReason());
+		if (vac.getReason() != null && !vac.getReason().equals("")) {
+			variables.put("reason", vac.getReason());
+		} else {
+			variables.put("reason", "");
+		}
 		variables.put("firstName", firstName);
 		variables.put("secondName", secondName);
 		// 开始流程
@@ -100,7 +110,14 @@ public class VacationServiceImpl implements VacationService {
 
 	@Override
 	public List<Vacation> myVac(String userName) {
-		List<ProcessInstance> instanceList = runtimeService.createProcessInstanceQuery().startedBy(userName).list();
+		List<ProcessInstance> instanceList = new ArrayList<ProcessInstance>();
+		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
+			instanceList = runtimeService.createProcessInstanceQuery().list();
+		} else {
+			instanceList = runtimeService.createProcessInstanceQuery().startedBy(userName).list();
+		}
+		// List<ProcessInstance> instanceList =
+		// runtimeService.createProcessInstanceQuery().startedBy(userName).list();
 		List<Vacation> vacList = new ArrayList<>();
 		for (ProcessInstance instance : instanceList) {
 			Vacation vac = getVac(instance);
@@ -112,16 +129,31 @@ public class VacationServiceImpl implements VacationService {
 	private Vacation getVac(ProcessInstance instance) {
 		String reason = runtimeService.getVariable(instance.getId(), "reason", String.class);
 		String applyUser = runtimeService.getVariable(instance.getId(), "applyUser", String.class);
+		UserBean userBean = userMapper.queryUserBeanByUserId(applyUser);// 通过ID获取信息
+
 		String result = runtimeService.getVariable(instance.getId(), "result", String.class);
-		String auditor = runtimeService.getVariable(instance.getId(), "auditor", String.class);
+
 		String auditorremark = runtimeService.getVariable(instance.getId(), "auditorremark", String.class);
 		String firstName = runtimeService.getVariable(instance.getId(), "firstName", String.class);
+		UserBean user1 = userMapper.queryUserBeanByUserId(firstName);// 通过ID获取信息
+
 		String secondName = runtimeService.getVariable(instance.getId(), "secondName", String.class);
+		UserBean user2 = userMapper.queryUserBeanByUserId(secondName);// 通过ID获取信息
 		String processInstanceId = runtimeService.getVariable(instance.getId(), "processInstanceId", String.class);
+		String title = runtimeService.getVariable(instance.getId(), "title", String.class);
 		Vacation vac = new Vacation();
+		vac.setRealUserName(userBean.getNickname());
 		vac.setApplyUser(applyUser);
 		vac.setReason(reason);
-		vac.setAuditor(auditor);
+
+		String auditor = runtimeService.getVariable(instance.getId(), "auditor", String.class);
+		UserBean user = new UserBean();
+		if (auditor != null && !auditor.equals("")) {
+			user = userMapper.queryUserBeanByUserId(auditor);// 通过ID获取信息
+			vac.setAuditor(auditor);
+			vac.setRealAuditorName(user.getNickname());
+		}
+
 		vac.setAuditorremark(auditorremark);
 		vac.setProcessInstanceId(processInstanceId);
 		if (result != null) {
@@ -130,16 +162,22 @@ public class VacationServiceImpl implements VacationService {
 		Date startTime = instance.getStartTime(); // activiti 6 才有
 		vac.setApplyTime(startTime);
 		vac.setApplyStatus(instance.isEnded() ? "申请结束" : "等待审批");
-		vac.setFirstName(firstName);
-		vac.setSecondName(secondName);
+		vac.setFirstName(user1.getNickname());
+		vac.setSecondName(user2.getNickname());
+		vac.setTitle(title);
 		return vac;
 	}
 
 	@Override
 	public List<VacTask> myAudit(String userName) {
 		// TODO Auto-generated method stub
-		List<Task> taskList = taskService.createTaskQuery().processDefinitionKey(PROCESS_DEFINE_KEY)
-				.taskAssignee(userName).list();
+		List<Task> taskList = new ArrayList<Task>();
+		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
+			taskList = taskService.createTaskQuery().processDefinitionKey(PROCESS_DEFINE_KEY).list();
+		} else {
+			taskList = taskService.createTaskQuery().processDefinitionKey(PROCESS_DEFINE_KEY).taskAssignee(userName)
+					.list();
+		}
 		List<VacTask> vacTaskList = new ArrayList<>();
 		for (Task task : taskList) {
 			VacTask vacTask = new VacTask();
@@ -150,6 +188,8 @@ public class VacationServiceImpl implements VacationService {
 			ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(instanceId)
 					.singleResult();
 			Vacation vac = getVac(instance);
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+			vac.setApplyTimename(ft.format(vac.getApplyTime()));
 			vacTask.setVac(vac);
 			vacTaskList.add(vacTask);
 		}
@@ -159,9 +199,18 @@ public class VacationServiceImpl implements VacationService {
 	@Override
 	public List<Vacation> myVacRecord(String userName) {
 		// TODO Auto-generated method stub
-		List<HistoricProcessInstance> hisProInstance = historyService.createHistoricProcessInstanceQuery()
-				.processDefinitionKey(PROCESS_DEFINE_KEY).startedBy(userName).finished().orderByProcessInstanceEndTime()
-				.desc().list();
+		List<HistoricProcessInstance> hisProInstance = new ArrayList<HistoricProcessInstance>();
+		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
+			hisProInstance = historyService.createHistoricProcessInstanceQuery()
+					.processDefinitionKey(PROCESS_DEFINE_KEY).finished().orderByProcessInstanceEndTime().desc().list();
+		} else {
+			hisProInstance = historyService.createHistoricProcessInstanceQuery()
+					.processDefinitionKey(PROCESS_DEFINE_KEY).startedBy(userName).finished()
+					.orderByProcessInstanceEndTime().desc().list();
+		}
+//		List<HistoricProcessInstance> hisProInstance = historyService.createHistoricProcessInstanceQuery()
+//				.processDefinitionKey(PROCESS_DEFINE_KEY).startedBy(userName).finished().orderByProcessInstanceEndTime()
+//				.desc().list();
 
 		List<Vacation> vacList = new ArrayList<>();
 		for (HistoricProcessInstance hisInstance : hisProInstance) {
@@ -174,6 +223,20 @@ public class VacationServiceImpl implements VacationService {
 			ActivitiUtil.setVars(vacation, varInstanceList);
 			vacList.add(vacation);
 		}
+		if (vacList.size() > 0) {
+			for (int i = 0; i < vacList.size(); i++) {
+				Vacation vacation = vacList.get(i);
+				UserBean user1 = userMapper.queryUserBeanByUserId(vacation.getApplyUser());// 通过ID获取信息
+				vacList.get(i).setRealUserName(user1.getNickname());
+
+				UserBean user2 = userMapper.queryUserBeanByUserId(vacation.getFirstName());// 通过ID获取信息
+				vacList.get(i).setFirstName(user2.getNickname());
+
+				UserBean user3 = userMapper.queryUserBeanByUserId(vacation.getSecondName());// 通过ID获取信息
+				vacList.get(i).setSecondName(user3.getNickname());
+			}
+		}
+
 		return vacList;
 	}
 
