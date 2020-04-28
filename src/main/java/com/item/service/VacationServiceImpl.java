@@ -46,13 +46,6 @@ public class VacationServiceImpl implements VacationService {
 	@Autowired
 	private HistoryService historyService;
 
-	// 实例流程id,用来记录流程,以便获取当前任务
-	private String processInstanceId;
-
-	public String getProcessInstanceId() {
-		return processInstanceId;
-	}
-
 	private static final String PROCESS_DEFINE_KEY = "vacationProcess";
 
 	@Override
@@ -62,16 +55,18 @@ public class VacationServiceImpl implements VacationService {
 		identityService.setAuthenticatedUserId(userName);
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("applyUser", vac.getApplyUser());
+		variables.put("title", vac.getTitle());
 		variables.put("reason", vac.getReason());
 		variables.put("firstName", firstName);
 		variables.put("secondName", secondName);
-		variables.put("processInstanceId", processInstanceId);
 		// 开始流程
 		ProcessInstance vacationInstance = runtimeService.startProcessInstanceByKey(PROCESS_DEFINE_KEY, variables);
 		// 查询当前任务
 		Task currentTask = taskService.createTaskQuery().processInstanceId(vacationInstance.getId()).singleResult();
 		// 申明任务
 		taskService.claim(currentTask.getId(), userName);
+
+		variables.put("processInstanceId", vacationInstance.getId());
 
 		taskService.complete(currentTask.getId(), variables);
 
@@ -107,11 +102,13 @@ public class VacationServiceImpl implements VacationService {
 		String auditorremark = runtimeService.getVariable(instance.getId(), "auditorremark", String.class);
 		String firstName = runtimeService.getVariable(instance.getId(), "firstName", String.class);
 		String secondName = runtimeService.getVariable(instance.getId(), "secondName", String.class);
+		String processInstanceId = runtimeService.getVariable(instance.getId(), "processInstanceId", String.class);
 		Vacation vac = new Vacation();
 		vac.setApplyUser(applyUser);
 		vac.setReason(reason);
 		vac.setAuditor(auditor);
 		vac.setAuditorremark(auditorremark);
+		vac.setProcessInstanceId(processInstanceId);
 		if (result != null) {
 			vac.setResult(Integer.parseInt(result) == 1 ? "审批通过" : "审批驳回");
 		}

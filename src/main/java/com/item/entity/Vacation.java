@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author Created by yawn on 2018-01-08 16:44
  */
-public class Vacation {
+public class Vacation implements Comparable<Vacation> {
 
 	/**
 	 * 申请人
@@ -14,6 +14,7 @@ public class Vacation {
 	private String title;// 申请的标题
 	private String reason;// 申请的原因
 	private Date applyTime;// 申请的时间
+	private String applyTimename;// 申请时间
 	private String applyStatus;// 申请状态 正在申请或者申请结束 1、正在审批中 2. 审批成功 3.审批失败
 
 	private String firstName;// 第一审批人
@@ -27,7 +28,24 @@ public class Vacation {
 	private String auditor;// 审核人
 	private String result;// 审核结果 审核拒绝或者审核通过
 	private Date auditTime;// 审核的时间
+	private String auditTimename;// 时间
 	private String auditorremark;// 评论
+
+	public String getApplyTimename() {
+		return applyTimename;
+	}
+
+	public void setApplyTimename(String applyTimename) {
+		this.applyTimename = applyTimename;
+	}
+
+	public String getAuditTimename() {
+		return auditTimename;
+	}
+
+	public void setAuditTimename(String auditTimename) {
+		this.auditTimename = auditTimename;
+	}
 
 	public String getProcessInstanceId() {
 		return processInstanceId;
@@ -123,6 +141,12 @@ public class Vacation {
 
 	public void setAuditorremark(String auditorremark) {
 		this.auditorremark = auditorremark;
+	}
+
+	@Override
+	public int compareTo(Vacation o) {
+		// TODO Auto-generated method stub
+		return this.applyTime.compareTo(o.getApplyTime());
 	}
 
 }

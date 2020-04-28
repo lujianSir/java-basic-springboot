@@ -1,5 +1,6 @@
 package com.item.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,19 @@ public class VacationController {
 	@RequestMapping(value = "/myVac")
 	public Result<?> myVac(String userName) {
 		List<Vacation> vacList = vacationService.myVac(userName);
+		List<Vacation> oldvacList = vacationService.myVacRecord(userName);
+		vacList.addAll(oldvacList);
+		for (int i = 0; i < vacList.size(); i++) {
+			Vacation vacation = vacList.get(i);
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if (vacation.getApplyTime() != null) {
+				vacList.get(i).setApplyTimename(ft.format(vacation.getApplyTime()));
+			}
+			if (vacation.getAuditTime() != null) {
+				vacList.get(i).setAuditTimename(ft.format(vacation.getAuditTime()));
+			}
+
+		}
 		return Result.success(vacList);
 	}
 
