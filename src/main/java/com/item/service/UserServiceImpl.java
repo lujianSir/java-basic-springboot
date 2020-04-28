@@ -249,6 +249,9 @@ public class UserServiceImpl implements UserService {
 		if (user.getNickname() == null || user.getNickname().equals("")) {
 			user.setNickname(user.getUsername());
 			userMessage.setNickname(user.getUsername());
+		} else {
+			user.setNickname(user.getNickname());
+			userMessage.setNickname(user.getNickname());
 		}
 
 		userMessage.setUserid(user.getUserid());
