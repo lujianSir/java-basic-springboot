@@ -38,7 +38,7 @@ public interface ExcelMapper {
 	 * @param excelContent
 	 * @return
 	 */
-	List<ExcelContent> queryExcelContentByEid(ExcelContent excelContent);
+	List<ExcelContent> queryExcelContentByEid(ExcelManage excelManage);
 
 	/**
 	 * 通过ID删除表单信息

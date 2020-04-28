@@ -82,8 +82,8 @@ public class ExcelController {
 	 */
 	@RequestMapping("/queryExcelContentByEid")
 	@ResponseBody
-	public Result<?> queryExcelManage(ExcelContent excelContent) {
-		List<ExcelContent> list = excelServcie.queryExcelContentByEid(excelContent);
+	public Result<?> queryExcelManage(ExcelManage excelManage) {
+		List<ExcelContent> list = excelServcie.queryExcelContentByEid(excelManage);
 		return Result.success(list);
 	}
 

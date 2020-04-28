@@ -36,16 +36,6 @@ public class Vacation implements Comparable<Vacation> {
 	private String auditTimename;// 时间
 	private String auditorremark;// 评论
 
-	private String eid;// 审批的名称
-
-	public String getEid() {
-		return eid;
-	}
-
-	public void setEid(String eid) {
-		this.eid = eid;
-	}
-
 	private List<VacUser> vacUsers;//
 
 	private List<VacComment> vacComments;// 评论

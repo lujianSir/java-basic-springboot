@@ -29,7 +29,7 @@ public interface ExcelServcie {
 	 * @param excelContent
 	 * @return
 	 */
-	List<ExcelContent> queryExcelContentByEid(ExcelContent excelContent);
+	List<ExcelContent> queryExcelContentByEid(ExcelManage excelManage);
 
 	/**
 	 * 根据ID删除excel信息

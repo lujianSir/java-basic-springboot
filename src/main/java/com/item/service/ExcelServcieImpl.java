@@ -111,9 +111,9 @@ public class ExcelServcieImpl implements ExcelServcie {
 	}
 
 	@Override
-	public List<ExcelContent> queryExcelContentByEid(ExcelContent excelContent) {
+	public List<ExcelContent> queryExcelContentByEid(ExcelManage excelManage) {
 		// TODO Auto-generated method stub
-		List<ExcelContent> list = excelMapper.queryExcelContentByEid(excelContent);
+		List<ExcelContent> list = excelMapper.queryExcelContentByEid(excelManage);
 		return list;
 	}
 

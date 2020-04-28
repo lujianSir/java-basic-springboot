@@ -46,8 +46,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 		FROM
 			excelcontent  a
-		WHERE
-			a.eid = #{eid}
+			<where>
+				<if test="eid !=null and eid !=''">
+					a.eid = #{eid}
+				</if>
+				
+				<if test="excelname !=null and excelname !=''">
+					a.eid in (select eid from excelmanage where excelname=#{excelname})
+				</if>
+			</where>
 	</select>
 	
 	<!-- 通过ID删除表单信息 -->
