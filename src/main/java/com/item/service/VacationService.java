@@ -13,7 +13,7 @@ public interface VacationService {
 	public boolean startVac(Vacation vac, String userName, String firstName, String secondName, String eid);
 
 	// 我正在申请的假
-	public List<Vacation> myVac(String userName);
+	public List<Vacation> myVac(String userName, String title);
 
 	// 待我审核的请假
 	public List<VacTask> myAudit(String userName);
@@ -22,7 +22,7 @@ public interface VacationService {
 	public boolean passAudit(String userName, VacTask vacTask);
 
 	// 我申请过的假
-	public List<Vacation> myVacRecord(String userName);
+	public List<Vacation> myVacRecord(String userName, String title);
 
 	// 我的审核记录
 	public List<Vacation> myAuditRecord(String userName);

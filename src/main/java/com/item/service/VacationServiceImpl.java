@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
@@ -109,7 +111,7 @@ public class VacationServiceImpl implements VacationService {
 	}
 
 	@Override
-	public List<Vacation> myVac(String userName) {
+	public List<Vacation> myVac(String userName, String title) {
 		List<ProcessInstance> instanceList = new ArrayList<ProcessInstance>();
 		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
 			instanceList = runtimeService.createProcessInstanceQuery().list();
@@ -123,7 +125,19 @@ public class VacationServiceImpl implements VacationService {
 			Vacation vac = getVac(instance);
 			vacList.add(vac);
 		}
-		return vacList;
+		List<Vacation> results = new ArrayList<Vacation>();
+		if (title != null && !title.equals("")) {
+			Pattern pattern = Pattern.compile(title);
+			for (int m = 0; m < vacList.size(); m++) {
+				Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getTitle());
+				if (matcher.find()) {
+					results.add(vacList.get(m));
+				}
+			}
+		} else {
+			results = vacList;
+		}
+		return results;
 	}
 
 	private Vacation getVac(ProcessInstance instance) {
@@ -197,7 +211,7 @@ public class VacationServiceImpl implements VacationService {
 	}
 
 	@Override
-	public List<Vacation> myVacRecord(String userName) {
+	public List<Vacation> myVacRecord(String userName, String title) {
 		// TODO Auto-generated method stub
 		List<HistoricProcessInstance> hisProInstance = new ArrayList<HistoricProcessInstance>();
 		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
@@ -221,11 +235,29 @@ public class VacationServiceImpl implements VacationService {
 			List<HistoricVariableInstance> varInstanceList = historyService.createHistoricVariableInstanceQuery()
 					.processInstanceId(hisInstance.getId()).list();
 			ActivitiUtil.setVars(vacation, varInstanceList);
+			if (vacation.getResult().equals("1")) {
+				vacation.setApplyStatus("审批通过");
+			} else {
+				vacation.setApplyStatus("审批驳回");
+			}
 			vacList.add(vacation);
 		}
-		if (vacList.size() > 0) {
-			for (int i = 0; i < vacList.size(); i++) {
-				Vacation vacation = vacList.get(i);
+		List<Vacation> results = new ArrayList<Vacation>();
+		if (title != null && !title.equals("")) {
+			Pattern pattern = Pattern.compile(title);
+			for (int m = 0; m < vacList.size(); m++) {
+				Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getTitle());
+				if (matcher.find()) {
+					results.add(vacList.get(m));
+				}
+			}
+		} else {
+			results = vacList;
+		}
+
+		if (results.size() > 0) {
+			for (int i = 0; i < results.size(); i++) {
+				Vacation vacation = results.get(i);
 				UserBean user1 = userMapper.queryUserBeanByUserId(vacation.getApplyUser());// 通过ID获取信息
 				vacList.get(i).setRealUserName(user1.getNickname());
 
@@ -237,7 +269,7 @@ public class VacationServiceImpl implements VacationService {
 			}
 		}
 
-		return vacList;
+		return results;
 	}
 
 	@Override
@@ -259,9 +291,9 @@ public class VacationServiceImpl implements VacationService {
 		Authentication.setAuthenticatedUserId(userName); // 添加批注时候的审核人，通常应该从session获取
 		if (vacTask.getVac().getAuditorremark() != null && !vacTask.getVac().getAuditorremark().equals("")) {
 			taskService.addComment(taskId, processInstancesId,
-					Utils.getCurrent() + "," + vacTask.getVac().getAuditorremark());// 添加审批的评论
+					Utils.getCurrent() + "," + result + "," + vacTask.getVac().getAuditorremark());// 添加审批的评论
 		} else {
-			taskService.addComment(taskId, processInstancesId, Utils.getCurrent());// 添加审批的评论
+			taskService.addComment(taskId, processInstancesId, Utils.getCurrent() + "," + result);// 添加审批的评论
 		}
 
 		taskService.complete(taskId, vars);
@@ -271,9 +303,15 @@ public class VacationServiceImpl implements VacationService {
 	@Override
 	public List<Vacation> myAuditRecord(String userName) {
 		// TODO Auto-generated method stub
-		List<HistoricProcessInstance> hisProInstance = historyService.createHistoricProcessInstanceQuery()
-				.processDefinitionKey(PROCESS_DEFINE_KEY).involvedUser(userName).finished()
-				.orderByProcessInstanceEndTime().desc().list();
+		List<HistoricProcessInstance> hisProInstance = new ArrayList<HistoricProcessInstance>();
+		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
+			hisProInstance = historyService.createHistoricProcessInstanceQuery()
+					.processDefinitionKey(PROCESS_DEFINE_KEY).orderByProcessInstanceEndTime().desc().list();
+		} else {
+			hisProInstance = historyService.createHistoricProcessInstanceQuery()
+					.processDefinitionKey(PROCESS_DEFINE_KEY).involvedUser(userName).orderByProcessInstanceEndTime()
+					.desc().list();
+		}
 
 		List<String> auditTaskNameList = new ArrayList<>();
 		auditTaskNameList.add("第一审批人");
@@ -299,6 +337,10 @@ public class VacationServiceImpl implements VacationService {
 			List<HistoricVariableInstance> varInstanceList = historyService.createHistoricVariableInstanceQuery()
 					.processInstanceId(hisInstance.getId()).list();
 			ActivitiUtil.setVars(vacation, varInstanceList);
+			UserBean userBean = userMapper.queryUserBeanByUserId(vacation.getApplyUser());// 通过ID获取信息
+			vacation.setRealUserName(userBean.getNickname());
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+			vacation.setApplyTimename(ft.format(vacation.getApplyTime()));
 			vacList.add(vacation);
 		}
 		return vacList;
@@ -316,12 +358,17 @@ public class VacationServiceImpl implements VacationService {
 			String message = comment.getFullMessage();
 			if (message != null && !message.equals("")) {
 				String[] messages = message.split(",");
-				if (messages.length > 1) {
-					vacComment.setCommenttime(messages[0]);
-					vacComment.setComment(messages[1]);
+				vacComment.setCommenttime(messages[0]);
+				vacComment.setResult(messages[1]);
+				if (messages[1].equals("1")) {
+					vacComment.setStatus(1);
 				} else {
-					vacComment.setCommenttime(messages[0]);
+					vacComment.setStatus(0);
 				}
+				if (messages.length == 3) {
+					vacComment.setComment(messages[2]);
+				}
+
 			}
 			vacComments.add(vacComment);
 		}

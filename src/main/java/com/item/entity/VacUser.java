@@ -8,6 +8,16 @@ public class VacUser {
 
 	private boolean flag = false;// 状态判断
 
+	private int style = 2;// 状态
+
+	public int getStyle() {
+		return style;
+	}
+
+	public void setStyle(int style) {
+		this.style = style;
+	}
+
 	public boolean isFlag() {
 		return flag;
 	}

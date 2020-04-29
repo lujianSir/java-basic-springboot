@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.item.entity.Page;
 import com.item.entity.VacComment;
 import com.item.entity.VacTask;
 import com.item.entity.VacUser;
@@ -61,9 +64,10 @@ public class VacationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/myVac")
-	public Result<?> myVac(String userName) {
-		List<Vacation> vacList = vacationService.myVac(userName);
-		List<Vacation> oldvacList = vacationService.myVacRecord(userName);
+	public Result<?> myVac(String userName, String title, Page page) {
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<Vacation> vacList = vacationService.myVac(userName, title);
+		List<Vacation> oldvacList = vacationService.myVacRecord(userName, title);
 		vacList.addAll(oldvacList);
 		for (int i = 0; i < vacList.size(); i++) {
 			Vacation vacation = vacList.get(i);
@@ -82,6 +86,7 @@ public class VacationController {
 			vacUser1.setNickname(vacation.getRealUserName());
 			vacUser1.setDatimename(vacation.getApplyTimename());
 			vacUser1.setFlag(true);
+			vacUser1.setStyle(1);
 
 			VacUser vacUser2 = new VacUser();
 			vacUser2.setNickname(vacation.getFirstName());
@@ -92,11 +97,23 @@ public class VacationController {
 				VacComment comment = comments.get(0);
 				vacUser2.setDatimename(comment.getCommenttime().substring(0, 10));
 				vacUser2.setFlag(true);
+				if (comment.getStatus() == 0) {
+					vacUser2.setDatimename("审批驳回");
+				}
+				vacUser2.setStyle(comment.getStatus());
 				comments.get(0).setUsername(vacUser2.getNickname());
+				if (comment.getStatus() == 0) {
+					vacUser3.setStyle(3);
+				}
 				if (comments.size() == 2) {
 					vacUser3.setDatimename(comments.get(1).getCommenttime().substring(0, 10));
 					vacUser3.setFlag(true);
+					if (comments.get(1).getStatus() == 0) {
+						vacUser3.setDatimename("审批驳回");
+					}
+					vacUser3.setStyle(comments.get(1).getStatus());
 					comments.get(1).setUsername(vacUser3.getNickname());
+
 				}
 			}
 			vacUsers.add(vacUser1);
@@ -106,7 +123,8 @@ public class VacationController {
 			vacList.get(i).setVacComments(comments);
 
 		}
-		return Result.success(vacList);
+		PageInfo<Vacation> pageInfo = new PageInfo<Vacation>(vacList);
+		return Result.success(pageInfo);
 	}
 
 	/**
@@ -128,8 +146,8 @@ public class VacationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/myVacRecord")
-	public Result<?> myVacRecord(String userName) {
-		List<Vacation> vacList = vacationService.myVacRecord(userName);
+	public Result<?> myVacRecord(String userName, String title) {
+		List<Vacation> vacList = vacationService.myVacRecord(userName, title);
 		return Result.success(vacList);
 	}
 
