@@ -70,4 +70,12 @@ public interface ExcelMapper {
 	 * @return
 	 */
 	int updateExcelManage(ExcelManage excelManage);
+
+	/**
+	 * 批量查询
+	 * 
+	 * @param list
+	 * @return
+	 */
+	List<ExcelManage> queryByTitle(List<String> list);
 }

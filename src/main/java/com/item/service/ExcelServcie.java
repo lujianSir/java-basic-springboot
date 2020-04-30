@@ -46,4 +46,12 @@ public interface ExcelServcie {
 	 */
 	int queryExcelManageByExcelname(String excelname);
 
+	/**
+	 * 批量查询
+	 * 
+	 * @param list
+	 * @return
+	 */
+	List<ExcelManage> queryByTitle(List<String> list);
+
 }

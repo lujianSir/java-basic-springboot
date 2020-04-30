@@ -94,4 +94,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</set>
 			where eid=#{eid}
 	</update>
+	
+	<!-- 批量查询 -->
+	<select id="queryByTitle" resultType="com.item.entity.ExcelManage" parameterType="java.util.List">
+		select a.*,b.username,b.nickname  from excelmanage  a LEFT JOIN userinfo b on a.uid=b.userid 	
+		where a.excelname in
+		<foreach collection="list" item="valueList" open="(" close=")" separator=",">
+			#{valueList}
+		</foreach>
+	</select>
 </mapper>

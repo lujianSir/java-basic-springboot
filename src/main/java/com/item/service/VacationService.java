@@ -27,6 +27,9 @@ public interface VacationService {
 	// 我的审核记录
 	public List<Vacation> myAuditRecord(String userName);
 
+	// 我的审核记录
+	public List<Vacation> myAuditAgree();
+
 	// 备注列表
 	List<VacComment> auditComment(String processInstanceId);
 

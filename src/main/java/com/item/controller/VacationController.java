@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -15,11 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.item.entity.ExcelManage;
 import com.item.entity.Page;
+import com.item.entity.UserBean;
 import com.item.entity.VacComment;
 import com.item.entity.VacTask;
 import com.item.entity.VacUser;
 import com.item.entity.Vacation;
+import com.item.service.ExcelServcie;
+import com.item.service.UserService;
 import com.item.service.VacationService;
 import com.item.tool.Result;
 
@@ -29,6 +35,12 @@ public class VacationController {
 
 	@Autowired
 	private VacationService vacationService;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private ExcelServcie excelServcie;
 
 	/**
 	 * 发起申请
@@ -64,7 +76,7 @@ public class VacationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/myVac")
-	public Result<?> myVac(String userName, String title, Page page) {
+	public Result<?> myVac(String userName, String title, Page page, String applyStatus) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<Vacation> vacList = vacationService.myVac(userName, title);
 		List<Vacation> oldvacList = vacationService.myVacRecord(userName, title);
@@ -123,7 +135,48 @@ public class VacationController {
 			vacList.get(i).setVacComments(comments);
 
 		}
-		PageInfo<Vacation> pageInfo = new PageInfo<Vacation>(vacList);
+		List<Vacation> results = new ArrayList<Vacation>();
+		if (!title.equals("") || !applyStatus.equals("")) {
+			if (!title.equals("") && !applyStatus.equals("")) {
+				List<Vacation> other = new ArrayList<Vacation>();
+				Pattern pattern = Pattern.compile(title);
+				for (int m = 0; m < vacList.size(); m++) {
+					Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getTitle());
+					if (matcher.find()) {
+						results.add(vacList.get(m));
+					}
+				}
+				Pattern pattern1 = Pattern.compile(applyStatus);
+				for (int n = 0; n < results.size(); n++) {
+					Matcher matcher = pattern1.matcher(((Vacation) results.get(n)).getApplyStatus());
+					if (matcher.find()) {
+						other.add(results.get(n));
+					}
+				}
+				results = other;
+			} else if (!title.equals("")) {
+				Pattern pattern = Pattern.compile(title);
+				for (int m = 0; m < vacList.size(); m++) {
+					Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getTitle());
+					if (matcher.find()) {
+						results.add(vacList.get(m));
+					}
+				}
+			} else if (!applyStatus.equals("")) {
+				Pattern pattern = Pattern.compile(applyStatus);
+				for (int m = 0; m < vacList.size(); m++) {
+					Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getApplyStatus());
+					if (matcher.find()) {
+						results.add(vacList.get(m));
+					}
+				}
+			}
+
+		} else {
+			results = vacList;
+		}
+
+		PageInfo<Vacation> pageInfo = new PageInfo<Vacation>(results);
 		return Result.success(pageInfo);
 	}
 
@@ -136,6 +189,11 @@ public class VacationController {
 	@RequestMapping(value = "/myAudit")
 	public Result<?> myAudit(String userName) {
 		List<VacTask> vacTaskList = vacationService.myAudit(userName);
+		for (int i = 0; i < vacTaskList.size(); i++) {
+			if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
+				vacTaskList.get(i).setShow(false);
+			}
+		}
 		return Result.success(vacTaskList);
 	}
 
@@ -179,9 +237,83 @@ public class VacationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/myAuditRecord")
-	public Result<?> myAuditRecord(String userName) {
+	public Result<?> myAuditRecord(String userName, Page page, String applyStatus) {
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<Vacation> vacList = vacationService.myAuditRecord(userName);
-		return Result.success(vacList);
+		List<Vacation> results = new ArrayList<Vacation>();
+		for (int i = 0; i < vacList.size(); i++) {
+			Vacation vacation = vacList.get(i);
+			if (vacation.getResult().equals("0")) {
+				vacation.setApplyStatus("审核拒绝");
+			}
+			if (vacation.getResult().equals("1")) {
+				if (vacation.getFirstName().equals(vacation.getAuditor())) {
+					vacation.setApplyStatus("等待审批");
+				} else if (vacation.getSecondName().equals(vacation.getAuditor())) {
+					vacation.setApplyStatus("审核通过");
+				}
+			}
+			String processInstanceId = vacation.getProcessInstanceId();
+			List<VacComment> comments = vacationService.auditComment(processInstanceId);
+			String strtime = "";
+			String strname = "";
+			if (comments.size() == 1) {
+				strname = comments.get(0).getUsername();
+				UserBean userBean = userService.queryUserBeanByUserId(strname);// 通过ID获取信
+				strname = userBean.getNickname();
+				strtime = comments.get(0).getCommenttime().substring(0, 10);
+			} else {
+				if (userName.equals(vacation.getFirstName())) {
+					strtime = comments.get(0).getCommenttime().substring(0, 10);
+				} else {
+					strtime = comments.get(1).getCommenttime().substring(0, 10);
+				}
+				UserBean userBean = userService.queryUserBeanByUserId(comments.get(0).getUsername());// 通过ID获取信
+				UserBean userBean1 = userService.queryUserBeanByUserId(comments.get(1).getUsername());// 通过ID获取信
+				strname = userBean.getNickname() + " " + userBean1.getNickname();
+			}
+			for (int m = 0; m < comments.size(); m++) {
+				UserBean userBean = userService.queryUserBeanByUserId(comments.get(m).getUsername());
+				comments.get(m).setUsername(userBean.getNickname());
+			}
+			vacList.get(i).setAuditTimename(strtime);
+			vacList.get(i).setAuditor(strname);
+			vacList.get(i).setVacComments(comments);
+
+		}
+
+		if (applyStatus != null && !applyStatus.equals("")) {
+			Pattern pattern = Pattern.compile(applyStatus);
+			for (int m = 0; m < vacList.size(); m++) {
+				Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getApplyStatus());
+				if (matcher.find()) {
+					results.add(vacList.get(m));
+				}
+			}
+		} else {
+			results = vacList;
+		}
+
+		PageInfo<Vacation> pageInfo = new PageInfo<Vacation>(results);
+		return Result.success(pageInfo);
+	}
+
+	/**
+	 * 显示通过的
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/myAuditAgree")
+	public Result<?> myAuditAgree(Page page) {
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+		List<String> list = new ArrayList<String>();
+		List<Vacation> vacList = vacationService.myAuditAgree();
+		for (int i = 0; i < vacList.size(); i++) {
+			list.add(vacList.get(i).getTitle());
+		}
+		List<ExcelManage> excelmanages = excelServcie.queryByTitle(list);
+		PageInfo<ExcelManage> pageInfo = new PageInfo<ExcelManage>(excelmanages);
+		return Result.success(pageInfo);
 	}
 
 	/**

@@ -7,40 +7,50 @@ import java.util.Date;
  */
 public class VacTask {
 
-    private String id;
-    private String name;
-    private Vacation vac;
-    private Date createTime;
+	private String id;
+	private String name;
+	private Vacation vac;
+	private Date createTime;
 
-    public String getId() {
-        return id;
-    }
+	private boolean show = true;// 是否显示
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public boolean isShow() {
+		return show;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setShow(boolean show) {
+		this.show = show;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public Vacation getVac() {
-        return vac;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public void setVac(Vacation vac) {
-        this.vac = vac;
-    }
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Vacation getVac() {
+		return vac;
+	}
+
+	public void setVac(Vacation vac) {
+		this.vac = vac;
+	}
 }

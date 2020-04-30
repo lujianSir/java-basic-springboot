@@ -7,8 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowNode;
@@ -125,19 +123,7 @@ public class VacationServiceImpl implements VacationService {
 			Vacation vac = getVac(instance);
 			vacList.add(vac);
 		}
-		List<Vacation> results = new ArrayList<Vacation>();
-		if (title != null && !title.equals("")) {
-			Pattern pattern = Pattern.compile(title);
-			for (int m = 0; m < vacList.size(); m++) {
-				Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getTitle());
-				if (matcher.find()) {
-					results.add(vacList.get(m));
-				}
-			}
-		} else {
-			results = vacList;
-		}
-		return results;
+		return vacList;
 	}
 
 	private Vacation getVac(ProcessInstance instance) {
@@ -242,22 +228,10 @@ public class VacationServiceImpl implements VacationService {
 			}
 			vacList.add(vacation);
 		}
-		List<Vacation> results = new ArrayList<Vacation>();
-		if (title != null && !title.equals("")) {
-			Pattern pattern = Pattern.compile(title);
-			for (int m = 0; m < vacList.size(); m++) {
-				Matcher matcher = pattern.matcher(((Vacation) vacList.get(m)).getTitle());
-				if (matcher.find()) {
-					results.add(vacList.get(m));
-				}
-			}
-		} else {
-			results = vacList;
-		}
 
-		if (results.size() > 0) {
-			for (int i = 0; i < results.size(); i++) {
-				Vacation vacation = results.get(i);
+		if (vacList.size() > 0) {
+			for (int i = 0; i < vacList.size(); i++) {
+				Vacation vacation = vacList.get(i);
 				UserBean user1 = userMapper.queryUserBeanByUserId(vacation.getApplyUser());// 通过ID获取信息
 				vacList.get(i).setRealUserName(user1.getNickname());
 
@@ -269,7 +243,7 @@ public class VacationServiceImpl implements VacationService {
 			}
 		}
 
-		return results;
+		return vacList;
 	}
 
 	@Override
@@ -318,25 +292,46 @@ public class VacationServiceImpl implements VacationService {
 		auditTaskNameList.add("第二审批人");
 		List<Vacation> vacList = new ArrayList<>();
 		for (HistoricProcessInstance hisInstance : hisProInstance) {
-			List<HistoricTaskInstance> hisTaskInstanceList = historyService.createHistoricTaskInstanceQuery()
-					.processInstanceId(hisInstance.getId()).processFinished().taskAssignee(userName)
-					.taskNameIn(auditTaskNameList).orderByHistoricTaskInstanceEndTime().desc().list();
+			List<HistoricTaskInstance> hisTaskInstanceList = new ArrayList<HistoricTaskInstance>();
+			if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
+				hisTaskInstanceList = historyService.createHistoricTaskInstanceQuery()
+						.processInstanceId(hisInstance.getId()).taskNameIn(auditTaskNameList)
+						.orderByHistoricTaskInstanceEndTime().desc().list();
+			} else {
+				hisTaskInstanceList = historyService.createHistoricTaskInstanceQuery()
+						.processInstanceId(hisInstance.getId()).taskAssignee(userName).taskNameIn(auditTaskNameList)
+						.orderByHistoricTaskInstanceEndTime().desc().list();
+			}
+
 			boolean isMyAudit = false;
 			for (HistoricTaskInstance taskInstance : hisTaskInstanceList) {
-				if (taskInstance.getAssignee().equals(userName)) {
+				if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
 					isMyAudit = true;
+				} else {
+					if (taskInstance.getAssignee().equals(userName)) {
+						isMyAudit = true;
+					}
 				}
+
 			}
 			if (!isMyAudit) {
 				continue;
 			}
 			Vacation vacation = new Vacation();
 			vacation.setApplyUser(hisInstance.getStartUserId());
-			vacation.setApplyStatus("申请结束");
+
 			vacation.setApplyTime(hisInstance.getStartTime());
 			List<HistoricVariableInstance> varInstanceList = historyService.createHistoricVariableInstanceQuery()
 					.processInstanceId(hisInstance.getId()).list();
 			ActivitiUtil.setVars(vacation, varInstanceList);
+			if (vacation.getResult() == null || vacation.getResult().equals("")) {
+				break;
+			}
+			if (vacation.getResult().equals("1")) {
+				vacation.setApplyStatus("审核通过");
+			} else {
+				vacation.setApplyStatus("审核驳回");
+			}
 			UserBean userBean = userMapper.queryUserBeanByUserId(vacation.getApplyUser());// 通过ID获取信息
 			vacation.setRealUserName(userBean.getNickname());
 			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
@@ -351,6 +346,19 @@ public class VacationServiceImpl implements VacationService {
 		// TODO Auto-generated method stub
 		List<VacComment> vacComments = new ArrayList<VacComment>();
 		List<Comment> list = taskService.getProcessInstanceComments(processInstanceId);
+		if (list != null && list.size() == 2) {
+			for (int m = 0; m < 1; m++) {
+				Comment comment1 = list.get(0);
+				Comment comment2 = list.get(1);
+				int num = compare(comment1.getTime(), comment2.getTime());
+				if (num == 1) {
+					Comment newcomment = comment1;
+					list.remove(0);
+					list.add(newcomment);
+				}
+			}
+		}
+
 		for (int i = 0; i < list.size(); i++) {
 			Comment comment = list.get(i);
 			VacComment vacComment = new VacComment();
@@ -373,6 +381,23 @@ public class VacationServiceImpl implements VacationService {
 			vacComments.add(vacComment);
 		}
 		return vacComments;
+	}
+
+	public int compare(Date dt1, Date dt2) {
+
+		try {
+
+			if (dt1.getTime() > dt2.getTime()) {
+				return 1;
+			} else if (dt1.getTime() < dt2.getTime()) {
+				return -1;
+			} else {
+				return 0;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	@Override
@@ -429,6 +454,38 @@ public class VacationServiceImpl implements VacationService {
 			}
 		}
 		return executedFlowIdList;
+	}
+
+	@Override
+	public List<Vacation> myAuditAgree() {
+		// TODO Auto-generated method stub
+		List<HistoricProcessInstance> hisProInstance = historyService.createHistoricProcessInstanceQuery()
+				.processDefinitionKey(PROCESS_DEFINE_KEY).finished().orderByProcessInstanceEndTime().desc().list();
+
+		List<String> auditTaskNameList = new ArrayList<>();
+		auditTaskNameList.add("第一审批人");
+		auditTaskNameList.add("第二审批人");
+		List<Vacation> vacList = new ArrayList<>();
+		for (HistoricProcessInstance hisInstance : hisProInstance) {
+			Vacation vacation = new Vacation();
+			vacation.setApplyUser(hisInstance.getStartUserId());
+
+			vacation.setApplyTime(hisInstance.getStartTime());
+			List<HistoricVariableInstance> varInstanceList = historyService.createHistoricVariableInstanceQuery()
+					.processInstanceId(hisInstance.getId()).list();
+			ActivitiUtil.setVars(vacation, varInstanceList);
+			if (vacation.getResult().equals("1")) {
+				vacation.setApplyStatus("审核通过");
+			} else {
+				continue;
+			}
+			UserBean userBean = userMapper.queryUserBeanByUserId(vacation.getApplyUser());// 通过ID获取信息
+			vacation.setRealUserName(userBean.getNickname());
+			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd");
+			vacation.setApplyTimename(ft.format(vacation.getApplyTime()));
+			vacList.add(vacation);
+		}
+		return vacList;
 	}
 
 }

@@ -140,4 +140,10 @@ public class ExcelServcieImpl implements ExcelServcie {
 		return excelMapper.queryExcelManageByExcelname(excelname);
 	}
 
+	@Override
+	public List<ExcelManage> queryByTitle(List<String> list) {
+		// TODO Auto-generated method stub
+		return excelMapper.queryByTitle(list);
+	}
+
 }
