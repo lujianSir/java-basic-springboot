@@ -78,8 +78,8 @@ public class VacationController {
 	@RequestMapping(value = "/myVac")
 	public Result<?> myVac(String userName, String title, Page page, String applyStatus) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
-		List<Vacation> vacList = vacationService.myVac(userName, title);
-		List<Vacation> oldvacList = vacationService.myVacRecord(userName, title);
+		List<Vacation> vacList = vacationService.myVac(userName);
+		List<Vacation> oldvacList = vacationService.myVacRecord(userName);
 		vacList.addAll(oldvacList);
 		for (int i = 0; i < vacList.size(); i++) {
 			Vacation vacation = vacList.get(i);
@@ -204,8 +204,8 @@ public class VacationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/myVacRecord")
-	public Result<?> myVacRecord(String userName, String title) {
-		List<Vacation> vacList = vacationService.myVacRecord(userName, title);
+	public Result<?> myVacRecord(String userName) {
+		List<Vacation> vacList = vacationService.myVacRecord(userName);
 		return Result.success(vacList);
 	}
 
@@ -244,13 +244,13 @@ public class VacationController {
 		for (int i = 0; i < vacList.size(); i++) {
 			Vacation vacation = vacList.get(i);
 			if (vacation.getResult().equals("0")) {
-				vacation.setApplyStatus("审核拒绝");
+				vacation.setApplyStatus("审批驳回");
 			}
 			if (vacation.getResult().equals("1")) {
 				if (vacation.getFirstName().equals(vacation.getAuditor())) {
 					vacation.setApplyStatus("等待审批");
 				} else if (vacation.getSecondName().equals(vacation.getAuditor())) {
-					vacation.setApplyStatus("审核通过");
+					vacation.setApplyStatus("审批通过");
 				}
 			}
 			String processInstanceId = vacation.getProcessInstanceId();

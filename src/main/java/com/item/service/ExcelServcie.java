@@ -54,4 +54,12 @@ public interface ExcelServcie {
 	 */
 	List<ExcelManage> queryByTitle(List<String> list);
 
+	/**
+	 * 编辑
+	 * 
+	 * @param excelManage
+	 * @return
+	 */
+	int updateExcelManage(ExcelManage excelManage);
+
 }

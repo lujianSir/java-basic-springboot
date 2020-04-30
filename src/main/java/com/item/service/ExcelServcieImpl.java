@@ -146,4 +146,10 @@ public class ExcelServcieImpl implements ExcelServcie {
 		return excelMapper.queryByTitle(list);
 	}
 
+	@Override
+	public int updateExcelManage(ExcelManage excelManage) {
+		// TODO Auto-generated method stub
+		return excelMapper.updateExcelManage(excelManage);
+	}
+
 }

@@ -22,7 +22,17 @@ public class ExcelManage {
 
 	private String realpath;// 文件上传的实际路径
 
-	private int excelstatus;// 1 显示 2 不显示
+	private int excelstatus;// 1 显示提交申请 2 正在审批 3.审批通过 4. 审批拒绝
+
+	private String processInstanceId;// 流程ID
+
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
+
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
 
 	public String getNickname() {
 		return nickname;

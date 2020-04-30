@@ -23,7 +23,9 @@ import com.github.pagehelper.PageInfo;
 import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
 import com.item.entity.Page;
+import com.item.entity.Vacation;
 import com.item.service.ExcelServcie;
+import com.item.service.VacationService;
 import com.item.tool.Result;
 
 @Controller
@@ -32,6 +34,9 @@ public class ExcelController {
 
 	@Autowired
 	private ExcelServcie excelServcie;
+
+	@Autowired
+	private VacationService vacationService;
 
 	@RequestMapping("/test1")
 	public String file() {
@@ -70,6 +75,48 @@ public class ExcelController {
 	public Result<?> queryExcelManage(ExcelManage excelManage, Page page) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<ExcelManage> list = excelServcie.queryExcelManage(excelManage);
+		String userName = "00da3c04c1b14519862301666987bfcd";
+		List<Vacation> vacList = vacationService.myVac(userName);
+		List<Vacation> oldvacList = vacationService.myVacRecord(userName);
+		vacList.addAll(oldvacList);
+		for (int i = 0; i < vacList.size(); i++) {
+			Vacation vacation = vacList.get(i);
+			if (vacation.getResult() != null && !vacation.getResult().equals("")) {
+				if (vacation.getResult().equals("0")) {
+					vacation.setApplyStatus("审批驳回");
+				}
+				if (vacation.getResult().equals("1")) {
+					if (vacation.getFirstName().equals(vacation.getAuditor())) {
+						vacation.setApplyStatus("等待审批");
+					} else if (vacation.getSecondName().equals(vacation.getAuditor())) {
+						vacation.setApplyStatus("审批通过");
+					}
+				}
+			} else {
+				vacation.setApplyStatus("等待审批");
+			}
+
+		}
+		for (int m = 0; m < list.size(); m++) {
+			ExcelManage excelmanage = list.get(m);
+			for (int n = 0; n < vacList.size(); n++) {
+				Vacation vacation = vacList.get(n);
+				if (excelmanage.getExcelname().equals(vacation.getTitle())) {
+					if (vacation.getApplyStatus().equals("审批驳回")) {
+						list.get(m).setExcelstatus(4);
+						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
+					} else if (vacation.getApplyStatus().equals("审批通过")) {
+						list.get(m).setExcelstatus(3);
+						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
+					} else if (vacation.getApplyStatus().equals("等待审批")) {
+						list.get(m).setExcelstatus(2);
+						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
+					}
+				}
+
+			}
+		}
+
 		PageInfo<ExcelManage> pageInfo = new PageInfo<ExcelManage>(list);
 		return Result.success(pageInfo);
 	}
@@ -139,8 +186,29 @@ public class ExcelController {
 	 */
 	@RequestMapping("/deleteExcelByEid")
 	@ResponseBody
-	public Result<?> deleteExcelByEid(String eid) {
+	public Result<?> deleteExcelByEid(String eid, String processInstanceId) {
 		int row = excelServcie.deleteExcelByEid(eid);
+		if (processInstanceId != null && !processInstanceId.equals("")) {
+			vacationService.deleteProcessId(processInstanceId);
+		}
+		return Result.success(row);
+	}
+
+	/**
+	 * 撤销操作
+	 * 
+	 * @param eid
+	 * @param processInstanceId
+	 * @return
+	 */
+	@RequestMapping("/backExcelById")
+	@ResponseBody
+	public Result<?> backExcelById(String eid, String processInstanceId) {
+		ExcelManage excelManage = new ExcelManage();
+		excelManage.setEid(eid);
+		excelManage.setExcelstatus(1);
+		int row = excelServcie.updateExcelManage(excelManage);
+		vacationService.deleteProcessId(processInstanceId);
 		return Result.success(row);
 	}
 }

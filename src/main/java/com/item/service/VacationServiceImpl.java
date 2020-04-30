@@ -109,7 +109,7 @@ public class VacationServiceImpl implements VacationService {
 	}
 
 	@Override
-	public List<Vacation> myVac(String userName, String title) {
+	public List<Vacation> myVac(String userName) {
 		List<ProcessInstance> instanceList = new ArrayList<ProcessInstance>();
 		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
 			instanceList = runtimeService.createProcessInstanceQuery().list();
@@ -197,7 +197,7 @@ public class VacationServiceImpl implements VacationService {
 	}
 
 	@Override
-	public List<Vacation> myVacRecord(String userName, String title) {
+	public List<Vacation> myVacRecord(String userName) {
 		// TODO Auto-generated method stub
 		List<HistoricProcessInstance> hisProInstance = new ArrayList<HistoricProcessInstance>();
 		if (userName.equals("00da3c04c1b14519862301666987bfcd")) {
@@ -486,6 +486,22 @@ public class VacationServiceImpl implements VacationService {
 			vacList.add(vacation);
 		}
 		return vacList;
+	}
+
+	@Override
+	public void deleteProcessId(String processInstanceId) {
+		// TODO Auto-generated method stub
+		ProcessInstance pi = runtimeService.createProcessInstanceQuery()//
+				.processInstanceId(processInstanceId)// 使用流程实例ID查询
+				.singleResult();
+		if (pi == null) {
+			// 该流程实例已经完成了
+			historyService.deleteHistoricProcessInstance(processInstanceId);
+		} else {
+			// 该流程实例未结束的
+			runtimeService.deleteProcessInstance(processInstanceId, "");
+			historyService.deleteHistoricProcessInstance(processInstanceId);// (顺序不能换)
+		}
 	}
 
 }
