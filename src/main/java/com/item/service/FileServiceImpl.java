@@ -302,4 +302,14 @@ public class FileServiceImpl implements FileService {
 		return list;
 	}
 
+	@Override
+	public int updateModelInfoById(ModelBean modelBean) {
+		// TODO Auto-generated method stub
+		ModelBean m = fileMapper.queryModelById(modelBean.getMid());
+		int total = m.getDownload() + 1;
+		modelBean.setDownload(total);
+		fileMapper.updateStarAndDownById(modelBean);
+		return total;
+	}
+
 }

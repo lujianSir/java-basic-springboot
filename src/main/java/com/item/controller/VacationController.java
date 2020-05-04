@@ -311,7 +311,10 @@ public class VacationController {
 		for (int i = 0; i < vacList.size(); i++) {
 			list.add(vacList.get(i).getTitle());
 		}
-		List<ExcelManage> excelmanages = excelServcie.queryByTitle(list);
+		List<ExcelManage> excelmanages = new ArrayList<ExcelManage>();
+		if (vacList.size() > 0) {
+			excelmanages = excelServcie.queryByTitle(list);
+		}
 		PageInfo<ExcelManage> pageInfo = new PageInfo<ExcelManage>(excelmanages);
 		return Result.success(pageInfo);
 	}

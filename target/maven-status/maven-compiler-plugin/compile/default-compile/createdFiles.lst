@@ -18,6 +18,7 @@ com\item\entity\FileBean.class
 com\item\entity\User.class
 com\item\service\ExcelServcieImpl.class
 com\item\controller\ExcelController.class
+com\item\tool\UtilMisc.class
 com\item\service\FlowServiceImpl.class
 com\item\entity\FlowBean.class
 com\item\service\UserService.class
@@ -25,6 +26,7 @@ com\item\controller\FileController.class
 com\item\entity\ShoppingCart.class
 com\item\controller\TagController.class
 com\item\mapper\UserMapper.class
+com\item\tool\FlowUtils.class
 com\item\entity\Power.class
 com\item\service\FileService.class
 com\item\test\Test.class
@@ -38,6 +40,7 @@ com\item\config\ActivitiConfig.class
 com\item\service\PayServiceImpl.class
 com\item\mapper\PowerMapper.class
 com\item\mapper\FileMapper.class
+com\item\tool\BpmsActivityTypeEnum.class
 com\item\mapper\RoleMapper.class
 com\item\controller\OrderController.class
 com\item\service\PowerService.class
@@ -49,6 +52,7 @@ com\item\entity\UserBean.class
 com\item\service\UserServiceImpl.class
 com\item\controller\FlowController.class
 com\item\entity\ModelBean.class
+com\item\entity\VacComment.class
 com\item\alipay\OrderFlow.class
 com\item\entity\ExcelBean.class
 com\item\tool\ExcelUtil.class
@@ -62,6 +66,7 @@ com\item\entity\Role.class
 com\item\service\FlowService.class
 com\item\alipay\AlipayBean.class
 com\item\controller\PowerController.class
+com\item\entity\VacUser.class
 com\item\service\VacationService.class
 com\item\config\WebMvcConfig.class
 com\item\entity\ExcelManage.class

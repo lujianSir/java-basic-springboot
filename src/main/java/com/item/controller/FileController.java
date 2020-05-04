@@ -74,8 +74,14 @@ public class FileController {
 
 	@RequestMapping(value = "/download")
 	@ResponseBody
-	public Result<?> fileDownload(HttpServletResponse response, HttpServletRequest request, String fileModel)
-			throws IOException {
+	public Result<?> fileDownload(HttpServletResponse response, HttpServletRequest request, String fileModel,
+			String mid) throws IOException {
+
+		if (mid != null && !mid.equals("")) {
+			ModelBean modelBean = new ModelBean();
+			modelBean.setMid(Integer.parseInt(mid));
+			fileService.updateModelInfoById(modelBean);
+		}
 		// 文件存放服务端的位置
 		// String path = "/usr/local/jar/"+rootPath+"web/模型源文件/";
 		String path = System.getProperty("user.dir") + "/upload/web/模型源文件/";

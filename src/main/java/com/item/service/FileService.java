@@ -48,4 +48,7 @@ public interface FileService {
 	// 通过ID查询模型的信息
 	public Result<?> queryModelById(String mid, String uid);
 
+	// 修改下载状态
+	public int updateModelInfoById(ModelBean modelBean);
+
 }
