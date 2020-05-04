@@ -19,6 +19,7 @@ import com.github.pagehelper.PageInfo;
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
+import com.item.entity.StarClass;
 import com.item.entity.UserBean;
 import com.item.mapper.FileMapper;
 import com.item.mapper.UserMapper;
@@ -310,6 +311,20 @@ public class FileServiceImpl implements FileService {
 		modelBean.setDownload(total);
 		fileMapper.updateStarAndDownById(modelBean);
 		return total;
+	}
+
+	@Override
+	public Result<?> insertStarClass(StarClass starClass) {
+		// TODO Auto-generated method stub
+		ModelBean m = fileMapper.queryModelById(starClass.getMid());
+		int startclass = m.getStarclass();
+		int newstar = JavaTool.avg(starClass.getStar(), startclass);
+		ModelBean model = new ModelBean();
+		model.setMid(starClass.getMid());
+		model.setStarclass(newstar);
+		fileMapper.updateStarAndDownById(model);
+		fileMapper.insertStarClass(starClass);
+		return Result.success();
 	}
 
 }

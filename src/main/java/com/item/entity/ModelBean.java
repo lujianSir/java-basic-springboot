@@ -79,6 +79,16 @@ public class ModelBean implements Serializable {
 
 	private String examineremark;// 备注
 
+	private int starnumber;// 是否已经评论
+
+	public int getStarnumber() {
+		return starnumber;
+	}
+
+	public void setStarnumber(int starnumber) {
+		this.starnumber = starnumber;
+	}
+
 	public String getExamineremark() {
 		return examineremark;
 	}

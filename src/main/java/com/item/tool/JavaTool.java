@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -333,14 +332,6 @@ public class JavaTool {
 
 	}
 
-	public static void main(String[] args) {
-		List<String> arr = new ArrayList<String>();
-		arr.add("123");
-		arr.add("3");
-		arr.add("0.33");
-		System.out.println(f(arr, 0));
-	}
-
 	public static String getIp() {
 		try {
 			InetAddress ia = InetAddress.getLocalHost();
@@ -352,5 +343,14 @@ public class JavaTool {
 			e.printStackTrace();
 			return "500";
 		}
+	}
+
+	public static int avg(int a, int b) {
+		return (int) Math.ceil((double) (a + b) / 2);
+
+	}
+
+	public static void main(String[] args) {
+		System.out.println(avg(1, 6));
 	}
 }

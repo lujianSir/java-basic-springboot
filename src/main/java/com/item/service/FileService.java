@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
+import com.item.entity.StarClass;
 import com.item.tool.Result;
 
 public interface FileService {
@@ -51,4 +52,6 @@ public interface FileService {
 	// 修改下载状态
 	public int updateModelInfoById(ModelBean modelBean);
 
+	// 添加评论
+	public Result<?> insertStarClass(StarClass starClass);
 }

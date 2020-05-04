@@ -25,6 +25,7 @@ import com.item.alipay.FlowModel;
 import com.item.entity.Image;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
+import com.item.entity.StarClass;
 import com.item.service.FileService;
 import com.item.service.PayService;
 import com.item.tool.JavaTool;
@@ -350,4 +351,15 @@ public class FileController {
 		return Result.success(pageInfo);
 	}
 
+	/**
+	 * 添加点评
+	 * 
+	 * @param starClass
+	 * @return
+	 */
+	@RequestMapping("/insertStarClass")
+	@ResponseBody
+	public Result<?> insertStarClass(StarClass starClass) {
+		return fileService.insertStarClass(starClass);
+	}
 }

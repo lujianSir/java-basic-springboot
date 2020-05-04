@@ -186,13 +186,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 通过ID查询模型的信息 -->
 	<select id="queryModelById" resultType="com.item.entity.ModelBean">
-		select a.*,b.username from 	modelinfo a LEFT JOIN usermessage b  on a.userid=b.userid where  a.mid=#{mid}  group by a.mid
+		select a.*,b.username 		
+		from 	modelinfo a LEFT JOIN usermessage b  on a.userid=b.userid where  a.mid=#{mid}  group by a.mid
 	</select>
 	
 	<!-- 通过用户和模型ID查询已购模型 -->
 	<select id="queryModelByIdAndUserId" resultType="com.item.entity.ModelBean">
 			SELECT
 				a.endtime, b.*,
+				case when (select count(*)  from startclass where mid=#{mid} and uid=#{uid}) >0 then 1 else 0 end starnumber,
 				case when a.endtime ='' then  1 
 						 when a.endtime >=DATE_FORMAT(NOW(),'%Y-%m-%d') then  1 
 						else 0  end status
@@ -222,5 +224,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteModelInfoByMid" parameterType="com.item.entity.ModelBean">
 		delete from modelinfo where mid=#{mid}
 	</delete>
-
+	
+	<!-- 添加评论 -->
+	<insert id="insertStarClass" parameterType="com.item.entity.StarClass">
+		insert into startclass (uid,mid,star) values (#{uid},#{mid},#{star})
+	</insert>
 </mapper>

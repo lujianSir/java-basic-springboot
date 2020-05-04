@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
+import com.item.entity.StarClass;
 
 @Repository
 public interface FileMapper {
@@ -53,5 +54,8 @@ public interface FileMapper {
 
 	// 通过模型ID修改下载量以及评分
 	public void updateStarAndDownById(ModelBean model);
+
+	// 添加评论
+	public int insertStarClass(StarClass starClass);
 
 }
