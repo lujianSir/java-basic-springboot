@@ -66,4 +66,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteTypeById" parameterType="int">
     	delete from alltype where id=#{id}  
     </delete>
+    
+    <!-- 查询所有的构建类型-->
+    <select id="resourceAllQuery"   resultType="com.item.entity.ResourceBean">
+       	select * from (select id ,pid , rname from resourceinfo where FIND_IN_SET(id,getResourceChildList(#{pid}))) a ORDER BY id
+    </select>
+    
+    <!-- 添加构建类型节点 -->
+    <insert id="insertResource" parameterType="com.item.entity.ResourceBean" useGeneratedKeys="true" keyProperty="id">
+    	insert into resourceinfo (pid,rname) values (#{pid},#{rname})
+    </insert>
+    
+     <!-- 修改构建类型节点 -->
+    <update id="updateResource" parameterType="com.item.entity.ResourceBean">
+    	update resourceinfo 
+    		<set>
+    			<if test="pid !=null and pid!=''">
+    				pid=#{pid},
+    			</if>
+    			<if test="rname !=null and rname !=''">
+    				rname=#{rname},
+    			</if> 			
+    		</set>
+    	where id=#{id}
+    </update>
+    
+    <!-- 通过ID删除 -->
+     <delete id="deleteResourceById" parameterType="int">
+    	delete from resourceinfo where id=#{id}  
+    </delete>
+    
+    <!-- 查询一级菜单 -->
+    <select id="queryResourceById" resultType="com.item.entity.ResourceBean">
+    	select * from resourceinfo where pid=#{pid}
+    </select>
 </mapper>

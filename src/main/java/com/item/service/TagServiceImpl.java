@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.item.entity.ResourceBean;
 import com.item.entity.TagBean;
 import com.item.mapper.TagMapper;
 import com.item.tool.Result;
@@ -133,6 +134,42 @@ public class TagServiceImpl implements TagService {
 	public Result<?> deleteTypeById(TagBean tagBean) {
 		// TODO Auto-generated method stub
 		return Result.success(tagMapper.deleteTypeById(tagBean.getId()));
+	}
+
+	@Override
+	public Result<?> resourceAllQuery(ResourceBean resourceBean) {
+		// TODO Auto-generated method stub
+		return Result.success(tagMapper.resourceAllQuery(resourceBean));
+	}
+
+	@Override
+	public Result<?> insertOrUpdateResource(ResourceBean resourceBean) {
+		// TODO Auto-generated method stub
+		int id = resourceBean.getId();
+		int num = 0;
+		if (id > 0) {
+			num = tagMapper.updateResource(resourceBean);
+		} else {
+			num = tagMapper.insertResource(resourceBean);
+			num = resourceBean.getId();
+		}
+		if (num > 0) {
+			return Result.success(num);
+		} else {
+			return Result.error(500, "请求失败");
+		}
+	}
+
+	@Override
+	public Result<?> deleteResourceById(ResourceBean resourceBean) {
+		// TODO Auto-generated method stub
+		return Result.success(tagMapper.deleteResourceById(resourceBean));
+	}
+
+	@Override
+	public Result<?> queryResourceById(ResourceBean resourceBean) {
+		// TODO Auto-generated method stub
+		return Result.success(tagMapper.queryResourceById(resourceBean));
 	}
 
 }
