@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.item.entity.Role;
 import com.item.entity.RolePower;
@@ -13,6 +14,7 @@ import com.item.tool.Result;
 import com.item.tool.Utils;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements RoleService {
 
 	@Autowired

@@ -28,6 +28,7 @@ import org.activiti.engine.task.Task;
 import org.activiti.image.ProcessDiagramGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.item.entity.ExcelManage;
 import com.item.entity.UserBean;
@@ -40,6 +41,7 @@ import com.item.tool.ActivitiUtil;
 import com.item.tool.Utils;
 
 @Service
+@Transactional
 public class VacationServiceImpl implements VacationService {
 
 	@Autowired

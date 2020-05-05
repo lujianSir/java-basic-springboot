@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
@@ -26,6 +27,7 @@ import com.item.tool.Result;
 import com.item.tool.Utils;
 
 @Service
+@Transactional
 public class PayServiceImpl implements PayService {
 
 	@Autowired

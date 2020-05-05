@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.item.entity.Power;
 import com.item.entity.Role;
@@ -11,6 +12,7 @@ import com.item.mapper.PowerMapper;
 import com.item.tool.Result;
 
 @Service
+@Transactional
 public class PowerServiceImpl implements PowerService {
 
 	@Autowired

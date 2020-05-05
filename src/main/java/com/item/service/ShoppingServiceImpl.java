@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.item.alipay.OrderFlow;
 import com.item.entity.ShoppingCart;
@@ -14,6 +15,7 @@ import com.item.mapper.ShoppingMapper;
 import com.item.tool.JavaTool;
 
 @Service
+@Transactional
 public class ShoppingServiceImpl implements ShoppingService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(FlowServiceImpl.class);

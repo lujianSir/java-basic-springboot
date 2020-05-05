@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
@@ -27,6 +28,7 @@ import com.item.tool.JavaTool;
 import com.item.tool.Result;
 
 @Service
+@Transactional
 public class FileServiceImpl implements FileService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(FileServiceImpl.class);
