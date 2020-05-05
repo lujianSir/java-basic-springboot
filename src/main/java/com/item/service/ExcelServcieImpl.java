@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,6 +115,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 	}
 
 	@Override
+	@Cacheable(value = "excelContentList", key = "#excelManage.excelname")
 	public List<ExcelContent> queryExcelContentByEid(ExcelManage excelManage) {
 		// TODO Auto-generated method stub
 		List<ExcelContent> list = excelMapper.queryExcelContentByEid(excelManage);
@@ -120,6 +123,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 	}
 
 	@Override
+	@CacheEvict(value = "excelContentList", allEntries = true)
 	public int deleteExcelByEid(String eid) {
 		// TODO Auto-generated method stub
 		ExcelManage excelManage = new ExcelManage();

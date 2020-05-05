@@ -27,9 +27,18 @@ public class ModelBean implements Serializable {
 	// 构建类型
 	private String buildtype;
 	// 资源库类型一级
+
 	private String resource_one;
+
 	// 资源库类型二级
 	private String resource_two;
+
+	// 资源库类型三级
+	private String resource_three;
+
+	// 资源库类型四级
+	private String resource_four;
+
 	// 模型图片地址
 	private String filePics;
 
@@ -193,22 +202,6 @@ public class ModelBean implements Serializable {
 		this.buildtype = buildtype;
 	}
 
-	public String getResource_one() {
-		return resource_one;
-	}
-
-	public void setResource_one(String resource_one) {
-		this.resource_one = resource_one;
-	}
-
-	public String getResource_two() {
-		return resource_two;
-	}
-
-	public void setResource_two(String resource_two) {
-		this.resource_two = resource_two;
-	}
-
 	public String getFilePics() {
 		return filePics;
 	}
@@ -307,6 +300,38 @@ public class ModelBean implements Serializable {
 
 	public void setModelstatus(int modelstatus) {
 		this.modelstatus = modelstatus;
+	}
+
+	public String getResource_one() {
+		return resource_one;
+	}
+
+	public void setResource_one(String resource_one) {
+		this.resource_one = resource_one;
+	}
+
+	public String getResource_two() {
+		return resource_two;
+	}
+
+	public void setResource_two(String resource_two) {
+		this.resource_two = resource_two;
+	}
+
+	public String getResource_three() {
+		return resource_three;
+	}
+
+	public void setResource_three(String resource_three) {
+		this.resource_three = resource_three;
+	}
+
+	public String getResource_four() {
+		return resource_four;
+	}
+
+	public void setResource_four(String resource_four) {
+		this.resource_four = resource_four;
 	}
 
 }

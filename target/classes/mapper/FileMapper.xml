@@ -22,9 +22,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="modelinfoAdd"
 		parameterType="com.item.entity.ModelBean">
 		INSERT INTO modelinfo
-		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`filePics`,`fileModel`,`mdescribe`,`creatTime`,`userid`,`modelstatus`,`examine`,`examinepeople`,`examinetime`)
+		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`resource_three`,`resource_four`,`filePics`,`fileModel`,`mdescribe`,`creatTime`,`userid`,`modelstatus`,`examine`,`examinepeople`,`examinetime`)
 		VALUES
-		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{filePics},#{fileModel},#{mdescribe},#{creatTime},#{userid},#{modelstatus},#{examine},#{examinepeople},#{examinetime})
+		(#{modelname},#{modelprice},#{unitprice},#{buildtype},#{resource_one},#{resource_two},#{resource_three},#{resource_four},#{filePics},#{fileModel},#{mdescribe},#{creatTime},#{userid},#{modelstatus},#{examine},#{examinepeople},#{examinetime})
 	</insert>
 	
 	<!-- 模型信息修改 -->
@@ -48,6 +48,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</if>
 			<if test="resource_two!=null and resource_two!=''">
 				resource_two=#{resource_two},
+			</if>
+			<if test="resource_three!=null and resource_three!=''">
+				resource_three=#{resource_three},
+			</if>
+			<if test="resource_four!=null and resource_four!=''">
+				resource_four=#{resource_four},
 			</if>
 			<if test="filePics!=null and filePics!=''">
 				filePics=#{filePics},
@@ -117,6 +123,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				</if>
 				<if test="modelBean.resource_two!=null and modelBean.resource_two!=''">
 					and resource_two=#{modelBean.resource_two}
+				</if>
+				<if test="modelBean.resource_three!=null and modelBean.resource_three!=''">
+					and resource_three=#{modelBean.resource_three}
+				</if>
+				<if test="modelBean.resource_four!=null and modelBean.resource_four!=''">
+					and resource_four=#{modelBean.resource_four}
 				</if>
 				<if test="modelBean.modelprice!=201.0 and  modelBean.modelprice != -0.1">
 					and modelprice &lt;= #{modelBean.modelprice}

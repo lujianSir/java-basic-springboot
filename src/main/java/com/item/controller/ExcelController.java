@@ -188,7 +188,7 @@ public class ExcelController {
 	@ResponseBody
 	public Result<?> deleteExcelByEid(String eid, String processInstanceId) {
 		int row = excelServcie.deleteExcelByEid(eid);
-		if (processInstanceId != null && !processInstanceId.equals("")) {
+		if (processInstanceId != null && !processInstanceId.equals("null")) {
 			vacationService.deleteProcessId(processInstanceId);
 		}
 		return Result.success(row);

@@ -131,9 +131,10 @@ public class FileController {
 	 */
 	@RequestMapping("/model")
 	@ResponseBody
-	public Result<?> modelUpload(String modelname, String resource_two, String modelprice, String unitprice,
-			String buildtype, String resource_one, String mdescribe, String filePics, String fileModel, String mid,
-			String userid, String modelstatus, String examine, String examinepeople, String examineremark) {
+	public Result<?> modelUpload(String modelname, String modelprice, String unitprice, String buildtype,
+			String resource_one, String resource_two, String resource_three, String resource_four, String mdescribe,
+			String filePics, String fileModel, String mid, String userid, String modelstatus, String examine,
+			String examinepeople, String examineremark) {
 		ModelBean model = new ModelBean();
 		model.setBuildtype(buildtype);
 		model.setMdescribe(mdescribe);
@@ -146,6 +147,8 @@ public class FileController {
 		}
 		model.setResource_one(resource_one);
 		model.setResource_two(resource_two);
+		model.setResource_three(resource_three);
+		model.setResource_four(resource_four);
 		model.setFilePics(filePics);
 		model.setFileModel(fileModel);
 		model.setUserid(userid);

@@ -137,12 +137,14 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
+	@Cacheable(value = "resourceList")
 	public Result<?> resourceAllQuery(ResourceBean resourceBean) {
 		// TODO Auto-generated method stub
 		return Result.success(tagMapper.resourceAllQuery(resourceBean));
 	}
 
 	@Override
+	@CacheEvict(value = "resourceList", allEntries = true)
 	public Result<?> insertOrUpdateResource(ResourceBean resourceBean) {
 		// TODO Auto-generated method stub
 		int id = resourceBean.getId();
@@ -161,12 +163,14 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
+	@CacheEvict(value = "resourceList", allEntries = true)
 	public Result<?> deleteResourceById(ResourceBean resourceBean) {
 		// TODO Auto-generated method stub
 		return Result.success(tagMapper.deleteResourceById(resourceBean));
 	}
 
 	@Override
+	@Cacheable(value = "resourceList", key = "#resourceBean.pid")
 	public Result<?> queryResourceById(ResourceBean resourceBean) {
 		// TODO Auto-generated method stub
 		return Result.success(tagMapper.queryResourceById(resourceBean));
