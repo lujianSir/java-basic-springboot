@@ -41,6 +41,7 @@ D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\BpmsAct
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\controller\OrderController.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\PowerServiceImpl.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\ModelBean.java
+D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\StarClass.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\Vacation.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\FileServiceImpl.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\FlowBean.java
@@ -63,6 +64,7 @@ D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\mapper\UserM
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\Power.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\User.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\UserBean.java
+D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\ResourceBean.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\VacComment.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\ActivitiUtil.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\CorsFilter.java

@@ -25,6 +25,7 @@ com\item\service\UserService.class
 com\item\controller\FileController.class
 com\item\entity\ShoppingCart.class
 com\item\controller\TagController.class
+com\item\entity\StarClass.class
 com\item\mapper\UserMapper.class
 com\item\tool\FlowUtils.class
 com\item\entity\Power.class
@@ -58,6 +59,7 @@ com\item\entity\ExcelBean.class
 com\item\tool\ExcelUtil.class
 com\item\entity\Page.class
 com\item\controller\ShoppingController.class
+com\item\entity\ResourceBean.class
 com\item\tool\CorsFilter.class
 com\item\config\IntercepterConfig.class
 com\item\service\TagService.class

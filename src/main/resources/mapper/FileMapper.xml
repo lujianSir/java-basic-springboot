@@ -46,13 +46,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="resource_one!=null and resource_one!=''">
 				resource_one=#{resource_one},
 			</if>
-			<if test="resource_two!=null and resource_two!=''">
+			<if test="resource_two!=null ">
 				resource_two=#{resource_two},
 			</if>
-			<if test="resource_three!=null and resource_three!=''">
+			<if test="resource_three!=null">
 				resource_three=#{resource_three},
 			</if>
-			<if test="resource_four!=null and resource_four!=''">
+			<if test="resource_four!=null">
 				resource_four=#{resource_four},
 			</if>
 			<if test="filePics!=null and filePics!=''">

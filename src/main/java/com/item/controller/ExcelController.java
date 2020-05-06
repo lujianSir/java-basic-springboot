@@ -75,7 +75,7 @@ public class ExcelController {
 	public Result<?> queryExcelManage(ExcelManage excelManage, Page page) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<ExcelManage> list = excelServcie.queryExcelManage(excelManage);
-		String userName = "00da3c04c1b14519862301666987bfcd";
+		String userName = excelManage.getUid();
 		List<Vacation> vacList = vacationService.myVac(userName);
 		List<Vacation> oldvacList = vacationService.myVacRecord(userName);
 		vacList.addAll(oldvacList);
