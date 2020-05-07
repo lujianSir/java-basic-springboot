@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace： 1. namespace必须和Mapper接口类路径一致 -->
+<mapper namespace="com.item.mapper.ExcelProcessMapper">
+		<resultMap id="exceApplayResult" type="com.item.entity.ExcelApplay">
+	        <id property="applyid" column="applyid" />
+	        <result property="applyname" column="applyname" />
+	        <result property="excelname" column="excelname" />
+	        <result property="applyreson" column="applyreson" />
+	        <result property="applycreattime" column="applycreattime" />
+	        <result property="applystatus" column="applystatus" />   
+	        <result property="applystatusname" column="applystatusname" />    
+	        <collection property="excelAuthors" resultMap="excelAuthorResult" />
+	    </resultMap>
+ 
+ 	<resultMap id="excelAuthorResult" type="com.item.entity.ExcelAuthor">
+ 			<id property="authorid" column="authorid" />
+	        <result property="authorname" column="authorname" />
+	        <result property="authorreson" column="authorreson" />
+	        <result property="authortime" column="authortime" />
+	        <result property="authorstatus" column="authorstatus" />
+	        <result property="number" column="number" />
+ 	</resultMap>
+
+	<!-- 查询发起的申请 -->
+	<select id="queryExcelApplayByName" resultMap="exceApplayResult" parameterType="com.item.entity.ExcelApplay">
+		SELECT
+			a.applyid,
+			d.nickname applyname,
+			a.excelname,
+			a.applyreson,
+			LEFT(a.applycreattime,10) applycreattime,
+			a.applystatus,
+			case when  a.applystatus=2 then '等待审批' when a.applystatus=3 then '审批驳回'  else '审批通过' end applystatusname,
+			c.authorid,
+			e.nickname authorname,
+			c.authorreson,
+			LEFT(c.authortime,10) authortime,
+			c.authorstatus,
+			c.number
+		FROM
+			excelapplay a
+		LEFT JOIN userinfo d on a.applyname=d.userid
+		LEFT JOIN excelapplayauthor b ON a.applyid = b.applyid
+		LEFT JOIN excelauthor c ON b.authorid = c.authorid
+		LEFT JOIN userinfo e on c.authorname=e.userid
+		<where>
+			<if test="applyname !=null and applyname !='' ">
+			 and a.applyname = #{applyname}
+			</if>	
+			<if test="applyid !=null and applyid !='' ">
+			 and a.applyid = #{applyid}
+			</if>
+		</where>
+		ORDER BY
+			a.applycreattime DESC,
+			c.number
+	</select>
+	
+	<!-- 查询需要审批的流程 -->
+	<select id="queryExcelApplayByAuthorName" resultMap="exceApplayResult" parameterType="com.item.entity.ExcelAuthor">
+		SELECT
+			a.applyid,
+			d.nickname applyname,
+			a.excelname,
+			a.applyreson,
+			LEFT(a.applycreattime,10) applycreattime,
+			a.applystatus,
+			case when  a.applystatus=2 then '等待审批' when a.applystatus=3 then '审批驳回'  else '审批通过' end applystatusname,
+			c.*
+		FROM
+			excelapplay a
+		LEFT JOIN userinfo d on a.applyname=d.userid
+		LEFT JOIN excelapplayauthor b ON a.applyid = b.applyid
+		LEFT JOIN excelauthor c ON b.authorid = c.authorid	
+		WHERE c.authorstatus=2  and a.applystatus=2
+			<if test="authorname !=null and authorname != ''">
+				and c.authorname=#{authorname}
+			</if>
+		ORDER BY
+			a.applycreattime DESC
+	</select>
+	
+	
+
+		 <!--添加用户  -->
+   <insert id="creatExcelProcess" parameterType="com.item.entity.ExcelApplay" useGeneratedKeys="true" keyProperty="pid">
+   		insert into excelapplay 
+   		<trim prefix="(" suffix=")" suffixOverrides=",">
+	   		<if test="applyid != null and applyid !=''">
+				applyid,
+			</if>
+			<if test="applyname != null and applyname !=''">
+				applyname,
+			</if>
+			<if test="excelname != null and excelname !=''">
+				excelname,
+			</if>
+			<if test="applyreson != null and applyreson !=''">
+				applyreson,
+			</if>
+			<if test="applycreattime != null and applycreattime !=''">
+				applycreattime,
+			</if>
+			<if test="applystatus != null and  applystatus !=''">
+				applystatus,
+			</if>		
+   		</trim>
+   		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="applyid != null and applyid !=''">
+				#{applyid},
+			</if>
+			<if test="applyname != null and applyname !=''">
+				#{applyname},
+			</if>
+			<if test="excelname != null and excelname !=''">
+				#{excelname},
+			</if>
+			<if test="applyreson != null and applyreson !=''">
+				#{applyreson},
+			</if>
+			<if test="applycreattime != null and applycreattime !=''">
+				#{applycreattime},
+			</if>
+			<if test="applystatus != null and  applystatus !=''">
+				#{applystatus},
+			</if>
+   		</trim>
+   </insert>
+   
+   <!-- 添加excel 内容 -->
+	<insert id="insertExcelAuthor" parameterType="java.util.List">
+    	insert into excelauthor (authorid, authorname,authorreson, authortime, authorstatus,number)
+   		 values
+	    <foreach collection="list" item="item" index="index" separator=",">
+	      (#{item.authorid}, #{item.authorname}, #{item.authorreson},#{item.authortime}, #{item.authorstatus}, #{item.number})
+	    </foreach>
+	</insert>
+	
+	<!-- 添加第三方 -->
+	<insert id="insertApplayAuthor" parameterType="java.util.List">
+    	insert into excelapplayauthor (applyid, authorid)
+   		 values
+	    <foreach collection="list" item="item" index="index" separator=",">
+	      (#{item.applyid}, #{item.authorid})
+	    </foreach>
+	</insert>
+	
+	<!-- 修改流程的属性 -->
+	<update id="updateExcelApplay" parameterType="com.item.entity.ExcelApplay">
+		update  excelapplay set applystatus=#{applystatus} where applyid=#{applyid}
+	</update>
+	
+	<!-- 修改审批人的属性 -->
+	<update id="updateExcelAuthor" parameterType="com.item.entity.ExcelAuthor">
+		update  excelauthor 
+			<set>
+				<if test="authorstatus !=null and authorstatus !=''">
+					authorstatus=#{authorstatus},
+				</if>
+				<if test="authorreson !=null and authorreson !=''">
+					authorreson=#{authorreson},
+				</if>
+				<if test="authortime !=null and authortime!=''">
+					authortime=#{authortime},
+				</if>			
+			</set>
+			where authorid=#{authorid}
+	
+	</update>
+	
+	<!-- 查询审批的人 -->
+	<select id="queryExcelAuthorByApplayId" resultType="com.item.entity.ExcelAuthor">
+		SELECT
+			a.authorid, 
+			d.nickname authorname,
+			a.authorreson,
+			LEFT(a.authortime,10) authortime,
+			a.authorstatus,
+			a.number
+		FROM
+			excelauthor a
+		LEFT JOIN userinfo d ON a.authorname = d.userid
+		LEFT JOIN excelapplayauthor b ON a.authorid = b.authorid
+		LEFT JOIN excelapplay c ON b.applyid = c.applyid
+		where a.number != 1  and  a.authortime is not null  and c.applyid=#{applyid}	
+		ORDER BY a.number 	
+	</select>
+	
+	<select id="queryExcelApplayByAuthor" resultMap="exceApplayResult" parameterType="com.item.entity.ExcelAuthor">
+		SELECT
+			a.applyid,
+			d.nickname applyname,
+			a.excelname,
+			a.applyreson,
+			LEFT(a.applycreattime,10) applycreattime,
+			a.applystatus,
+			case when  a.applystatus=2 then '等待审批' when a.applystatus=3 then '审批驳回'  else '审批通过' end applystatusname,
+			c.authorid,
+			e.nickname authorname,
+			c.authorreson,
+			LEFT(c.authortime,10) authortime,
+			c.authorstatus,
+			c.number
+		FROM
+			excelapplay a
+		LEFT JOIN userinfo d on a.applyname=d.userid
+		LEFT JOIN excelapplayauthor b ON a.applyid = b.applyid
+		LEFT JOIN excelauthor c ON b.authorid = c.authorid
+		LEFT JOIN userinfo e on c.authorname=e.userid
+		where c.number !=1 and c.authortime is not null and  c.authorname=#{authorname}	
+	</select>
+</mapper>

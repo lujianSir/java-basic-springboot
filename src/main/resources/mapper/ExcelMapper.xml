@@ -99,6 +99,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			where eid=#{eid}
 	</update>
 	
+	<update id="updateExcelManageStauts" parameterType="com.item.entity.ExcelManage">
+		update excelmanage 
+			<set>				
+				<if test="excelstatus!=null and excelstatus!=''">
+					excelstatus=#{excelstatus},
+				</if>			
+			</set>
+			where excelname=#{excelname}
+	</update>
+	
+	
 	<!-- 批量查询 -->
 	<select id="queryByTitle" resultType="com.item.entity.ExcelManage" parameterType="java.util.List">
 		select a.*,b.username,b.nickname  from excelmanage  a LEFT JOIN userinfo b on a.uid=b.userid 	

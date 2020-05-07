@@ -72,6 +72,14 @@ public interface ExcelMapper {
 	int updateExcelManage(ExcelManage excelManage);
 
 	/**
+	 * 通过名称去修改状态
+	 * 
+	 * @param excelManage
+	 * @return
+	 */
+	int updateExcelManageStauts(ExcelManage excelManage);
+
+	/**
 	 * 批量查询
 	 * 
 	 * @param list
