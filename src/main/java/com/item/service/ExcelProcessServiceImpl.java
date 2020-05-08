@@ -211,4 +211,22 @@ public class ExcelProcessServiceImpl implements ExcelProcessService {
 		return list;
 	}
 
+	@Override
+	public void deleteApplayAndAuthor(ExcelApplay excelApplay) {
+		// TODO Auto-generated method stub
+		ExcelApplay eapplay = excelProcessMapper.queryApplayByExcelName(excelApplay.getExcelname());
+		List<ApplayAuthor> list = excelProcessMapper.queryApplayAuthorByApplayId(eapplay.getApplyid());
+		for (int i = 0; i < list.size(); i++) {
+			ApplayAuthor applayAuthor = list.get(i);
+			excelProcessMapper.deleteExcelAuthorByAuthorid(applayAuthor.getAuthorid());
+		}
+		excelProcessMapper.deleteApplayByExcelName(excelApplay.getExcelname());
+	}
+
+	@Override
+	public List<ExcelApplay> queryExcelApplayByStatus(ExcelApplay excelApplay) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

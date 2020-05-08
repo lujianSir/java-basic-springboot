@@ -47,11 +47,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LEFT JOIN excelauthor c ON b.authorid = c.authorid
 		LEFT JOIN userinfo e on c.authorname=e.userid
 		<where>
-			<if test="applyname !=null and applyname !='' ">
+			<if test="applyname !=null and applyname !=''  and applyname !='00da3c04c1b14519862301666987bfcd' ">
 			 and a.applyname = #{applyname}
 			</if>	
 			<if test="applyid !=null and applyid !='' ">
 			 and a.applyid = #{applyid}
+			</if>
+			<if test="excelname !=null and excelname !='' ">
+			 and a.excelname like CONCAT('%',#{excelname},'%')
+			</if>
+			<if test="applystatus !=null and applystatus !='' ">
+			 and a.applystatus = #{applystatus}
 			</if>
 		</where>
 		ORDER BY
@@ -76,7 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LEFT JOIN excelapplayauthor b ON a.applyid = b.applyid
 		LEFT JOIN excelauthor c ON b.authorid = c.authorid	
 		WHERE c.authorstatus=2  and a.applystatus=2
-			<if test="authorname !=null and authorname != ''">
+			<if test="authorname !=null and authorname != '' and authorname !='00da3c04c1b14519862301666987bfcd' ">
 				and c.authorname=#{authorname}
 			</if>
 		ORDER BY
@@ -210,6 +216,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LEFT JOIN excelapplayauthor b ON a.applyid = b.applyid
 		LEFT JOIN excelauthor c ON b.authorid = c.authorid
 		LEFT JOIN userinfo e on c.authorname=e.userid
-		where c.number !=1 and c.authortime is not null and  c.authorname=#{authorname}	
+		where c.number !=1 and c.authortime is not null
+		<if test="authorname !=null and authorname != '' and authorname !='00da3c04c1b14519862301666987bfcd'">
+		 	and  c.authorname=#{authorname}	
+		</if>
+		<if test="authorstatus !=null and authorstatus!=''">
+			and c.authorstatus=#{authorstatus}
+		</if>
+		
+		
 	</select>
+	
+	<delete id="deleteApplayByExcelName" parameterType="String">
+		delete from excelapplay where excelname=#{excelname}
+	</delete>
+	
+	<select id="queryApplayByExcelName" resultType="com.item.entity.ExcelApplay">
+		select * from excelapplay where excelname=#{excelname}
+	</select>
+	
+	<select id="queryApplayAuthorByApplayId" resultType="com.item.entity.ApplayAuthor">
+		select * from excelapplayauthor where applyid=#{applyid}
+	</select>
+	
+	<delete id="deleteExcelAuthorByAuthorid" parameterType="String">
+		delete from excelauthor where authorid=#{authorid}
+	</delete>
+	
 </mapper>

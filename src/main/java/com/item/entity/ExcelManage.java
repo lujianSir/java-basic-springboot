@@ -22,7 +22,7 @@ public class ExcelManage {
 
 	private String realpath;// 文件上传的实际路径
 
-	private int excelstatus;// 1 显示提交申请 2 正在审批 3.审批通过 4. 审批拒绝
+	private int excelstatus;// 1 显示提交申请 2 正在审批 3.审批拒绝 4. 审批通过
 
 	private String processInstanceId;// 流程ID
 

@@ -54,4 +54,17 @@ public interface ExcelProcessService {
 	 * @return
 	 */
 	List<ExcelApplay> queryExcelApplayByAuthor(ExcelAuthor excelAuthor);
+
+	/**
+	 * 通过文件名删除
+	 */
+	void deleteApplayAndAuthor(ExcelApplay excelApplay);
+
+	/**
+	 * 查询审批通过的
+	 * 
+	 * @return
+	 */
+	List<ExcelApplay> queryExcelApplayByStatus(ExcelApplay excelApplay);
+
 }

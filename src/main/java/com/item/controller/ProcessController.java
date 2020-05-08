@@ -46,7 +46,17 @@ public class ProcessController {
 	 * @return
 	 */
 	@RequestMapping(value = "/queryExcelApplayByName")
-	public Result<?> queryExcelApplayByName(ExcelApplay excelApplay, Page page) {
+	public Result<?> queryExcelApplayByName(ExcelApplay excelApplay, Page page, String statusname) {
+		if (statusname != null && !statusname.equals("")) {
+			if (statusname.equals("等待审批")) {
+				excelApplay.setApplystatus(2);
+			} else if (statusname.equals("审批通过")) {
+				excelApplay.setApplystatus(4);
+			} else {
+				excelApplay.setApplystatus(3);
+			}
+
+		}
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<ExcelApplay> list = excelProcessService.queryExcelApplayByName(excelApplay);
 		PageInfo<ExcelApplay> pageInfo = new PageInfo<ExcelApplay>(list);
@@ -65,6 +75,22 @@ public class ProcessController {
 		List<ExcelApplay> list = excelProcessService.queryExcelApplayByAuthorName(excelAuthor);
 		PageInfo<ExcelApplay> pageInfo = new PageInfo<ExcelApplay>(list);
 		return Result.success(pageInfo);
+	}
+
+	/**
+	 * 查询需要审批的流程数量
+	 * 
+	 * @param excelAuthor
+	 * @return
+	 */
+	@RequestMapping(value = "/queryExcelApplayCount")
+	public Result<?> queryExcelApplayCount(ExcelAuthor excelAuthor) {
+		List<ExcelApplay> list = excelProcessService.queryExcelApplayByAuthorName(excelAuthor);
+		int num = 0;
+		if (list.size() > 0) {
+			num = list.size();
+		}
+		return Result.success(num);
 	}
 
 	/**

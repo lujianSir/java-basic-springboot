@@ -20,12 +20,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.item.entity.ExcelApplay;
 import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
 import com.item.entity.Page;
-import com.item.entity.Vacation;
+import com.item.service.ExcelProcessService;
 import com.item.service.ExcelServcie;
-import com.item.service.VacationService;
 import com.item.tool.Result;
 
 @Controller
@@ -36,7 +36,7 @@ public class ExcelController {
 	private ExcelServcie excelServcie;
 
 	@Autowired
-	private VacationService vacationService;
+	private ExcelProcessService excelProcessService;
 
 	@RequestMapping("/test1")
 	public String file() {
@@ -70,53 +70,62 @@ public class ExcelController {
 	 * @param page
 	 * @return
 	 */
+//	@RequestMapping("/queryExcelManage")
+//	@ResponseBody
+//	public Result<?> queryExcelManage(ExcelManage excelManage, Page page) {
+//		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
+//		List<ExcelManage> list = excelServcie.queryExcelManage(excelManage);
+//		String userName = excelManage.getUid();
+//		List<Vacation> vacList = vacationService.myVac(userName);
+//		List<Vacation> oldvacList = vacationService.myVacRecord(userName);
+//		vacList.addAll(oldvacList);
+//		for (int i = 0; i < vacList.size(); i++) {
+//			Vacation vacation = vacList.get(i);
+//			if (vacation.getResult() != null && !vacation.getResult().equals("")) {
+//				if (vacation.getResult().equals("0")) {
+//					vacation.setApplyStatus("审批驳回");
+//				}
+//				if (vacation.getResult().equals("1")) {
+//					if (vacation.getFirstName().equals(vacation.getAuditor())) {
+//						vacation.setApplyStatus("等待审批");
+//					} else if (vacation.getSecondName().equals(vacation.getAuditor())) {
+//						vacation.setApplyStatus("审批通过");
+//					}
+//				}
+//			} else {
+//				vacation.setApplyStatus("等待审批");
+//			}
+//
+//		}
+//		for (int m = 0; m < list.size(); m++) {
+//			ExcelManage excelmanage = list.get(m);
+//			for (int n = 0; n < vacList.size(); n++) {
+//				Vacation vacation = vacList.get(n);
+//				if (excelmanage.getExcelname().equals(vacation.getTitle())) {
+//					if (vacation.getApplyStatus().equals("审批驳回")) {
+//						list.get(m).setExcelstatus(4);
+//						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
+//					} else if (vacation.getApplyStatus().equals("审批通过")) {
+//						list.get(m).setExcelstatus(3);
+//						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
+//					} else if (vacation.getApplyStatus().equals("等待审批")) {
+//						list.get(m).setExcelstatus(2);
+//						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
+//					}
+//				}
+//
+//			}
+//		}
+//
+//		PageInfo<ExcelManage> pageInfo = new PageInfo<ExcelManage>(list);
+//		return Result.success(pageInfo);
+//	}
+
 	@RequestMapping("/queryExcelManage")
 	@ResponseBody
 	public Result<?> queryExcelManage(ExcelManage excelManage, Page page) {
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<ExcelManage> list = excelServcie.queryExcelManage(excelManage);
-		String userName = excelManage.getUid();
-		List<Vacation> vacList = vacationService.myVac(userName);
-		List<Vacation> oldvacList = vacationService.myVacRecord(userName);
-		vacList.addAll(oldvacList);
-		for (int i = 0; i < vacList.size(); i++) {
-			Vacation vacation = vacList.get(i);
-			if (vacation.getResult() != null && !vacation.getResult().equals("")) {
-				if (vacation.getResult().equals("0")) {
-					vacation.setApplyStatus("审批驳回");
-				}
-				if (vacation.getResult().equals("1")) {
-					if (vacation.getFirstName().equals(vacation.getAuditor())) {
-						vacation.setApplyStatus("等待审批");
-					} else if (vacation.getSecondName().equals(vacation.getAuditor())) {
-						vacation.setApplyStatus("审批通过");
-					}
-				}
-			} else {
-				vacation.setApplyStatus("等待审批");
-			}
-
-		}
-		for (int m = 0; m < list.size(); m++) {
-			ExcelManage excelmanage = list.get(m);
-			for (int n = 0; n < vacList.size(); n++) {
-				Vacation vacation = vacList.get(n);
-				if (excelmanage.getExcelname().equals(vacation.getTitle())) {
-					if (vacation.getApplyStatus().equals("审批驳回")) {
-						list.get(m).setExcelstatus(4);
-						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
-					} else if (vacation.getApplyStatus().equals("审批通过")) {
-						list.get(m).setExcelstatus(3);
-						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
-					} else if (vacation.getApplyStatus().equals("等待审批")) {
-						list.get(m).setExcelstatus(2);
-						excelmanage.setProcessInstanceId(vacation.getProcessInstanceId());
-					}
-				}
-
-			}
-		}
-
 		PageInfo<ExcelManage> pageInfo = new PageInfo<ExcelManage>(list);
 		return Result.success(pageInfo);
 	}
@@ -186,10 +195,10 @@ public class ExcelController {
 	 */
 	@RequestMapping("/deleteExcelByEid")
 	@ResponseBody
-	public Result<?> deleteExcelByEid(String eid, String processInstanceId) {
+	public Result<?> deleteExcelByEid(String eid, ExcelApplay excelApplay) {
 		int row = excelServcie.deleteExcelByEid(eid);
-		if (processInstanceId != null && !processInstanceId.equals("null")) {
-			vacationService.deleteProcessId(processInstanceId);
+		if (excelApplay.getExcelname() != null && !excelApplay.getExcelname().equals("null")) {
+			excelProcessService.deleteApplayAndAuthor(excelApplay);
 		}
 		return Result.success(row);
 	}
@@ -203,12 +212,12 @@ public class ExcelController {
 	 */
 	@RequestMapping("/backExcelById")
 	@ResponseBody
-	public Result<?> backExcelById(String eid, String processInstanceId) {
+	public Result<?> backExcelById(String eid, ExcelApplay excelApplay) {
 		ExcelManage excelManage = new ExcelManage();
 		excelManage.setEid(eid);
 		excelManage.setExcelstatus(1);
 		int row = excelServcie.updateExcelManage(excelManage);
-		vacationService.deleteProcessId(processInstanceId);
+		excelProcessService.deleteApplayAndAuthor(excelApplay);
 		return Result.success(row);
 	}
 }

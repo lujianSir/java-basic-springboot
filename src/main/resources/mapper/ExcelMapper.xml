@@ -30,6 +30,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="excelname !=null and excelname !=''">
 				a.excelname like CONCAT('%',#{excelname},'%')
 			</if>
+			<if test="excelstatus !=null and excelstatus !=''">
+				a.excelstatus=#{excelstatus}
+			</if>
 			<if test="uid !=null and uid != '' and uid !='00da3c04c1b14519862301666987bfcd'">
 				a.uid=#{uid}
 			</if>

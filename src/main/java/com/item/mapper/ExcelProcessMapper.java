@@ -77,4 +77,41 @@ public interface ExcelProcessMapper {
 	 * @return
 	 */
 	List<ExcelApplay> queryExcelApplayByAuthor(ExcelAuthor excelAuthor);
+
+	/**
+	 * 根据文件名删除
+	 * 
+	 * @param excelname
+	 */
+	void deleteApplayByExcelName(String excelname);
+
+	/**
+	 * 通过文件名称获取流程信息
+	 * 
+	 * @param excelname
+	 * @return
+	 */
+	ExcelApplay queryApplayByExcelName(String excelname);
+
+	/**
+	 * 通过ID或者绑定的审核人
+	 * 
+	 * @param applyid
+	 * @return
+	 */
+	List<ApplayAuthor> queryApplayAuthorByApplayId(String applyid);
+
+	/***
+	 * 删除审核人的信息
+	 * 
+	 * @param authorid
+	 */
+	void deleteExcelAuthorByAuthorid(String authorid);
+
+	/**
+	 * 
+	 * @param excelApplay
+	 * @return
+	 */
+	List<ExcelApplay> queryExcelApplayByStatus(ExcelApplay excelApplay);
 }
