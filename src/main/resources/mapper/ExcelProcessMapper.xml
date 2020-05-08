@@ -11,19 +11,69 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        <result property="applyreson" column="applyreson" />
 	        <result property="applycreattime" column="applycreattime" />
 	        <result property="applystatus" column="applystatus" />   
-	        <result property="applystatusname" column="applystatusname" />    
-	        <collection property="excelAuthors" resultMap="excelAuthorResult" />
+	        <result property="applystatusname" column="applystatusname" />  
+	         
+	        <collection property="excelAuthors"  ofType="com.item.entity.ExcelAuthor">
+				<id property="authorid" column="authorid" />
+		        <result property="authorname" column="authorname" />
+		        <result property="authorreson" column="authorreson" />
+		        <result property="authortime" column="authortime" />
+		        <result property="authorstatus" column="authorstatus" />
+		        <result property="number" column="number" />
+			</collection>
+	         	 
 	    </resultMap>
  
- 	<resultMap id="excelAuthorResult" type="com.item.entity.ExcelAuthor">
+ 	<!-- <resultMap id="excelAuthorResult" type="com.item.entity.ExcelAuthor">
  			<id property="authorid" column="authorid" />
 	        <result property="authorname" column="authorname" />
 	        <result property="authorreson" column="authorreson" />
 	        <result property="authortime" column="authortime" />
 	        <result property="authorstatus" column="authorstatus" />
 	        <result property="number" column="number" />
- 	</resultMap>
+ 	</resultMap> -->
 
+	<!-- 查询发起的申请 -->
+	<select id="queryExcelApplayByNamePage" resultMap="exceApplayResult" parameterType="com.item.entity.ExcelApplay">
+		SELECT
+			a.applyid,
+			d.nickname applyname,
+			a.excelname,
+			a.applyreson,
+			LEFT(a.applycreattime,10) applycreattime,
+			a.applystatus,
+			case when  a.applystatus=2 then '等待审批' when a.applystatus=3 then '审批驳回'  else '审批通过' end applystatusname,
+			c.authorid,
+			e.nickname authorname,
+			c.authorreson,
+			LEFT(c.authortime,10) authortime,
+			c.authorstatus,
+			c.number
+		FROM
+			excelapplay a
+		LEFT JOIN userinfo d on a.applyname=d.userid
+		LEFT JOIN excelapplayauthor b ON a.applyid = b.applyid
+		LEFT JOIN excelauthor c ON b.authorid = c.authorid
+		LEFT JOIN userinfo e on c.authorname=e.userid
+		where  a.applyid IN (SELECT test.applyid from (SELECT applyid FROM excelapplay  LIMIT  #{page.pageStart},#{page.pageSize}) AS test)			 	
+			<if test="excelApplay.applyname !=null and excelApplay.applyname !=''  and excelApplay.applyname !='00da3c04c1b14519862301666987bfcd' ">
+			 and a.applyname = #{excelApplay.applyname}
+			</if>	
+			<if test="excelApplay.applyid !=null and excelApplay.applyid !='' ">
+			 and a.applyid = #{excelApplay.applyid}
+			</if>
+			<if test="excelApplay.excelname !=null and excelApplay.excelname !='' ">
+			 and a.excelname like CONCAT('%',#{excelApplay.excelname},'%')
+			</if>
+			<if test="excelApplay.applystatus !=null and excelApplay.applystatus !='' ">
+			 and a.applystatus = #{excelApplay.applystatus}
+			</if>
+			ORDER BY
+			a.applycreattime DESC,
+			c.number
+	</select>
+	
+	
 	<!-- 查询发起的申请 -->
 	<select id="queryExcelApplayByName" resultMap="exceApplayResult" parameterType="com.item.entity.ExcelApplay">
 		SELECT
@@ -59,10 +109,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="applystatus !=null and applystatus !='' ">
 			 and a.applystatus = #{applystatus}
 			</if>
-		</where>
-		ORDER BY
+		</where>  			
+			ORDER BY
 			a.applycreattime DESC,
 			c.number
+	</select>
+	
+	<!-- 查询流程总数 -->
+	<select id="queryCountApplay" resultType="int">
+			SELECT
+			count(*)
+			FROM
+			excelapplay a
+			<where>
+				<if test="applyname !=null and applyname !=''  and applyname !='00da3c04c1b14519862301666987bfcd' ">
+				 and a.applyname = #{applyname}
+				</if>	
+				<if test="applyid !=null and applyid !='' ">
+				 and a.applyid = #{applyid}
+				</if>
+				<if test="excelname !=null and excelname !='' ">
+				 and a.excelname like CONCAT('%',#{excelname},'%')
+				</if>
+				<if test="applystatus !=null and applystatus !='' ">
+				 and a.applystatus = #{applystatus}
+				</if>
+			</where>
 	</select>
 	
 	<!-- 查询需要审批的流程 -->

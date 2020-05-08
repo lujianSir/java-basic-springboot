@@ -57,10 +57,8 @@ public class ProcessController {
 			}
 
 		}
-		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
-		List<ExcelApplay> list = excelProcessService.queryExcelApplayByName(excelApplay);
-		PageInfo<ExcelApplay> pageInfo = new PageInfo<ExcelApplay>(list);
-		return Result.success(pageInfo);
+		page = excelProcessService.queryExcelApplayByName(excelApplay, page);
+		return Result.success(page);
 	}
 
 	/**
@@ -123,7 +121,16 @@ public class ProcessController {
 	 * @return
 	 */
 	@RequestMapping(value = "/queryExcelApplayByAuthor")
-	public Result<?> queryExcelApplayByAuthor(ExcelAuthor excelAuthor, Page page) {
+	public Result<?> queryExcelApplayByAuthor(ExcelAuthor excelAuthor, Page page, String statusname) {
+		if (statusname != null && !statusname.equals("")) {
+			if (statusname.equals("等待审批")) {
+				excelAuthor.setAuthorstatus(2);
+			} else if (statusname.equals("审批通过")) {
+				excelAuthor.setAuthorstatus(4);
+			} else {
+				excelAuthor.setAuthorstatus(3);
+			}
+		}
 		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<ExcelApplay> list = excelProcessService.queryExcelApplayByAuthor(excelAuthor);
 		PageInfo<ExcelApplay> pageInfo = new PageInfo<ExcelApplay>(list);

@@ -2,11 +2,13 @@ package com.item.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.item.entity.ApplayAuthor;
 import com.item.entity.ExcelApplay;
 import com.item.entity.ExcelAuthor;
+import com.item.entity.Page;
 
 @Repository
 public interface ExcelProcessMapper {
@@ -34,12 +36,30 @@ public interface ExcelProcessMapper {
 	void insertApplayAuthor(List<ApplayAuthor> list);
 
 	/**
-	 * 通过名称查询发起的申请
+	 * 通过名称查询发起的申请分页
 	 * 
 	 * @param excelApplay
 	 * @return
 	 */
+	List<ExcelApplay> queryExcelApplayByNamePage(@Param("excelApplay") ExcelApplay excelApplay,
+			@Param("page") Page page);
+
+	/**
+	 * 不分页
+	 * 
+	 * @param excelApplay
+	 * @param page
+	 * @return
+	 */
 	List<ExcelApplay> queryExcelApplayByName(ExcelApplay excelApplay);
+
+	/**
+	 * 求总数
+	 * 
+	 * @param excelApplay
+	 * @return
+	 */
+	int queryCountApplay(ExcelApplay excelApplay);
 
 	/**
 	 * 查询当前人需要审批的流程

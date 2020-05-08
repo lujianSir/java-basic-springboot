@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.item.entity.ExcelApplay;
 import com.item.entity.ExcelAuthor;
+import com.item.entity.Page;
 import com.item.tool.Result;
 
 public interface ExcelProcessService {
@@ -22,7 +23,7 @@ public interface ExcelProcessService {
 	 * @param excelApplay
 	 * @return
 	 */
-	List<ExcelApplay> queryExcelApplayByName(ExcelApplay excelApplay);
+	Page queryExcelApplayByName(ExcelApplay excelApplay, Page page);
 
 	/**
 	 * 查询当前人需要审批的流程

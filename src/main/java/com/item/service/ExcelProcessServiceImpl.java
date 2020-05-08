@@ -11,6 +11,7 @@ import com.item.entity.ApplayAuthor;
 import com.item.entity.ExcelApplay;
 import com.item.entity.ExcelAuthor;
 import com.item.entity.ExcelManage;
+import com.item.entity.Page;
 import com.item.mapper.ExcelMapper;
 import com.item.mapper.ExcelProcessMapper;
 import com.item.tool.JavaTool;
@@ -91,16 +92,18 @@ public class ExcelProcessServiceImpl implements ExcelProcessService {
 	}
 
 	@Override
-	public List<ExcelApplay> queryExcelApplayByName(ExcelApplay excelApplay) {
+	public Page queryExcelApplayByName(ExcelApplay excelApplay, Page page) {
 		// TODO Auto-generated method stub
-		List<ExcelApplay> list = excelProcessMapper.queryExcelApplayByName(excelApplay);
+		List<ExcelApplay> list = excelProcessMapper.queryExcelApplayByNamePage(excelApplay, page);
 		for (int i = 0; i < list.size(); i++) {
 			ExcelApplay eApplay = list.get(i);
 			List<ExcelAuthor> eAuthors = excelProcessMapper.queryExcelAuthorByApplayId(eApplay);
 			list.get(i).setExcelMessages(eAuthors);
 		}
-
-		return list;
+		int total = excelProcessMapper.queryCountApplay(excelApplay);
+		page.setList(list);
+		page.setTotal(total);
+		return page;
 	}
 
 	@Override
