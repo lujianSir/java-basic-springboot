@@ -35,6 +35,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 查询发起的申请 -->
 	<select id="queryExcelApplayByNamePage" resultMap="exceApplayResult" parameterType="com.item.entity.ExcelApplay">
+		<!-- SELECT
+			a.applyid,
+			d.nickname applyname,
+			a.excelname,
+			a.applyreson,
+			LEFT(a.applycreattime,10) applycreattime,
+			a.applystatus,
+			case when  a.applystatus=2 then '等待审批' when a.applystatus=3 then '审批驳回'  else '审批通过' end applystatusname,
+			c.authorid,
+			e.nickname authorname,
+			c.authorreson,
+			LEFT(c.authortime,10) authortime,
+			c.authorstatus,
+			c.number
+	FROM
+		(
+			SELECT
+				a.applyid
+			FROM
+				excelapplayauthor a
+			LEFT JOIN excelauthor b ON a.authorid = b.authorid
+			WHERE
+				b.authorname = '336d17728a9b4ca092f6c4870f83b80d'
+		) m
+	LEFT JOIN excelapplay a ON m.applyid = a.applyid
+	LEFT JOIN userinfo d ON a.applyname = d.userid
+	LEFT JOIN excelapplayauthor b ON a.applyid = b.applyid
+	LEFT JOIN excelauthor c ON b.authorid = c.authorid
+	LEFT JOIN userinfo e ON c.authorname = e.userid
+	WHERE
+		a.applyid IN (
+			SELECT
+				test.applyid
+			FROM
+				(
+					SELECT
+						applyid
+					FROM
+						excelapplay
+					LIMIT 0,
+					10
+				) AS test
+		)
+	ORDER BY
+		a.applycreattime DESC,
+		c.number -->
+			
 		SELECT
 			a.applyid,
 			d.nickname applyname,
