@@ -30,7 +30,6 @@ public class ProcessController {
 	 */
 	@RequestMapping(value = "/creatExcelProcess")
 	public Result<?> creatExcelProcess(ExcelApplay excelApplay, String author) {
-		author = "336d17728a9b4ca092f6c4870f83b80d,4499182d18e54e8f97f75c5c257d9afa,ae7f2d6a5614425a9365af5bcf5655e6,fef85ca364c44fe582a3621b73a77243";
 		int row = excelProcessService.creatExcelProcess(excelApplay, author);
 		if (row > 0) {
 			return Result.success(row);
