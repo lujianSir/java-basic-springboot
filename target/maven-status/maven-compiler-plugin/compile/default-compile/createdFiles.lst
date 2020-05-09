@@ -77,6 +77,7 @@ com\item\alipay\AlipayBean.class
 com\item\controller\PowerController.class
 com\item\entity\VacUser.class
 com\item\service\VacationService.class
+com\item\config\WebMvcConfig.class
 com\item\entity\ExcelManage.class
 com\item\service\TagServiceImpl.class
 com\item\service\ShoppingService.class

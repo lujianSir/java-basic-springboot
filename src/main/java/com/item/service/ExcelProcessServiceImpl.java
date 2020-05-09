@@ -126,7 +126,7 @@ public class ExcelProcessServiceImpl implements ExcelProcessService {
 		int num = 0;
 		if (excelAuthors.size() == 1 || excelAuthor.getAuthorstatus() == 3) {
 			if (excelAuthor.getAuthorstatus() == 3) {
-				for (int j = 0; j < otherexcelAuthors.size(); j++) {
+				for (int j = 0; j < excelAuthors.size(); j++) {
 					if (otherexcelAuthors.get(0).getAuthorid().equals(excelAuthor.getAuthorid())) {
 						otherexcelAuthors.remove(0);
 						break;
@@ -218,12 +218,15 @@ public class ExcelProcessServiceImpl implements ExcelProcessService {
 	public void deleteApplayAndAuthor(ExcelApplay excelApplay) {
 		// TODO Auto-generated method stub
 		ExcelApplay eapplay = excelProcessMapper.queryApplayByExcelName(excelApplay.getExcelname());
-		List<ApplayAuthor> list = excelProcessMapper.queryApplayAuthorByApplayId(eapplay.getApplyid());
-		for (int i = 0; i < list.size(); i++) {
-			ApplayAuthor applayAuthor = list.get(i);
-			excelProcessMapper.deleteExcelAuthorByAuthorid(applayAuthor.getAuthorid());
+		if (eapplay != null) {
+			List<ApplayAuthor> list = excelProcessMapper.queryApplayAuthorByApplayId(eapplay.getApplyid());
+			for (int i = 0; i < list.size(); i++) {
+				ApplayAuthor applayAuthor = list.get(i);
+				excelProcessMapper.deleteExcelAuthorByAuthorid(applayAuthor.getAuthorid());
+			}
+			excelProcessMapper.deleteApplayByExcelName(excelApplay.getExcelname());
 		}
-		excelProcessMapper.deleteApplayByExcelName(excelApplay.getExcelname());
+
 	}
 
 	@Override
