@@ -1,11 +1,19 @@
 package com.item.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.item.entity.ResourceBean;
 import com.item.entity.TagBean;
 import com.item.service.TagService;
@@ -128,4 +136,37 @@ public class TagController {
 	public Result<?> queryResourceById(ResourceBean resourceBean) {
 		return tagService.queryResourceById(resourceBean);
 	}
+
+	/**
+	 * 动态移动位置
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/updateresourceinfo")
+	public Result<?> updateresourceinfo(String message) {
+		JSONArray jsonArray = JSONArray.parseArray(message);
+		List<Map<String, Object>> maplist = new ArrayList<Map<String, Object>>();
+		for (int i = 0; i < jsonArray.size(); i++) {
+			Map<String, Object> m = new HashMap<String, Object>();
+			JSONObject o = (JSONObject) jsonArray.get(i);
+			Map<String, Object> map = o;
+			for (Entry<String, Object> entry : map.entrySet()) {
+				m.put(entry.getKey(), entry.getValue());
+				System.out.println(entry.getKey() + ":" + entry.getValue());
+
+			}
+			maplist.add(map);
+		}
+		List<ResourceBean> list = new ArrayList<ResourceBean>();
+		for (int m = 0; m < maplist.size(); m++) {
+			ResourceBean resourceBean = new ResourceBean();
+			resourceBean.setId(Integer.parseInt(maplist.get(m).get("id").toString()));
+			resourceBean.setPid(Integer.parseInt(maplist.get(m).get("pid").toString()));
+			resourceBean.setRname(maplist.get(m).get("rname").toString());
+			list.add(resourceBean);
+		}
+		tagService.updateresourceinfo(list);
+		return Result.success();
+	}
+
 }

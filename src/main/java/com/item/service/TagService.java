@@ -1,5 +1,7 @@
 package com.item.service;
 
+import java.util.List;
+
 import com.item.entity.ResourceBean;
 import com.item.entity.TagBean;
 import com.item.tool.Result;
@@ -38,5 +40,8 @@ public interface TagService {
 
 	// 通过ID查询一级菜单
 	public Result<?> queryResourceById(ResourceBean resourceBean);
+
+	// 修改资源库管理
+	public Result<?> updateresourceinfo(List<ResourceBean> list);
 
 }

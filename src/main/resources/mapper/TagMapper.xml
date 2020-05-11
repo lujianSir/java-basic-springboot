@@ -100,4 +100,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="queryResourceById" resultType="com.item.entity.ResourceBean">
     	select * from resourceinfo where pid=#{pid}
     </select>
+    
+    <!-- 删除所有 -->
+    <delete id="deleteResourceAll">
+    	delete from resourceinfo
+    </delete>
+    
+      <!-- 添加excel 内容 -->
+	<insert id="insertResourceAll" parameterType="java.util.List">
+    	insert into resourceinfo (id, pid,rname)
+   		 values
+	    <foreach collection="list" item="item" index="index" separator=",">
+	      (#{item.id}, #{item.pid}, #{item.rname})
+	    </foreach>
+	</insert>
 </mapper>

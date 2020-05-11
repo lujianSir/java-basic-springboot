@@ -176,4 +176,13 @@ public class TagServiceImpl implements TagService {
 		return Result.success(tagMapper.queryResourceById(resourceBean));
 	}
 
+	@Override
+	@CacheEvict(value = "resourceList", allEntries = true)
+	public Result<?> updateresourceinfo(List<ResourceBean> list) {
+		// TODO Auto-generated method stub
+		tagMapper.deleteResourceAll();
+		tagMapper.insertResourceAll(list);
+		return Result.success();
+	}
+
 }

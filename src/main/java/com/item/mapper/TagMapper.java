@@ -51,4 +51,11 @@ public interface TagMapper {
 
 	// 通过ID查询一级菜单
 	public List<ResourceBean> queryResourceById(ResourceBean resourceBean);
+
+	// 删除所有的信息
+	public void deleteResourceAll();
+
+	// 批量添加所有信息
+	public void insertResourceAll(List<ResourceBean> list);
+
 }
