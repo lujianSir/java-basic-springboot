@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace： 1. namespace必须和Mapper接口类路径一致 -->
+<mapper namespace="com.item.mapper.IndustryMapper">
+		<!-- 添加 -->
+	<insert id="insertIndustry" parameterType="com.item.entity.Industry">
+		INSERT INTO industry (`iname`) VALUES (#{iname})
+	</insert>
+	
+	<!-- 修改 -->
+	<update id="updateIndustry" parameterType="com.item.entity.Industry">
+		update industry set iname=#{iname} where id=#{id}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="deleteIndustry" parameterType="com.item.entity.Industry">
+		delete from  industry where id=#{id}
+	</delete>
+	
+	<!-- 查询所有的行业 -->
+	<select id="queryIndustryServices" resultType="com.item.entity.Industry">
+		select *from industry 
+		<where>
+			<if test="id != null and id !=''">
+				id=#{id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加授权 -->
+	<insert id="insertIndustryModel" parameterType="java.util.List">
+    	insert into industrymodel (id, mid)
+   		 values
+	    <foreach collection="list" item="item" index="index" separator=",">
+	      (#{item.id}, #{item.mid})
+	    </foreach>
+	</insert>
+	
+	<!-- 查询是否已经分配 -->
+	<select id="queryModelBeanByIid" resultType="com.item.entity.IndustryModel">
+		SELECT
+			mid,
+			modelname,
+			case when mid in (select mid from industrymodel where id=#{id}) then 1 else 0 end style,
+			case when mid in (select mid from industrymodel) then 1 else 0 end otherstyle
+		FROM
+			modelinfo  where modelstatus=1 and examine=1
+	</select>
+	
+</mapper>

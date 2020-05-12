@@ -2,6 +2,8 @@ package com.item.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +69,7 @@ public class UserServiceImpl implements UserService {
 	 */
 
 	@Override
-	public Result<?> userLogin(String username, String password) {
+	public Result<?> userLogin(String username, String password, HttpServletRequest request) {
 
 		try {
 			if (this.userExist(username)) {
@@ -76,7 +78,7 @@ public class UserServiceImpl implements UserService {
 				// 判断密码是否相等
 				if (user.getStatus() == 1) {
 					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
-						String ip = JavaTool.getIp();
+						String ip = JavaTool.getIp(request);
 						UserBean u = new UserBean();
 						u.setUserid(user.getUserid());
 						u.setOldip(ip);
@@ -323,10 +325,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserBean queryUserBeanByUserId(String userid) {
+	public UserBean queryUserBeanByUserId(String userid, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		UserBean user = userMapper.queryUserBeanByUserId(userid);
-		String ip = JavaTool.getIp();
+		String ip = JavaTool.getIp(request);
 		user.setNewip(ip);
 		user.setLogintime(Utils.getCurrent());
 		return user;

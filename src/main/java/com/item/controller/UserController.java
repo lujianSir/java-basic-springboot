@@ -3,6 +3,8 @@ package com.item.controller;
 import java.util.List;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,8 +32,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/login")
-	public Result<?> userLogin(String username, String password) {
-		return userService.userLogin(username, password);
+	public Result<?> userLogin(String username, String password, HttpServletRequest request) {
+		return userService.userLogin(username, password, request);
 	}
 
 	/**
@@ -215,8 +217,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/queryUserBeanByUserId")
-	public Result<?> queryUserBeanByUserId(String userid) {
-		UserBean userBean = userService.queryUserBeanByUserId(userid);
+	public Result<?> queryUserBeanByUserId(String userid, HttpServletRequest request) {
+		UserBean userBean = userService.queryUserBeanByUserId(userid, request);
 		return Result.success(userBean);
 	}
 

@@ -2,6 +2,8 @@ package com.item.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
 import com.item.tool.Result;
@@ -12,7 +14,7 @@ public interface UserService {
 	public boolean userExist(String username);
 
 	// 根据用户名密码登录(管理页面)
-	public Result<?> userLogin(String username, String password);
+	public Result<?> userLogin(String username, String password, HttpServletRequest request);
 
 	// 用户注册(管理页面)
 	public Result<?> userRegister(UserBean user);
@@ -48,6 +50,6 @@ public interface UserService {
 	UserMessage queryUserMessageByUserId(String userid);
 
 	// 通过ID查询后台信息
-	UserBean queryUserBeanByUserId(String userid);
+	UserBean queryUserBeanByUserId(String userid, HttpServletRequest request);
 
 }
