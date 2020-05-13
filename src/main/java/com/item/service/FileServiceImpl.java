@@ -125,43 +125,45 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public Result<?> modelUpload(ModelBean model) {
-		PakInfo pakInfo = new PakInfo();
-		String fileMode = model.getFileModel();
-		String pic = model.getFilePics();
-		if (!pic.equals("")) {
-			String[] pics = pic.split(",");
-			pic = pics[0];
-		}
-		String pakname = fileMode.substring(0, fileMode.indexOf("."));
-		pakInfo.setPakgamepath("/Game/DPC/Item/" + pakname);
-		pakInfo.setPakname(pakname);
-		pakInfo.setPakdownloadpath("http://" + CommonServerIP.CURRENT_SERVER + "/file/download?fileModel=" + fileMode);
-		pakInfo.setType("Blueprint");
-		pakInfo.setPakpicturepath("http://" + CommonServerIP.CURRENT_SERVER + "/file/download?filepic=" + pic);
-		String classname = "";
-		if (!model.getResource_one().equals("")) {
-			classname = model.getResource_one();
-		}
-		if (!model.getResource_two().equals("")) {
-			classname = model.getResource_two();
-		}
-		if (!model.getResource_three().equals("")) {
-			classname = model.getResource_three();
-		}
-		if (!model.getResource_four().equals("")) {
-			classname = model.getResource_four();
-		}
-		ResourceBean resourceBean = new ResourceBean();
-		resourceBean.setId(Integer.parseInt(classname));
-		resourceBean = tagMapper.queryResourceBeanById(resourceBean);
-		pakInfo.setClassname(resourceBean.getRname());
-		pakInfo.setDisplayname(model.getModelname());
-		fileMapper.insertPakInfo(pakInfo);
+
 		try {
 			// 模型信息修改
 			if (model.getMid() > 0) {
 				fileMapper.modelInfoUpdate(model);
 			} else {
+				PakInfo pakInfo = new PakInfo();
+				String fileMode = model.getFileModel();
+				String pic = model.getFilePics();
+				if (!pic.equals("")) {
+					String[] pics = pic.split(",");
+					pic = pics[0];
+				}
+				String pakname = fileMode.substring(0, fileMode.indexOf("."));
+				pakInfo.setPakgamepath("/Game/DPC/Item/" + pakname);
+				pakInfo.setPakname(pakname);
+				pakInfo.setPakdownloadpath(
+						"http://" + CommonServerIP.CURRENT_SERVER + "/file/download?fileModel=" + fileMode);
+				pakInfo.setType("Blueprint");
+				pakInfo.setPakpicturepath("http://" + CommonServerIP.CURRENT_SERVER + "/file/download?filepic=" + pic);
+				String classname = "";
+				if (!model.getResource_one().equals("")) {
+					classname = model.getResource_one();
+				}
+				if (!model.getResource_two().equals("")) {
+					classname = model.getResource_two();
+				}
+				if (!model.getResource_three().equals("")) {
+					classname = model.getResource_three();
+				}
+				if (!model.getResource_four().equals("")) {
+					classname = model.getResource_four();
+				}
+				ResourceBean resourceBean = new ResourceBean();
+				resourceBean.setId(Integer.parseInt(classname));
+				resourceBean = tagMapper.queryResourceBeanById(resourceBean);
+				pakInfo.setClassname(resourceBean.getRname());
+				pakInfo.setDisplayname(model.getModelname());
+				fileMapper.insertPakInfo(pakInfo);
 				// 模型信息录入
 				fileMapper.modelinfoAdd(model);
 			}

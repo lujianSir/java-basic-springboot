@@ -110,8 +110,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 查询商城所以的信息 -->
 	<select id="queryModels" resultType="com.item.entity.ModelBean">
 	
-		select * from modelinfo  where modelstatus=1 and examine=1
-			
+				SELECT
+					modelinfo.*,
+					industrymodel.id	
+				FROM
+					modelinfo
+				LEFT JOIN industrymodel ON modelinfo.mid = industrymodel.mid
+				WHERE
+					modelstatus = 1
+				AND examine = 1
+				<if test="modelBean.id !=null and modelBean.id !=''">
+					and id=#{modelBean.id}
+				</if>	
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
 					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
 				</if>

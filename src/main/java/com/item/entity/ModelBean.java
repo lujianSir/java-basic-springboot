@@ -94,6 +94,16 @@ public class ModelBean implements Serializable {
 
 	private int starnumber;// 是否已经评论
 
+	private int id;// 行业ID
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getResource_onename() {
 		return resource_onename;
 	}
