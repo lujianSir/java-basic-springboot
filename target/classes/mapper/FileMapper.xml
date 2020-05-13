@@ -241,4 +241,63 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insertStarClass" parameterType="com.item.entity.StarClass">
 		insert into startclass (uid,mid,star) values (#{uid},#{mid},#{star})
 	</insert>
+	
+	<!-- 添加UE -->
+	<insert id="insertPakInfo" parameterType="com.item.entity.PakInfo">
+		   		insert into pakinfo 
+		   		<trim prefix="(" suffix=")" suffixOverrides=",">
+			   		<if test="pakgamepath != null and pakgamepath !=''">
+						pakgamepath,
+					</if>
+					<if test="pakname != null and pakname !=''">
+						pakname,
+					</if>
+					<if test="pakdownloadpath != null and pakdownloadpath !=''">
+						pakdownloadpath,
+					</if>
+					<if test="type != null and type !=''">
+						type,
+					</if>
+					<if test="pakpicturepath != null and pakpicturepath !=''">
+						pakpicturepath,
+					</if>
+					<if test="classname != null and classname !=''">
+						classname,
+					</if>					
+					<if test="remark != null and remark !=''">
+						remark,
+					</if>
+					<if test="displayname != null and displayname !=''">
+						displayname,
+					</if>
+					
+		   		</trim>
+		   		<trim prefix="values (" suffix=")" suffixOverrides=",">
+					<if test="pakgamepath != null and pakgamepath !=''">
+						#{pakgamepath},
+					</if>
+					<if test="pakname != null and pakname !=''">
+						#{pakname},
+					</if>
+					<if test="pakdownloadpath != null and pakdownloadpath !=''">
+						#{pakdownloadpath},
+					</if>
+					<if test="type != null and type !=''">
+						#{type},
+					</if>
+					<if test="pakpicturepath != null and pakpicturepath !=''">
+						#{pakpicturepath},
+					</if>
+					<if test="classname != null and classname !=''">
+						#{classname},
+					</if>					
+					<if test="remark != null and remark !=''">
+						#{remark},
+					</if>
+					<if test="displayname != null and displayname !=''">
+						#{displayname},
+					</if>
+	   		
+		   		</trim>	
+	</insert>
 </mapper>

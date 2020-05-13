@@ -52,7 +52,7 @@ public class FileController {
 
 	@RequestMapping("/test2")
 	public String multiFile() {
-		return "/multifile";
+		return "/file";
 	}
 
 	/**
@@ -76,20 +76,30 @@ public class FileController {
 	@RequestMapping(value = "/download")
 	@ResponseBody
 	public Result<?> fileDownload(HttpServletResponse response, HttpServletRequest request, String fileModel,
-			String mid) throws IOException {
+			String filepic, String mid) throws IOException {
 
 		if (mid != null && !mid.equals("")) {
 			ModelBean modelBean = new ModelBean();
 			modelBean.setMid(Integer.parseInt(mid));
 			fileService.updateModelInfoById(modelBean);
 		}
+		String path = "";
+		String s = "";
+		if (fileModel != null && !fileModel.equals("")) {
+			path = System.getProperty("user.dir") + "/upload/web/模型源文件/";
+			s = path + fileModel;
+		}
+		if (filepic != null && !filepic.equals("")) {
+			path = System.getProperty("user.dir") + "/upload/web/模型封面/";
+			s = path + filepic;
+		}
 		// 文件存放服务端的位置
 		// String path = "/usr/local/jar/"+rootPath+"web/模型源文件/";
-		String path = System.getProperty("user.dir") + "/upload/web/模型源文件/";
+
 		path = path.replaceAll("\\\\", "/");
 		// String newrootPath = rootPath+"web/模型源文件/";
 		System.out.println(path);
-		String s = path + fileModel;
+
 		// path是指欲下载的文件的路径。
 		File file = new File(s);
 		// 取得文件名。

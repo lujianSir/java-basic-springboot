@@ -114,4 +114,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	      (#{item.id}, #{item.pid}, #{item.rname})
 	    </foreach>
 	</insert>
+	
+	<select id="queryResourceBeanById" resultType="com.item.entity.ResourceBean">
+		select * from resourceinfo where id =#{id}
+	</select>
 </mapper>

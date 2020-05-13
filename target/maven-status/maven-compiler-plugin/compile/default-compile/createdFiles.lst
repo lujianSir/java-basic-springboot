@@ -1,14 +1,18 @@
 com\item\controller\VacationController.class
+com\item\mapper\IndustryMapper.class
 com\item\entity\TagBean.class
 com\item\mapper\TagMapper.class
+com\item\service\IndustryService.class
 com\item\service\PowerServiceImpl.class
 com\item\entity\Vacation.class
 com\item\tool\ActivitiUtil.class
 com\item\entity\ExcelApplay.class
+com\item\entity\Industry.class
 com\item\entity\UserMessage.class
 com\item\alipay\AlipayProperties.class
 com\item\alipay\FlowModel.class
 com\item\mapper\ExcelProcessMapper.class
+com\item\service\IndustryServiceImpl.class
 com\item\service\ShoppingServiceImpl.class
 com\item\service\FileServiceImpl.class
 com\item\service\VacationServiceImpl.class
@@ -61,6 +65,7 @@ com\item\service\UserServiceImpl.class
 com\item\controller\FlowController.class
 com\item\entity\ModelBean.class
 com\item\entity\VacComment.class
+com\item\tool\CommonServerIP.class
 com\item\alipay\OrderFlow.class
 com\item\entity\ExcelBean.class
 com\item\tool\ExcelUtil.class
@@ -70,6 +75,7 @@ com\item\entity\ResourceBean.class
 com\item\tool\CorsFilter.class
 com\item\config\IntercepterConfig.class
 com\item\service\TagService.class
+com\item\entity\IndustryModel.class
 com\item\entity\RolePower.class
 com\item\entity\Role.class
 com\item\service\FlowService.class
@@ -85,6 +91,8 @@ com\item\controller\RoleController.class
 com\item\mapper\FlowMapper.class
 com\item\entity\VacTask.class
 com\item\service\RoleServiceImpl.class
+com\item\entity\PakInfo.class
+com\item\controller\IndustryController.class
 com\item\entity\ApproveBean.class
 com\item\entity\ExcelContent.class
 com\item\mapper\PayMapper.class

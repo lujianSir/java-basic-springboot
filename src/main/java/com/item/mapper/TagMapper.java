@@ -58,4 +58,7 @@ public interface TagMapper {
 	// 批量添加所有信息
 	public void insertResourceAll(List<ResourceBean> list);
 
+	// 根据ID查询信息
+	public ResourceBean queryResourceBeanById(ResourceBean resourceBean);
+
 }

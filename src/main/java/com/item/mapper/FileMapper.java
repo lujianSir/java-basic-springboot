@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
+import com.item.entity.PakInfo;
 import com.item.entity.StarClass;
 
 @Repository
@@ -57,5 +58,8 @@ public interface FileMapper {
 
 	// 添加评论
 	public int insertStarClass(StarClass starClass);
+
+	// 添加ue模型
+	public int insertPakInfo(PakInfo pakInfo);
 
 }

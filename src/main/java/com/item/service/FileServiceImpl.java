@@ -20,10 +20,14 @@ import com.github.pagehelper.PageInfo;
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
+import com.item.entity.PakInfo;
+import com.item.entity.ResourceBean;
 import com.item.entity.StarClass;
 import com.item.entity.UserBean;
 import com.item.mapper.FileMapper;
+import com.item.mapper.TagMapper;
 import com.item.mapper.UserMapper;
+import com.item.tool.CommonServerIP;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
 
@@ -38,6 +42,9 @@ public class FileServiceImpl implements FileService {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private TagMapper tagMapper;
 
 	@Value("${disk-path}")
 	private String rootPath;
@@ -116,6 +123,38 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public Result<?> modelUpload(ModelBean model) {
+		PakInfo pakInfo = new PakInfo();
+		String fileMode = model.getFileModel();
+		String pic = model.getFilePics();
+		if (!pic.equals("")) {
+			String[] pics = pic.split(",");
+			pic = pics[0];
+		}
+		String pakname = fileMode.substring(0, fileMode.indexOf("."));
+		pakInfo.setPakgamepath("/Game/DPC/Item/" + pakname);
+		pakInfo.setPakname(pakname);
+		pakInfo.setPakdownloadpath("http://" + CommonServerIP.CURRENT_SERVER + "/file/download?fileModel=" + fileMode);
+		pakInfo.setType("Blueprint");
+		pakInfo.setPakpicturepath("http://" + CommonServerIP.CURRENT_SERVER + "/file/download?filepic=" + pic);
+		String classname = "";
+		if (!model.getResource_one().equals("")) {
+			classname = model.getResource_one();
+		}
+		if (!model.getResource_two().equals("")) {
+			classname = model.getResource_two();
+		}
+		if (!model.getResource_three().equals("")) {
+			classname = model.getResource_three();
+		}
+		if (!model.getResource_four().equals("")) {
+			classname = model.getResource_four();
+		}
+		ResourceBean resourceBean = new ResourceBean();
+		resourceBean.setId(Integer.parseInt(classname));
+		resourceBean = tagMapper.queryResourceBeanById(resourceBean);
+		pakInfo.setClassname(resourceBean.getRname());
+		pakInfo.setDisplayname(model.getModelname());
+		fileMapper.insertPakInfo(pakInfo);
 		try {
 			// 模型信息修改
 			if (model.getMid() > 0) {
