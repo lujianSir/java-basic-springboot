@@ -60,11 +60,13 @@ public class FileServiceImpl implements FileService {
 				// 文件存放服务端的位置
 				File dir = null;
 
-				long now = System.currentTimeMillis();
+				// long now = System.currentTimeMillis();
 
-				String filesuffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+				// String filesuffix =
+				// file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 
-				String filename = now + filesuffix;
+				// String filename = now + filesuffix;
+				String filename = file.getOriginalFilename();
 
 				String newrootPath = System.getProperty("user.dir") + "/upload";
 
