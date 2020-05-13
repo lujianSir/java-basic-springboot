@@ -43,10 +43,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT
 			mid,
 			modelname,
+			filePics modelpic,
+			userinfo.nickname creatname,
+			creatTime creattime,
 			case when mid in (select mid from industrymodel where id=#{id}) then 1 else 0 end style,
 			case when mid in (select mid from industrymodel) then 1 else 0 end otherstyle
-		FROM
-			modelinfo  where modelstatus=1 and examine=1
+			FROM
+			modelinfo  LEFT JOIN userinfo on modelinfo.userid=userinfo.userid
+			where modelstatus=1 and examine=1
 	</select>
+	
+	<!-- 添加模型关联 -->
+	<insert id="insertIndustryModelByIdAndMid" parameterType="com.item.entity.IndustryModel">
+		insert into industrymodel (id ,mid) values (#{id},#{mid})	
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="deleteIndustryModelByIdAndMid" parameterType="com.item.entity.IndustryModel">
+		delete from industrymodel where id=#{id} and mid=#{mid}
+	</delete>
 	
 </mapper>

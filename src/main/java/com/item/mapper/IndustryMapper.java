@@ -57,4 +57,20 @@ public interface IndustryMapper {
 	 * @return
 	 */
 	List<IndustryModel> queryModelBeanByIid(IndustryModel industryModel);
+
+	/**
+	 * 添加模型关联
+	 * 
+	 * @param industryModel
+	 * @return
+	 */
+	int insertIndustryModelByIdAndMid(IndustryModel industryModel);
+
+	/**
+	 * 删除模型关联
+	 * 
+	 * @param industryModel
+	 * @return
+	 */
+	int deleteIndustryModelByIdAndMid(IndustryModel industryModel);
 }

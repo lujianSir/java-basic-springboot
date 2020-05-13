@@ -30,8 +30,12 @@ public class ModelBean implements Serializable {
 
 	private String resource_one;
 
+	private String resource_onename;
+
 	// 资源库类型二级
 	private String resource_two;
+
+	private String resource_twoname;
 
 	// 资源库类型三级
 	private String resource_three;
@@ -89,6 +93,22 @@ public class ModelBean implements Serializable {
 	private String examineremark;// 备注
 
 	private int starnumber;// 是否已经评论
+
+	public String getResource_onename() {
+		return resource_onename;
+	}
+
+	public void setResource_onename(String resource_onename) {
+		this.resource_onename = resource_onename;
+	}
+
+	public String getResource_twoname() {
+		return resource_twoname;
+	}
+
+	public void setResource_twoname(String resource_twoname) {
+		this.resource_twoname = resource_twoname;
+	}
 
 	public int getStarnumber() {
 		return starnumber;

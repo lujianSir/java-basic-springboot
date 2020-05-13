@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.item.entity.Industry;
 import com.item.entity.IndustryModel;
+import com.item.tool.Result;
 
 /**
  * 行业接口
@@ -52,5 +53,13 @@ public interface IndustryService {
 	 * @return
 	 */
 	List<IndustryModel> queryModelBeanByIid(IndustryModel industryModel);
+
+	/**
+	 * 添加或者删除模型关联
+	 * 
+	 * @param industryModel
+	 * @return
+	 */
+	Result<?> insertOrDeleteIndustryModel(IndustryModel industryModel, String style);
 
 }

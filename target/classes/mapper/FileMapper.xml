@@ -160,7 +160,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 查询后台商城 -->
 	<select id="queryModelsByAdmin" resultType="com.item.entity.ModelBean">
-			select a.*,b.username from modelinfo a LEFT JOIN userinfo  b on  a.userid=b.userid
+			SELECT
+				a.*,
+				b.username,
+				c.rname resource_onename,
+				d.rname resource_twoname
+			FROM
+				modelinfo a
+			LEFT JOIN userinfo b ON a.userid = b.userid
+			LEFT JOIN resourceinfo c on a.resource_one=c.id
+			LEFT JOIN resourceinfo d on a.resource_two=d.id
 			<where>
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
 					and a.modelname like  CONCAT('%',#{modelBean.modelname},'%')

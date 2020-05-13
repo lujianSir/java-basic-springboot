@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.item.entity.Industry;
 import com.item.entity.IndustryModel;
+import com.item.entity.Page;
 import com.item.service.IndustryService;
 import com.item.tool.Result;
 
@@ -105,9 +108,23 @@ public class IndustryController {
 	 * @return
 	 */
 	@RequestMapping(value = "/queryModelBeanByIid")
-	public Result<?> queryModelBeanByIid(IndustryModel industryModel) {
+	public Result<?> queryModelBeanByIid(IndustryModel industryModel, Page page) {
+		PageHelper.startPage(page.getPageNumber(), page.getPageSize());
 		List<IndustryModel> list = industryService.queryModelBeanByIid(industryModel);
-		return Result.success(list);
+		PageInfo<IndustryModel> pageInfo = new PageInfo<IndustryModel>(list);
+		return Result.success(pageInfo);
+	}
+
+	/**
+	 * 模型关联
+	 * 
+	 * @param industryModel
+	 * @param style
+	 * @return
+	 */
+	@RequestMapping(value = "/insertOrDeleteIndustryModel")
+	public Result<?> insertOrDeleteIndustryModel(IndustryModel industryModel, String style) {
+		return industryService.insertOrDeleteIndustryModel(industryModel, style);
 	}
 
 }
