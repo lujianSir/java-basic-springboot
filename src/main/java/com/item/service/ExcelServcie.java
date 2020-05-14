@@ -23,7 +23,7 @@ public interface ExcelServcie {
 	 * @return
 	 * @throws Exception
 	 */
-	String uploadZipFilesAndParse(InputStream in, MultipartFile file) throws Exception;
+	String uploadZipFilesAndParse(MultipartFile file) throws Exception;
 
 	/**
 	 * 查询所有提交的信息

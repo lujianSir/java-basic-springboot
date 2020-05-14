@@ -67,10 +67,8 @@ public class ExcelController {
 	@ResponseBody
 	public Result<?> uploadZipFilesAndParse(@RequestParam("file") MultipartFile file, HttpServletRequest request)
 			throws Exception {
-		InputStream in = file.getInputStream();
 		// 数据导入
-		String str = excelServcie.uploadZipFilesAndParse(in, file);
-		in.close();
+		String str = excelServcie.uploadZipFilesAndParse(file);
 		return Result.success("导入成功");
 
 	}

@@ -1,21 +1,29 @@
 package com.item.service;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.item.config.FileUploadProperties;
 import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
+import com.item.entity.ModelBean;
 import com.item.mapper.ExcelMapper;
 import com.item.tool.ExcelUtil;
 import com.item.tool.FileUtil;
@@ -162,7 +170,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 	}
 
 	@Override
-	public String uploadZipFilesAndParse(InputStream in, MultipartFile file) throws Exception {
+	public String uploadZipFilesAndParse(MultipartFile file) throws Exception {
 		// TODO Auto-generated method stub
 
 		String filename = file.getOriginalFilename();
@@ -192,8 +200,12 @@ public class ExcelServcieImpl implements ExcelServcie {
 			String strPath = desPath + File.separator + name;
 
 			List<File> list = getFileList(strPath);
+			File excelFile = list.get(0);
+			FileItem item = createFileItem(excelFile, excelFile.getName());
+			MultipartFile multipartFile = new CommonsMultipartFile(item);
 			System.out.println(list.get(0).getName());
-			List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, file.getOriginalFilename());
+			InputStream in = multipartFile.getInputStream();
+			List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, multipartFile.getName());
 			System.out.println(listob);
 
 			FileUtil.clearFiles(filePath);
@@ -201,7 +213,48 @@ public class ExcelServcieImpl implements ExcelServcie {
 		return null;
 	}
 
-	// 获取excel表格
+	private List<ModelBean> insertModelBeans(List<List<Object>> listob) {
+		List<ModelBean> list = new ArrayList<ModelBean>();
+		for (int i = 0; i < listob.size(); i++) {
+			List<Object> ob = listob.get(i);
+			ModelBean modelBean = new ModelBean();
+			for (int j = 0; j < ob.size(); j++) {
+				if (ob.get(0) != null) {
+					modelBean.setModelname(String.valueOf(ob.get(0)));
+				}
+				if (ob.get(1) != null && !String.valueOf(ob.get(1)).equals("")) {
+					modelBean.setModelprice(Double.parseDouble(String.valueOf(ob.get(1))));
+				}
+				if (ob.get(2) != null && !String.valueOf(ob.get(2)).equals("")) {
+					modelBean.setUnitprice(Double.parseDouble(String.valueOf(ob.get(2))));
+				}
+			}
+			list.add(modelBean);
+		}
+		return list;
+	}
+
+	// 将file转为fileitem
+	private FileItem createFileItem(File file, String fieldName) {
+		FileItemFactory factory = new DiskFileItemFactory(16, null);
+		FileItem item = factory.createItem(fieldName, "text/plain", true, file.getName());
+		int bytesRead = 0;
+		byte[] buffer = new byte[8192];
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			OutputStream os = item.getOutputStream();
+			while ((bytesRead = fis.read(buffer, 0, 8192)) != -1) {
+				os.write(buffer, 0, bytesRead);
+			}
+			os.close();
+			fis.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return item;
+	}
+
+	// 获取文件夹excel表格
 	public static List<File> getFileList(String strPath) {
 		List<File> filelist = new ArrayList<File>();
 		File dir = new File(strPath);
