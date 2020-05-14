@@ -63,6 +63,18 @@ public class ExcelController {
 
 	}
 
+	@RequestMapping("/impotrzip")
+	@ResponseBody
+	public Result<?> uploadZipFilesAndParse(@RequestParam("file") MultipartFile file, HttpServletRequest request)
+			throws Exception {
+		InputStream in = file.getInputStream();
+		// 数据导入
+		String str = excelServcie.uploadZipFilesAndParse(in, file);
+		in.close();
+		return Result.success("导入成功");
+
+	}
+
 	/**
 	 * 分页查询所有的提交信息
 	 * 

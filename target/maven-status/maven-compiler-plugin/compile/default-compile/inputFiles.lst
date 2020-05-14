@@ -23,6 +23,7 @@ D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\PakIn
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\config\TokenInterceptor.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\PowerService.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\TagServiceImpl.java
+D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\config\FileUploadProperties.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\VacationService.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\controller\OrderController.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\PowerServiceImpl.java
@@ -54,6 +55,7 @@ D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\Flow
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\mapper\FileMapper.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\mapper\IndustryMapper.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\config\ActivitiConfig.java
+D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\FileUtil.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\service\FileService.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\entity\TagBean.java
 D:\kaifa\sts-workspace\java-basic-springboot\src\main\java\com\item\tool\Utils.java

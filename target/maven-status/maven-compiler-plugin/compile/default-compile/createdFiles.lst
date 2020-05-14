@@ -56,11 +56,13 @@ com\item\mapper\RoleMapper.class
 com\item\controller\OrderController.class
 com\item\controller\ProcessController.class
 com\item\service\PowerService.class
+com\item\config\FileUploadProperties.class
 com\item\service\RoleService.class
 com\item\entity\Image.class
 com\item\alipay\PropertiesListener.class
 com\item\config\TokenInterceptor.class
 com\item\entity\UserBean.class
+com\item\tool\FileUtil.class
 com\item\service\UserServiceImpl.class
 com\item\controller\FlowController.class
 com\item\entity\ModelBean.class

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.item.config.FileUploadProperties;
 import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
 import com.item.mapper.ExcelMapper;
 import com.item.tool.ExcelUtil;
+import com.item.tool.FileUtil;
 import com.item.tool.JavaTool;
 import com.item.tool.Utils;
 
@@ -158,4 +161,66 @@ public class ExcelServcieImpl implements ExcelServcie {
 		return excelMapper.updateExcelManage(excelManage);
 	}
 
+	@Override
+	public String uploadZipFilesAndParse(InputStream in, MultipartFile file) throws Exception {
+		// TODO Auto-generated method stub
+
+		String filename = file.getOriginalFilename();
+		String name = filename.substring(0, filename.indexOf("."));
+		String fileType = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(Locale.US);
+		String gettime = Utils.getCurrenttime();
+		// 判断文件是不是zip类型
+		if (fileType.equals("zip")) {
+			String desPath = FileUploadProperties.getLocation() + File.separator + gettime;
+			// 文件存放服务端的位置
+			File dir = null;
+			// 下面这三行的代码就是把上传文件copy到服务器，一定不要遗漏了。
+			// 遗漏了这个代码，在本地测试环境不会出问题，在服务器上一定会报没有找到文件的错误
+			String savePath = FileUploadProperties.getLocation();
+			dir = new File(savePath);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+			String filePath = dir.getAbsolutePath() + File.separator + filename;
+			File savefile = new File(filePath);
+			file.transferTo(savefile);
+			FileUtil fileUtil = new FileUtil();
+			// 解压zip文件
+			FileUtil.unZip(file, desPath, savePath);
+
+			// 读取文件夹里面的excel文件
+			String strPath = desPath + File.separator + name;
+
+			List<File> list = getFileList(strPath);
+			System.out.println(list.get(0).getName());
+			List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, file.getOriginalFilename());
+			System.out.println(listob);
+
+			FileUtil.clearFiles(filePath);
+		}
+		return null;
+	}
+
+	// 获取excel表格
+	public static List<File> getFileList(String strPath) {
+		List<File> filelist = new ArrayList<File>();
+		File dir = new File(strPath);
+		File[] files = dir.listFiles(); // 该文件目录下文件全部放入数组
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				String fileName = files[i].getName();
+				if (files[i].isDirectory()) { // 判断是文件还是文件夹
+					getFileList(files[i].getAbsolutePath()); // 获取文件绝对路径
+				} else if (fileName.endsWith(".xls") || fileName.endsWith(".xlsx")) { // 判断文件名是否以.avi结尾
+					String strFileName = files[i].getAbsolutePath();
+					System.out.println("---" + strFileName);
+					filelist.add(files[i]);
+				} else {
+					continue;
+				}
+			}
+
+		}
+		return filelist;
+	}
 }

@@ -62,6 +62,6 @@ public class IntercepterConfig implements WebMvcConfigurer {
 		excludePath.add("/user/getCheckCode");// 注册接口
 		excludePath.add("/excel/download");// excel下载接口
 		excludePath.add("/excel/impotr");// excel上传接口
-		registry.addInterceptor(tokenInterceptor).addPathPatterns(pathPattens).excludePathPatterns(excludePath);
+		// registry.addInterceptor(tokenInterceptor).addPathPatterns(pathPattens).excludePathPatterns(excludePath);
 	}
 }

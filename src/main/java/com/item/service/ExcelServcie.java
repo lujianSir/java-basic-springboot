@@ -16,6 +16,16 @@ public interface ExcelServcie {
 	int importExcelInfo(InputStream in, MultipartFile file, ExcelManage excelManage) throws Exception;
 
 	/**
+	 * 批量上传
+	 * 
+	 * @param in
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
+	String uploadZipFilesAndParse(InputStream in, MultipartFile file) throws Exception;
+
+	/**
 	 * 查询所有提交的信息
 	 * 
 	 * @param excelManage
