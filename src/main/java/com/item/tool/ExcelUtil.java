@@ -68,7 +68,12 @@ public class ExcelUtil {
 				List<Object> li = new ArrayList<Object>();
 				for (int y = row.getFirstCellNum(); y < row.getLastCellNum(); y++) {
 					cell = row.getCell(y);
-					li.add(getCellValue(cell));
+					if (cell != null) {
+						li.add(getCellValue(cell));
+					} else {
+						li.add("");
+					}
+
 				}
 				list.add(li);
 			}

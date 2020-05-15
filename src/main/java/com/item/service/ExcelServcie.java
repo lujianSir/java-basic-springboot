@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
+import com.item.tool.Result;
 
 public interface ExcelServcie {
 
@@ -23,7 +24,7 @@ public interface ExcelServcie {
 	 * @return
 	 * @throws Exception
 	 */
-	String uploadZipFilesAndParse(MultipartFile file) throws Exception;
+	Result<?> uploadZipFilesAndParse(MultipartFile file) throws Exception;
 
 	/**
 	 * 查询所有提交的信息

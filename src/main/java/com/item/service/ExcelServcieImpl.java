@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -23,11 +27,14 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import com.item.config.FileUploadProperties;
 import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
+import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
 import com.item.mapper.ExcelMapper;
+import com.item.mapper.FileMapper;
 import com.item.tool.ExcelUtil;
 import com.item.tool.FileUtil;
 import com.item.tool.JavaTool;
+import com.item.tool.Result;
 import com.item.tool.Utils;
 
 @Service
@@ -36,6 +43,9 @@ public class ExcelServcieImpl implements ExcelServcie {
 
 	@Autowired
 	private ExcelMapper excelMapper;
+
+	@Autowired
+	private FileMapper fileMapper;
 
 	@Override
 	public int importExcelInfo(InputStream in, MultipartFile file, ExcelManage excelManage) throws Exception {
@@ -170,68 +180,217 @@ public class ExcelServcieImpl implements ExcelServcie {
 	}
 
 	@Override
-	public String uploadZipFilesAndParse(MultipartFile file) throws Exception {
+	public Result<?> uploadZipFilesAndParse(MultipartFile file) throws Exception {
 		// TODO Auto-generated method stub
+		try {
+			String filename = file.getOriginalFilename();
+			String name = filename.substring(0, filename.indexOf("."));
+			String fileType = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(Locale.US);
+			String gettime = Utils.getCurrenttime();
+			// 判断文件是不是zip类型
+			if (fileType.equals("zip")) {
+				String desPath = FileUploadProperties.getLocation() + File.separator + gettime;
+				// 文件存放服务端的位置
+				File dir = null;
+				// 下面这三行的代码就是把上传文件copy到服务器，一定不要遗漏了。
+				// 遗漏了这个代码，在本地测试环境不会出问题，在服务器上一定会报没有找到文件的错误
+				String savePath = FileUploadProperties.getLocation();
+				dir = new File(savePath);
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				String filePath = dir.getAbsolutePath() + File.separator + filename;
+				File savefile = new File(filePath);
+				file.transferTo(savefile);
+				FileUtil fileUtil = new FileUtil();
+				// 解压zip文件
+				FileUtil.unZip(file, desPath, savePath);
 
-		String filename = file.getOriginalFilename();
-		String name = filename.substring(0, filename.indexOf("."));
-		String fileType = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(Locale.US);
-		String gettime = Utils.getCurrenttime();
-		// 判断文件是不是zip类型
-		if (fileType.equals("zip")) {
-			String desPath = FileUploadProperties.getLocation() + File.separator + gettime;
-			// 文件存放服务端的位置
-			File dir = null;
-			// 下面这三行的代码就是把上传文件copy到服务器，一定不要遗漏了。
-			// 遗漏了这个代码，在本地测试环境不会出问题，在服务器上一定会报没有找到文件的错误
-			String savePath = FileUploadProperties.getLocation();
-			dir = new File(savePath);
-			if (!dir.exists()) {
-				dir.mkdirs();
+				// 读取文件夹里面的excel文件
+				String strPath = desPath + File.separator + name;
+
+				List<File> list = getFileList(strPath);
+				File excelFile = list.get(0);
+				FileItem item = createFileItem(excelFile, excelFile.getName());
+				MultipartFile multipartFile = new CommonsMultipartFile(item);
+				System.out.println(list.get(0).getName());
+				InputStream in = multipartFile.getInputStream();
+				List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, multipartFile.getName());
+				String startpath = strPath;
+				Map<String, Object> map = insertModelBeans(listob, startpath);
+				List<String> message = (List<String>) map.get("message");
+				List<ModelBean> models = (List<ModelBean>) map.get("list");
+				FileUtil.clearFiles(filePath);
+				FileUtil.clearFiles(strPath);
+				if (message.size() == 0) {
+					fileMapper.insertModels(models);
+					return Result.success("导入成功");
+				} else {
+					return Result.success(message);
+				}
+
+			} else {
+				return Result.error(500, "导入的不是zip格式");
 			}
-			String filePath = dir.getAbsolutePath() + File.separator + filename;
-			File savefile = new File(filePath);
-			file.transferTo(savefile);
-			FileUtil fileUtil = new FileUtil();
-			// 解压zip文件
-			FileUtil.unZip(file, desPath, savePath);
-
-			// 读取文件夹里面的excel文件
-			String strPath = desPath + File.separator + name;
-
-			List<File> list = getFileList(strPath);
-			File excelFile = list.get(0);
-			FileItem item = createFileItem(excelFile, excelFile.getName());
-			MultipartFile multipartFile = new CommonsMultipartFile(item);
-			System.out.println(list.get(0).getName());
-			InputStream in = multipartFile.getInputStream();
-			List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, multipartFile.getName());
-			System.out.println(listob);
-
-			FileUtil.clearFiles(filePath);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return Result.error(501, "服务器错误，请重新上传");
 		}
-		return null;
+
 	}
 
-	private List<ModelBean> insertModelBeans(List<List<Object>> listob) {
+	private Map<String, Object> insertModelBeans(List<List<Object>> listob, String obpath) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<String> meassages = new ArrayList<String>();
+		String message = "";
+		String filename = "";
+		String startpath = "";
+		String endpath = "";
 		List<ModelBean> list = new ArrayList<ModelBean>();
 		for (int i = 0; i < listob.size(); i++) {
 			List<Object> ob = listob.get(i);
 			ModelBean modelBean = new ModelBean();
-			for (int j = 0; j < ob.size(); j++) {
-				if (ob.get(0) != null) {
-					modelBean.setModelname(String.valueOf(ob.get(0)));
-				}
-				if (ob.get(1) != null && !String.valueOf(ob.get(1)).equals("")) {
+			if (ob.get(0) != null) {
+				modelBean.setModelname(String.valueOf(ob.get(0)));
+			}
+			if (ob.get(1) != null && !String.valueOf(ob.get(1)).equals("")) {
+				if (isNumeric(String.valueOf(ob.get(1)))) {
 					modelBean.setModelprice(Double.parseDouble(String.valueOf(ob.get(1))));
+				} else {
+					message = "第" + (i + 2) + "行" + ",第2列的数据有问题";
+					meassages.add(message);
 				}
-				if (ob.get(2) != null && !String.valueOf(ob.get(2)).equals("")) {
+
+			}
+			if (ob.get(2) != null && !String.valueOf(ob.get(2)).equals("")) {
+				if (isNumeric(String.valueOf(ob.get(2)))) {
 					modelBean.setUnitprice(Double.parseDouble(String.valueOf(ob.get(2))));
+				} else {
+					message = "第" + (i + 2) + "行" + ",第3列的数据有问题";
+					meassages.add(message);
 				}
+			}
+			if (ob.get(3) != null && !String.valueOf(ob.get(3)).equals("")) {
+				if (isNumeric(String.valueOf(ob.get(3)))) {
+					modelBean.setModelstatus(Integer.parseInt(String.valueOf(ob.get(3))));
+				} else {
+					message = "第" + (i + 2) + "行" + ",第4列的数据有问题";
+					meassages.add(message);
+				}
+			}
+			if (ob.get(4) != null && !String.valueOf(ob.get(4)).equals("")) {
+				modelBean.setBuildtype(String.valueOf(ob.get(4)));
+			}
+			if (ob.get(5) != null && !String.valueOf(ob.get(5)).equals("")) {
+				if (isNumeric(String.valueOf(ob.get(5)))) {
+					modelBean.setResource_one(String.valueOf(ob.get(5)));
+				} else {
+					message = "第" + (i + 2) + "行" + ",第6列的数据有问题";
+					meassages.add(message);
+				}
+			}
+			if (ob.get(6) != null && !String.valueOf(ob.get(6)).equals("")) {
+				if (isNumeric(String.valueOf(ob.get(6)))) {
+					modelBean.setResource_two(String.valueOf(ob.get(6)));
+				} else {
+					message = "第" + (i + 2) + "行" + ",第7列的数据有问题";
+					meassages.add(message);
+				}
+			}
+			if (ob.get(7) != null && !String.valueOf(ob.get(7)).equals("")) {
+				if (isNumeric(String.valueOf(ob.get(7)))) {
+					modelBean.setResource_three(String.valueOf(ob.get(7)));
+				} else {
+					message = "第" + (i + 2) + "行" + ",第8列的数据有问题";
+					meassages.add(message);
+				}
+			}
+			if (ob.get(8) != null && !String.valueOf(ob.get(8)).equals("")) {
+				if (isNumeric(String.valueOf(ob.get(8)))) {
+					modelBean.setResource_four(String.valueOf(ob.get(8)));
+				} else {
+					message = "第" + (i + 2) + "行" + ",第9列的数据有问题";
+					meassages.add(message);
+				}
+			}
+			if (ob.get(9) != null && !String.valueOf(ob.get(9)).equals("")) {
+				filename = String.valueOf(ob.get(9));
+				String[] filenames = filename.split(",");
+				for (int m = 0; m < filenames.length; m++) {
+					String pathname = filenames[m];
+					startpath = obpath + File.separator + pathname;
+					endpath = System.getProperty("user.dir") + "/upload" + File.separator + "web" + File.separator
+							+ "模型封面";
+					moveFile(startpath, endpath, pathname, "模型封面");
+				}
+				modelBean.setFilePics(filename);
+			}
+			if (ob.get(10) != null && !String.valueOf(ob.get(10)).equals("")) {
+				filename = String.valueOf(ob.get(10));
+				String[] filenames = filename.split(",");
+				if (filenames.length > 1) {
+					message = "第" + (i + 2) + "行" + ",第11列的数据有问题";
+					meassages.add(message);
+				} else {
+					startpath = obpath + File.separator + filename;
+					endpath = System.getProperty("user.dir") + "/upload" + File.separator + "web" + File.separator
+							+ "模型源文件";
+					moveFile(startpath, endpath, filename, "模型源文件");
+					modelBean.setFileModel(filename);
+				}
+
 			}
 			list.add(modelBean);
 		}
-		return list;
+		map.put("message", meassages);
+		map.put("list", list);
+		return map;
+	}
+
+	// 判断字符串是是不是数字
+	public boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		Matcher isNum = pattern.matcher(str);
+		if (!isNum.matches()) {
+			return false;
+		}
+		return true;
+	}
+
+	private void moveFile(String startpath, String endpath, String filename, String catalog) {
+		// 源文件路径
+		File startFile = new File(startpath);
+		// 目的目录路径
+		File endDirection = new File(endpath);
+		// 如果目的目录路径不存在，则进行创建
+		if (!endDirection.exists()) {
+			endDirection.mkdirs();
+		}
+		// 目的文件路径=目的目录路径+源文件名称
+		File endFile = new File(endDirection + File.separator + startFile.getName());
+		try {
+			// 调用File类的核心方法renameTo
+			if (startFile.renameTo(endFile)) {
+				// 录入文件信息
+				FileBean fileinfo = new FileBean();
+				fileinfo.setCatalog(catalog);
+				fileinfo.setFileurl(endDirection + File.separator + startFile.getName());
+				fileinfo.setRole(0);
+				if (catalog.equals("模型描述")) {
+					String str = "/image/模型描述/" + filename;
+					filename = str;
+				}
+				fileinfo.setId(filename);
+				fileinfo.setUploadtime(JavaTool.getCurrent());
+				fileMapper.fileinfoAdd(fileinfo);
+				System.out.println("文件移动成功！目标路径：{" + endFile.getAbsolutePath() + "}");
+			} else {
+				System.out.println("文件移动失败！起始路径：{" + startFile.getAbsolutePath() + "}");
+			}
+		} catch (Exception e) {
+			System.out.println("文件移动出现异常！起始路径：{" + startFile.getAbsolutePath() + "}");
+		}
+
 	}
 
 	// 将file转为fileitem

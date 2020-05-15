@@ -319,4 +319,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   		
 		   		</trim>	
 	</insert>
+	
+	
+	<!-- 添加excel 内容 -->
+	<insert id="insertModels" parameterType="java.util.List"> 
+		INSERT INTO modelinfo
+		(`modelname`,`modelprice`,`unitprice`,`buildtype`,`resource_one`,`resource_two`,`resource_three`,`resource_four`,`filePics`,`fileModel`,`mdescribe`,`creatTime`,`userid`,`modelstatus`,`examine`,`examinepeople`,`examinetime`)
+		VALUES
+		  <foreach collection="list" item="item" index="index" separator=",">
+		(#{item.modelname},#{item.modelprice},#{item.unitprice},#{item.buildtype},#{item.resource_one},#{item.resource_two},#{item.resource_three},#{item.resource_four},#{item.filePics},#{item.fileModel},#{item.mdescribe},#{item.creatTime},#{item.userid},#{item.modelstatus},#{item.examine},#{item.examinepeople},#{item.examinetime})
+   		</foreach> 		
+	</insert>
 </mapper>
