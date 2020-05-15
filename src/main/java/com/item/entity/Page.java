@@ -53,6 +53,7 @@ public class Page {
 	}
 
 	public void setPageSize(int pageSize) {
+		this.pageStart = (pageNumber - 1) * pageSize;
 		this.pageSize = pageSize;
 	}
 
