@@ -77,7 +77,12 @@ public class ExcelController {
 	@ResponseBody
 	public Result<?> zipDownLoad(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		// path是指欲下载的文件的路径。
+		// windows
 		File file = ResourceUtils.getFile("classpath:zip/mould.zip");
+		// linux下面
+//		String path = "";
+//		path = System.getProperty("user.dir") + File.separator + "mould.zip";
+//		File file = new File(path);
 		// 取得文件名。
 		String filename = file.getName();
 		if (!file.exists()) {
