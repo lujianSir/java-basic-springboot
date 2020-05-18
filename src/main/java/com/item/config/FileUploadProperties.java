@@ -11,8 +11,6 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 public class FileUploadProperties {
 
 	public static final String LOCATION = "localtion";
-	public static final String MAXFILESIZE = "maxFileSize";
-	public static final String MAXREQUESTSIZE = "maxRequestSize";
 
 	/**
 	 * 保存加载配置参数
@@ -54,13 +52,4 @@ public class FileUploadProperties {
 	public static String getLocation() {
 		return propertiesMap.get(LOCATION);
 	}
-
-	public static String getMaxFileSize() {
-		return propertiesMap.get(MAXFILESIZE);
-	}
-
-	public static String getMaxRequestSize() {
-		return propertiesMap.get(MAXREQUESTSIZE);
-	}
-
 }

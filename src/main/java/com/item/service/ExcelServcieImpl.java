@@ -182,60 +182,67 @@ public class ExcelServcieImpl implements ExcelServcie {
 	@Override
 	public Result<?> uploadZipFilesAndParse(MultipartFile file) throws Exception {
 		// TODO Auto-generated method stub
-		try {
-			String filename = file.getOriginalFilename();
-			String name = filename.substring(0, filename.indexOf("."));
-			String fileType = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(Locale.US);
-			String gettime = Utils.getCurrenttime();
-			// 判断文件是不是zip类型
-			if (fileType.equals("zip")) {
-				String desPath = FileUploadProperties.getLocation() + File.separator + gettime;
-				// 文件存放服务端的位置
-				File dir = null;
-				// 下面这三行的代码就是把上传文件copy到服务器，一定不要遗漏了。
-				// 遗漏了这个代码，在本地测试环境不会出问题，在服务器上一定会报没有找到文件的错误
-				String savePath = FileUploadProperties.getLocation();
-				dir = new File(savePath);
-				if (!dir.exists()) {
-					dir.mkdirs();
-				}
-				String filePath = dir.getAbsolutePath() + File.separator + filename;
-				File savefile = new File(filePath);
-				file.transferTo(savefile);
-				FileUtil fileUtil = new FileUtil();
-				// 解压zip文件
-				FileUtil.unZip(file, desPath, savePath);
-
-				// 读取文件夹里面的excel文件
-				String strPath = desPath + File.separator + name;
-
-				List<File> list = getFileList(strPath);
-				File excelFile = list.get(0);
-				FileItem item = createFileItem(excelFile, excelFile.getName());
-				MultipartFile multipartFile = new CommonsMultipartFile(item);
-				System.out.println(list.get(0).getName());
-				InputStream in = multipartFile.getInputStream();
-				List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, multipartFile.getName());
-				String startpath = strPath;
-				Map<String, Object> map = insertModelBeans(listob, startpath);
-				List<String> message = (List<String>) map.get("message");
-				List<ModelBean> models = (List<ModelBean>) map.get("list");
-				FileUtil.clearFiles(filePath);
-				FileUtil.clearFiles(strPath);
-				if (message.size() == 0) {
-					fileMapper.insertModels(models);
-					return Result.success("导入成功");
-				} else {
-					return Result.success(message);
-				}
-
-			} else {
-				return Result.error(500, "导入的不是zip格式");
+		// try {
+		String filename = file.getOriginalFilename();
+		String name = filename.substring(0, filename.indexOf("."));
+		String fileType = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(Locale.US);
+		String gettime = Utils.getCurrenttime();
+		// 判断文件是不是zip类型
+		if (fileType.equals("zip")) {
+			String desPath = FileUploadProperties.getLocation() + File.separator + gettime;
+			// 文件存放服务端的位置
+			File dir = null;
+			// 下面这三行的代码就是把上传文件copy到服务器，一定不要遗漏了。
+			// 遗漏了这个代码，在本地测试环境不会出问题，在服务器上一定会报没有找到文件的错误
+			String savePath = FileUploadProperties.getLocation();
+			dir = new File(savePath);
+			if (!dir.exists()) {
+				dir.mkdirs();
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			return Result.error(501, "服务器错误，请重新上传");
+			String filePath = dir.getAbsolutePath() + File.separator + filename;
+			File savefile = new File(filePath);
+			file.transferTo(savefile);
+			FileUtil fileUtil = new FileUtil();
+			// 解压zip文件
+			FileUtil.unZip(savefile, desPath, savePath);
+
+			// 读取文件夹里面的excel文件
+			String strPath = desPath + File.separator + name;
+
+			List<File> list = getFileList(strPath);
+			File excelFile = list.get(0);
+			FileItem item = createFileItem(excelFile, excelFile.getName());
+			MultipartFile multipartFile = new CommonsMultipartFile(item);
+			System.out.println(list.get(0).getName());
+			InputStream in = multipartFile.getInputStream();
+			List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, multipartFile.getName());
+			String startpath = strPath;
+			Map<String, Object> map = insertModelBeans(listob, startpath);
+			List<String> message = (List<String>) map.get("message");
+			List<ModelBean> models = (List<ModelBean>) map.get("list");
+			FileUtil.clearFiles(filePath);
+			FileUtil.clearFiles(strPath);
+			if (message.size() == 0) {
+				fileMapper.insertModels(models);
+				return Result.success("导入成功");
+			} else {
+				String result = "";
+				for (int i = 0; i < message.size(); i++) {
+					result += message.get(i);
+					if (i <= message.size() - 1) {
+						result += ";";
+					}
+				}
+				return Result.error(502, result);
+			}
+
+		} else {
+			return Result.error(500, "导入的不是zip格式");
 		}
+		// } catch (Exception e) {
+		// TODO: handle exception
+		// return Result.error(501, "服务器错误，请重新上传");
+		// }
 
 	}
 
@@ -272,7 +279,14 @@ public class ExcelServcieImpl implements ExcelServcie {
 			}
 			if (ob.get(3) != null && !String.valueOf(ob.get(3)).equals("")) {
 				if (isNumeric(String.valueOf(ob.get(3)))) {
-					modelBean.setModelstatus(Integer.parseInt(String.valueOf(ob.get(3))));
+					if (Integer.parseInt(String.valueOf(ob.get(3))) != 0
+							|| Integer.parseInt(String.valueOf(ob.get(3))) != 1) {
+						message = "第" + (i + 2) + "行" + ",第4列的数据有问题";
+						meassages.add(message);
+					} else {
+						modelBean.setModelstatus(Integer.parseInt(String.valueOf(ob.get(3))));
+					}
+
 				} else {
 					message = "第" + (i + 2) + "行" + ",第4列的数据有问题";
 					meassages.add(message);
@@ -319,9 +333,16 @@ public class ExcelServcieImpl implements ExcelServcie {
 				for (int m = 0; m < filenames.length; m++) {
 					String pathname = filenames[m];
 					startpath = obpath + File.separator + pathname;
-					endpath = System.getProperty("user.dir") + "/upload" + File.separator + "web" + File.separator
-							+ "模型封面";
-					moveFile(startpath, endpath, pathname, "模型封面");
+					File file = new File(startpath);
+					if (!file.exists()) {
+						message = "第" + (i + 2) + "行" + ",第10列的数据有问题";
+						meassages.add(message);
+					} else {
+						endpath = System.getProperty("user.dir") + "/upload" + File.separator + "web" + File.separator
+								+ "模型封面";
+						moveFile(startpath, endpath, pathname, "模型封面");
+					}
+
 				}
 				modelBean.setFilePics(filename);
 			}
@@ -333,10 +354,17 @@ public class ExcelServcieImpl implements ExcelServcie {
 					meassages.add(message);
 				} else {
 					startpath = obpath + File.separator + filename;
-					endpath = System.getProperty("user.dir") + "/upload" + File.separator + "web" + File.separator
-							+ "模型源文件";
-					moveFile(startpath, endpath, filename, "模型源文件");
-					modelBean.setFileModel(filename);
+					File file = new File(startpath);
+					if (!file.exists()) {
+						message = "第" + (i + 2) + "行" + ",第11列的数据有问题";
+						meassages.add(message);
+					} else {
+						endpath = System.getProperty("user.dir") + "/upload" + File.separator + "web" + File.separator
+								+ "模型源文件";
+						moveFile(startpath, endpath, filename, "模型源文件");
+						modelBean.setFileModel(filename);
+					}
+
 				}
 
 			}

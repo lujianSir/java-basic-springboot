@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,6 +71,33 @@ public class ExcelController {
 		// 数据导入
 		return excelServcie.uploadZipFilesAndParse(file);
 
+	}
+
+	@RequestMapping(value = "/zipdownload")
+	@ResponseBody
+	public Result<?> zipDownLoad(HttpServletResponse response, HttpServletRequest request) throws IOException {
+		// path是指欲下载的文件的路径。
+		File file = ResourceUtils.getFile("classpath:zip/mould.zip");
+		// 取得文件名。
+		String filename = file.getName();
+		if (!file.exists()) {
+			System.out.println("Have no such file!");
+			return Result.error(500, "文件不存在");
+		}
+		FileInputStream fileInputStream = new FileInputStream(file);
+		// 设置Http响应头告诉浏览器下载这个附件,下载的文件名也是在这里设置的
+		response.setHeader("Content-Disposition", "attachment;Filename=" + URLEncoder.encode(filename, "UTF-8"));
+		OutputStream outputStream = response.getOutputStream();
+		byte[] bytes = new byte[2048];
+		int len = 0;
+		while ((len = fileInputStream.read(bytes)) > 0) {
+			outputStream.write(bytes, 0, len);
+		}
+		fileInputStream.close();
+		outputStream.close();
+		System.out.println("成功");
+		// JavaTool.download(s, response);
+		return Result.success();
 	}
 
 	/**

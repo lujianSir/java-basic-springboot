@@ -20,8 +20,6 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class FileUtil {
 
 	public static void clearFiles(String workspaceRootPath) {
@@ -208,16 +206,15 @@ public class FileUtil {
 	 * @throws RuntimeException
 	 * @throws IOException
 	 */
-	public static void unZip(MultipartFile srcFile, String destDirPath, String savePath)
-			throws RuntimeException, IOException {
+	public static void unZip(File file, String destDirPath, String savePath) throws RuntimeException, IOException {
 		long startTime = System.currentTimeMillis();
 
-		File file = null;
-		InputStream ins = srcFile.getInputStream();
-		file = new File(savePath + srcFile.getOriginalFilename());
+		// File file = null;
+		// InputStream ins = srcFile.getInputStream();
+		// file = new File(savePath + srcFile.getOriginalFilename());
 		// LogUtils.info("MultipartFile transform to File,MultipartFile name:" +
 		// srcFile.getOriginalFilename());
-		inputStreamToFile(ins, file);
+		// inputStreamToFile(ins, file);
 
 		if (!file.exists()) {
 			throw new RuntimeException(file.getPath() + ",file is not found");

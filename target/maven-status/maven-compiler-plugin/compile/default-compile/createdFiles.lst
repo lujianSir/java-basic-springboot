@@ -13,6 +13,7 @@ com\item\alipay\AlipayProperties.class
 com\item\alipay\FlowModel.class
 com\item\mapper\ExcelProcessMapper.class
 com\item\service\IndustryServiceImpl.class
+com\item\mapper\UnityMapper.class
 com\item\service\ShoppingServiceImpl.class
 com\item\service\FileServiceImpl.class
 com\item\service\VacationServiceImpl.class
@@ -25,15 +26,18 @@ com\item\entity\FileBean.class
 com\item\service\ExcelProcessService.class
 com\item\entity\User.class
 com\item\service\ExcelServcieImpl.class
+com\item\controller\UnityController.class
 com\item\controller\ExcelController.class
 com\item\service\ExcelProcessServiceImpl.class
 com\item\tool\UtilMisc.class
 com\item\service\FlowServiceImpl.class
 com\item\entity\FlowBean.class
+com\item\entity\Menu.class
 com\item\service\UserService.class
 com\item\entity\ExcelAuthor.class
 com\item\controller\FileController.class
 com\item\entity\ShoppingCart.class
+com\item\service\UnityService.class
 com\item\controller\TagController.class
 com\item\entity\StarClass.class
 com\item\mapper\UserMapper.class
@@ -46,6 +50,7 @@ com\item\tool\TokenUtil.class
 com\item\tool\Utils.class
 com\item\controller\UserController.class
 com\item\service\ExcelServcie.class
+com\item\service\UnityServiceImpl.class
 com\item\tool\JavaTool.class
 com\item\config\ActivitiConfig.class
 com\item\service\PayServiceImpl.class
