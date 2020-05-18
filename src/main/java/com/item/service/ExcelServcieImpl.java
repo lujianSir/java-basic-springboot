@@ -29,8 +29,10 @@ import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
+import com.item.entity.Role;
 import com.item.mapper.ExcelMapper;
 import com.item.mapper.FileMapper;
+import com.item.mapper.RoleMapper;
 import com.item.tool.ExcelUtil;
 import com.item.tool.FileUtil;
 import com.item.tool.JavaTool;
@@ -46,6 +48,9 @@ public class ExcelServcieImpl implements ExcelServcie {
 
 	@Autowired
 	private FileMapper fileMapper;
+
+	@Autowired
+	private RoleMapper roleMapper;
 
 	@Override
 	public int importExcelInfo(InputStream in, MultipartFile file, ExcelManage excelManage) throws Exception {
@@ -180,7 +185,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 	}
 
 	@Override
-	public Result<?> uploadZipFilesAndParse(MultipartFile file) throws Exception {
+	public Result<?> uploadZipFilesAndParse(MultipartFile file, String userid) throws Exception {
 		// TODO Auto-generated method stub
 		// try {
 		String filename = file.getOriginalFilename();
@@ -217,7 +222,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 			InputStream in = multipartFile.getInputStream();
 			List<List<Object>> listob = ExcelUtil.getBankListByExcel(in, multipartFile.getName());
 			String startpath = strPath;
-			Map<String, Object> map = insertModelBeans(listob, startpath);
+			Map<String, Object> map = insertModelBeans(listob, startpath, userid);
 			List<String> message = (List<String>) map.get("message");
 			List<ModelBean> models = (List<ModelBean>) map.get("list");
 			FileUtil.clearFiles(filePath);
@@ -246,7 +251,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 
 	}
 
-	private Map<String, Object> insertModelBeans(List<List<Object>> listob, String obpath) {
+	private Map<String, Object> insertModelBeans(List<List<Object>> listob, String obpath, String userid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<String> meassages = new ArrayList<String>();
 		String message = "";
@@ -254,6 +259,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 		String startpath = "";
 		String endpath = "";
 		List<ModelBean> list = new ArrayList<ModelBean>();
+		Role role = roleMapper.queryRoleByUserId(userid);
 		for (int i = 0; i < listob.size(); i++) {
 			List<Object> ob = listob.get(i);
 			ModelBean modelBean = new ModelBean();
@@ -261,6 +267,8 @@ public class ExcelServcieImpl implements ExcelServcie {
 				modelBean.setModelname(String.valueOf(ob.get(0)));
 			}
 			if (ob.get(1) != null && !String.valueOf(ob.get(1)).equals("")) {
+				System.out.println(String.valueOf(ob.get(1)));
+				System.out.println(Double.parseDouble(String.valueOf(ob.get(1))));
 				if (isNumeric(String.valueOf(ob.get(1)))) {
 					modelBean.setModelprice(Double.parseDouble(String.valueOf(ob.get(1))));
 				} else {
@@ -279,12 +287,12 @@ public class ExcelServcieImpl implements ExcelServcie {
 			}
 			if (ob.get(3) != null && !String.valueOf(ob.get(3)).equals("")) {
 				if (isNumeric(String.valueOf(ob.get(3)))) {
-					if (Integer.parseInt(String.valueOf(ob.get(3))) != 0
-							|| Integer.parseInt(String.valueOf(ob.get(3))) != 1) {
+					if (Integer.parseInt(String.valueOf(ob.get(3))) == 0
+							|| Integer.parseInt(String.valueOf(ob.get(3))) == 1) {
+						modelBean.setModelstatus(Integer.parseInt(String.valueOf(ob.get(3))));
+					} else {
 						message = "第" + (i + 2) + "行" + ",第4列的数据有问题";
 						meassages.add(message);
-					} else {
-						modelBean.setModelstatus(Integer.parseInt(String.valueOf(ob.get(3))));
 					}
 
 				} else {
@@ -368,6 +376,19 @@ public class ExcelServcieImpl implements ExcelServcie {
 				}
 
 			}
+			if (ob.get(11) != null && !String.valueOf(ob.get(11)).equals("")) {
+				modelBean.setMdescribe(String.valueOf(ob.get(11)));
+
+			}
+			if (role.getId() == 1 || role.getId() == 31) {
+				modelBean.setExamine(1);
+				modelBean.setExaminepeople(userid);
+				modelBean.setExaminetime(JavaTool.getCurrent());
+			} else {
+				modelBean.setExamine(0);
+			}
+			modelBean.setCreatTime(JavaTool.getCurrent());
+			modelBean.setUserid(userid);
 			list.add(modelBean);
 		}
 		map.put("message", meassages);
@@ -377,7 +398,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 
 	// 判断字符串是是不是数字
 	public boolean isNumeric(String str) {
-		Pattern pattern = Pattern.compile("[0-9]*");
+		Pattern pattern = Pattern.compile("[0-9]+.*[0-9]*");
 		Matcher isNum = pattern.matcher(str);
 		if (!isNum.matches()) {
 			return false;

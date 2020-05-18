@@ -66,10 +66,10 @@ public class ExcelController {
 
 	@RequestMapping("/impotrzip")
 	@ResponseBody
-	public Result<?> uploadZipFilesAndParse(@RequestParam("file") MultipartFile file, HttpServletRequest request)
-			throws Exception {
+	public Result<?> uploadZipFilesAndParse(@RequestParam("file") MultipartFile file, HttpServletRequest request,
+			String userid) throws Exception {
 		// 数据导入
-		return excelServcie.uploadZipFilesAndParse(file);
+		return excelServcie.uploadZipFilesAndParse(file, userid);
 
 	}
 

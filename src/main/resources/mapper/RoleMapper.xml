@@ -78,4 +78,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     				)
     		     </foreach>		
 	</insert>
+	
+	<select id="queryRoleByUserId" resultType="com.item.entity.Role">
+		select a.*  from  role a LEFT JOIN  userinfo b on a.id=b.role where b.userid=#{userid}
+	</select>
 </mapper>

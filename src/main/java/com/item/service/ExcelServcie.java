@@ -24,7 +24,7 @@ public interface ExcelServcie {
 	 * @return
 	 * @throws Exception
 	 */
-	Result<?> uploadZipFilesAndParse(MultipartFile file) throws Exception;
+	Result<?> uploadZipFilesAndParse(MultipartFile file, String userid) throws Exception;
 
 	/**
 	 * 查询所有提交的信息

@@ -30,4 +30,7 @@ public interface RoleMapper {
 
 	// 批量添加权限
 	int insertRolePower(List<RolePower> list);
+
+	// 通过用户的ID删除角色
+	Role queryRoleByUserId(String userid);
 }
