@@ -62,6 +62,9 @@ public interface FileMapper {
 	// 添加ue模型
 	public int insertPakInfo(PakInfo pakInfo);
 
+	// 批量添加UE模型
+	public int insertPakInfos(List<PakInfo> list);
+
 	/**
 	 * 批量添加模型
 	 * 

@@ -22,9 +22,11 @@ import com.item.entity.ModelBean;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
 import com.item.entity.ResourceBean;
+import com.item.entity.Role;
 import com.item.entity.StarClass;
 import com.item.entity.UserBean;
 import com.item.mapper.FileMapper;
+import com.item.mapper.RoleMapper;
 import com.item.mapper.TagMapper;
 import com.item.mapper.UserMapper;
 import com.item.tool.CommonServerIP;
@@ -45,6 +47,9 @@ public class FileServiceImpl implements FileService {
 
 	@Autowired
 	private TagMapper tagMapper;
+
+	@Autowired
+	private RoleMapper roleMapper;
 
 	@Value("${disk-path}")
 	private String rootPath;
@@ -165,6 +170,14 @@ public class FileServiceImpl implements FileService {
 				pakInfo.setDisplayname(model.getModelname());
 				fileMapper.insertPakInfo(pakInfo);
 				// 模型信息录入
+				Role role = roleMapper.queryRoleByUserId(model.getUserid());
+				if (role.getId() == 1 || role.getId() == 31) {
+					model.setExamine(1);
+					model.setExaminepeople(model.getUserid());
+					model.setExaminetime(JavaTool.getCurrent());
+				} else {
+					model.setExamine(0);
+				}
 				fileMapper.modelinfoAdd(model);
 			}
 			return Result.success();

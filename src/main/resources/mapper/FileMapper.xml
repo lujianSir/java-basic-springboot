@@ -321,6 +321,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	
+	<!-- 添加UE 内容 -->
+	<insert id="insertPakInfos" parameterType="java.util.List"> 
+		INSERT INTO pakinfo
+		(`pakgamepath`,`pakname`,`pakdownloadpath`,`type`,`pakpicturepath`,`classname`,`remark`,`displayname`)
+		VALUES
+		  <foreach collection="list" item="item" index="index" separator=",">
+		(#{item.pakgamepath},#{item.pakname},#{item.pakdownloadpath},#{item.type},#{item.pakpicturepath},#{item.classname},#{item.remark},#{item.displayname})
+   		</foreach> 		
+	</insert>
+	
+	
 	<!-- 添加excel 内容 -->
 	<insert id="insertModels" parameterType="java.util.List"> 
 		INSERT INTO modelinfo

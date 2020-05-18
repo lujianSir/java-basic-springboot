@@ -29,10 +29,14 @@ import com.item.entity.ExcelContent;
 import com.item.entity.ExcelManage;
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
+import com.item.entity.PakInfo;
+import com.item.entity.ResourceBean;
 import com.item.entity.Role;
 import com.item.mapper.ExcelMapper;
 import com.item.mapper.FileMapper;
 import com.item.mapper.RoleMapper;
+import com.item.mapper.TagMapper;
+import com.item.tool.CommonServerIP;
 import com.item.tool.ExcelUtil;
 import com.item.tool.FileUtil;
 import com.item.tool.JavaTool;
@@ -51,6 +55,9 @@ public class ExcelServcieImpl implements ExcelServcie {
 
 	@Autowired
 	private RoleMapper roleMapper;
+
+	@Autowired
+	private TagMapper tagMapper;
 
 	@Override
 	public int importExcelInfo(InputStream in, MultipartFile file, ExcelManage excelManage) throws Exception {
@@ -225,10 +232,17 @@ public class ExcelServcieImpl implements ExcelServcie {
 			Map<String, Object> map = insertModelBeans(listob, startpath, userid);
 			List<String> message = (List<String>) map.get("message");
 			List<ModelBean> models = (List<ModelBean>) map.get("list");
+			List<PakInfo> pakInfos = new ArrayList<PakInfo>();
 			FileUtil.clearFiles(filePath);
 			FileUtil.clearFiles(strPath);
 			if (message.size() == 0) {
+				for (int z = 0; z < models.size(); z++) {
+					ModelBean model = models.get(z);
+					PakInfo pakInfo = getPakInfo(model);
+					pakInfos.add(pakInfo);
+				}
 				fileMapper.insertModels(models);
+				fileMapper.insertPakInfos(pakInfos);
 				return Result.success("导入成功");
 			} else {
 				String result = "";
@@ -483,5 +497,41 @@ public class ExcelServcieImpl implements ExcelServcie {
 
 		}
 		return filelist;
+	}
+
+	// 获取PakInfo
+	public PakInfo getPakInfo(ModelBean model) {
+		PakInfo pakInfo = new PakInfo();
+		String fileMode = model.getFileModel();
+		String pic = model.getFilePics();
+		if (!pic.equals("")) {
+			String[] pics = pic.split(",");
+			pic = pics[0];
+		}
+		String pakname = fileMode.substring(0, fileMode.indexOf("."));
+		pakInfo.setPakgamepath("/Game/DPC/Item/" + pakname);
+		pakInfo.setPakname(pakname);
+		pakInfo.setPakdownloadpath("http://" + CommonServerIP.CURRENT_SERVER + "/file/download?fileModel=" + fileMode);
+		pakInfo.setType("Blueprint");
+		pakInfo.setPakpicturepath("http://" + CommonServerIP.CURRENT_SERVER + "/file/download?filepic=" + pic);
+		String classname = "";
+		if (model.getResource_one() != null && !model.getResource_one().equals("")) {
+			classname = model.getResource_one();
+		}
+		if (model.getResource_two() != null && !model.getResource_two().equals("")) {
+			classname = model.getResource_two();
+		}
+		if (model.getResource_three() != null && !model.getResource_three().equals("")) {
+			classname = model.getResource_three();
+		}
+		if (model.getResource_four() != null && !model.getResource_four().equals("")) {
+			classname = model.getResource_four();
+		}
+		ResourceBean resourceBean = new ResourceBean();
+		resourceBean.setId(Integer.parseInt(classname));
+		resourceBean = tagMapper.queryResourceBeanById(resourceBean);
+		pakInfo.setClassname(resourceBean.getRname());
+		pakInfo.setDisplayname(model.getModelname());
+		return pakInfo;
 	}
 }
