@@ -233,8 +233,8 @@ public class ExcelServcieImpl implements ExcelServcie {
 			List<String> message = (List<String>) map.get("message");
 			List<ModelBean> models = (List<ModelBean>) map.get("list");
 			List<PakInfo> pakInfos = new ArrayList<PakInfo>();
-			FileUtil.clearFiles(filePath);
-			FileUtil.clearFiles(strPath);
+//			FileUtil.clearFiles(filePath);
+//			FileUtil.clearFiles(strPath);
 			if (message.size() == 0) {
 				for (int z = 0; z < models.size(); z++) {
 					ModelBean model = models.get(z);
