@@ -73,48 +73,55 @@ public class FileServiceImpl implements FileService {
 				// String filename = now + filesuffix;
 				String filename = file.getOriginalFilename();
 
-				String newrootPath = System.getProperty("user.dir") + "/upload";
+				FileBean fileBean = fileMapper.selectFileById(filename);
 
-				System.out.println(newrootPath);
+				if (fileBean != null) {
+					return Result.error(501, "文件名重复");
+				} else {
+					String newrootPath = System.getProperty("user.dir") + "/upload";
 
-				// 0代表前台 1代表模型端
-				switch (role) {
-				case 0:
-					if (catalog.equals("模型描述")) {
-						dir = new File(newrootPath + File.separator + catalog);
-					} else {
-						dir = new File(newrootPath + File.separator + "web" + File.separator + catalog);
+					System.out.println(newrootPath);
+
+					// 0代表前台 1代表模型端
+					switch (role) {
+					case 0:
+						if (catalog.equals("模型描述")) {
+							dir = new File(newrootPath + File.separator + catalog);
+						} else {
+							dir = new File(newrootPath + File.separator + "web" + File.separator + catalog);
+						}
+						break;
+					case 1:
+						dir = new File(newrootPath + File.separator + "model" + File.separator + catalog);
+						break;
+					default:
+						break;
 					}
-					break;
-				case 1:
-					dir = new File(newrootPath + File.separator + "model" + File.separator + catalog);
-					break;
-				default:
-					break;
-				}
-				if (!dir.exists()) {
-					dir.mkdirs();
+					if (!dir.exists()) {
+						dir.mkdirs();
+					}
+
+					String filePath = dir.getAbsolutePath() + File.separator + filename;
+
+					// 写文件到服务器
+					File serverFile = new File(filePath);
+					file.transferTo(serverFile);
+
+					// 录入文件信息
+					FileBean fileinfo = new FileBean();
+					fileinfo.setCatalog(catalog);
+					fileinfo.setFileurl(filePath);
+					fileinfo.setRole(role);
+					if (catalog.equals("模型描述")) {
+						String str = "/image/模型描述/" + filename;
+						filename = str;
+					}
+					fileinfo.setId(filename);
+					fileinfo.setUploadtime(JavaTool.getCurrent());
+					fileMapper.fileinfoAdd(fileinfo);
+					return Result.success(filename);
 				}
 
-				String filePath = dir.getAbsolutePath() + File.separator + filename;
-
-				// 写文件到服务器
-				File serverFile = new File(filePath);
-				file.transferTo(serverFile);
-
-				// 录入文件信息
-				FileBean fileinfo = new FileBean();
-				fileinfo.setCatalog(catalog);
-				fileinfo.setFileurl(filePath);
-				fileinfo.setRole(role);
-				if (catalog.equals("模型描述")) {
-					String str = "/image/模型描述/" + filename;
-					filename = str;
-				}
-				fileinfo.setId(filename);
-				fileinfo.setUploadtime(JavaTool.getCurrent());
-				fileMapper.fileinfoAdd(fileinfo);
-				return Result.success(filename);
 			} catch (Exception e) {
 				LOG.error(e.getMessage());
 				return Result.error(500, "服务端错误");
