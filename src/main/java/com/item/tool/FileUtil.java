@@ -20,6 +20,9 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.github.junrar.Archive;
+import com.github.junrar.rarfile.FileHeader;
+
 public class FileUtil {
 
 	public static void clearFiles(String workspaceRootPath) {
@@ -200,6 +203,8 @@ public class FileUtil {
 	}
 
 	/**
+	 * 解压ZIP
+	 * 
 	 * @author panchaoyuan
 	 * @param srcFile     Unzipped file
 	 * @param destDirPath Unzipped destination folder
@@ -268,6 +273,45 @@ public class FileUtil {
 			File del = new File(file.toURI());
 			del.delete();
 		}
+	}
+
+	/**
+	 * 解压RAR
+	 * 
+	 * @param rarFile
+	 * @param outDir
+	 * @throws Exception
+	 */
+	public static void unRar(File rarFile, String outDir) throws Exception {
+		File outFileDir = new File(outDir);
+		if (!outFileDir.exists()) {
+			boolean isMakDir = outFileDir.mkdirs();
+			if (isMakDir) {
+				System.out.println("创建压缩目录成功");
+			}
+		}
+		Archive archive = new Archive(new FileInputStream(rarFile));
+		FileHeader fileHeader = archive.nextFileHeader();
+		while (fileHeader != null) {
+			if (fileHeader.isDirectory()) {
+				fileHeader = archive.nextFileHeader();
+				continue;
+			}
+			File out = new File(outDir + File.separator + fileHeader.getFileNameString());
+			if (!out.exists()) {
+				if (!out.getParentFile().exists()) {
+					out.getParentFile().mkdirs();
+				}
+				out.createNewFile();
+			}
+			FileOutputStream os = new FileOutputStream(out);
+			archive.extractFile(fileHeader, os);
+
+			os.close();
+
+			fileHeader = archive.nextFileHeader();
+		}
+		archive.close();
 	}
 
 	/**

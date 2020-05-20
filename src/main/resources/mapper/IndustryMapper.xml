@@ -6,12 +6,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.item.mapper.IndustryMapper">
 		<!-- 添加 -->
 	<insert id="insertIndustry" parameterType="com.item.entity.Industry">
-		INSERT INTO industry (`iname`) VALUES (#{iname})
+		INSERT INTO industry (`pid`,`iname`) VALUES (#{pid},#{iname})
 	</insert>
 	
 	<!-- 修改 -->
 	<update id="updateIndustry" parameterType="com.item.entity.Industry">
-		update industry set iname=#{iname} where id=#{id}
+		update industry set iname=#{iname},pid=#{pid} where id=#{id}
 	</update>
 	
 	<!-- 删除 -->

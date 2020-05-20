@@ -200,7 +200,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 		String fileType = filename.substring(filename.lastIndexOf(".") + 1).toLowerCase(Locale.US);
 		String gettime = Utils.getCurrenttime();
 		// 判断文件是不是zip类型
-		if (fileType.equals("zip")) {
+		if (fileType.equals("zip") || fileType.equals("rar")) {
 			String desPath = FileUploadProperties.getLocation() + File.separator + gettime;
 			// 文件存放服务端的位置
 			File dir = null;
@@ -215,9 +215,12 @@ public class ExcelServcieImpl implements ExcelServcie {
 			File savefile = new File(filePath);
 			file.transferTo(savefile);
 			FileUtil fileUtil = new FileUtil();
-			// 解压zip文件
-			FileUtil.unZip(savefile, desPath, savePath);
-
+			if (fileType.equals("zip")) {
+				// 解压zip文件
+				FileUtil.unZip(savefile, desPath, savePath);
+			} else {
+				FileUtil.unRar(savefile, desPath);
+			}
 			// 读取文件夹里面的excel文件
 			String strPath = desPath + File.separator + name;
 
@@ -256,7 +259,7 @@ public class ExcelServcieImpl implements ExcelServcie {
 			}
 
 		} else {
-			return Result.error(500, "导入的不是zip格式");
+			return Result.error(500, "导入的格式不符合规范");
 		}
 		// } catch (Exception e) {
 		// TODO: handle exception

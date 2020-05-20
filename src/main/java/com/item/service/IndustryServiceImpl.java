@@ -1,6 +1,8 @@
 package com.item.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,38 @@ public class IndustryServiceImpl implements IndustryService {
 	@Override
 	public List<Industry> queryIndustryServices(Industry industry) {
 		// TODO Auto-generated method stub
-		return industryMapper.queryIndustryServices(industry);
+		List<Industry> list = industryMapper.queryIndustryServices(industry);
+		list = parseMenuTree(list);
+		return list;
+	}
+
+	public static List<Industry> parseMenuTree(List<Industry> list) {
+		List<Industry> result = new ArrayList<Industry>();
+
+		// 1、获取第一级节点
+		for (Industry industry : list) {
+			if (industry.getPid() == 0) {
+				result.add(industry);
+			}
+		}
+
+		// 2、递归获取子节点
+		for (Industry parent : result) {
+			parent = recursiveTree(parent, list);
+		}
+
+		return result;
+	}
+
+	public static Industry recursiveTree(Industry parent, List<Industry> list) {
+		for (Industry industry : list) {
+			if (Objects.equals(parent.getId(), industry.getPid())) {
+				industry = recursiveTree(industry, list);
+				parent.getChildrens().add(industry);
+			}
+		}
+
+		return parent;
 	}
 
 	@Override
