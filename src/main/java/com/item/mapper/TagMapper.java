@@ -37,6 +37,9 @@ public interface TagMapper {
 	// 删除节点
 	public int deleteTypeById(int id);
 
+	// 查询是否存在子集
+	public int queryTagBeansByPid(int id);
+
 	// 查询所有的构建类型
 	public List<ResourceBean> resourceAllQuery(ResourceBean resourceBean);
 
@@ -48,6 +51,14 @@ public interface TagMapper {
 
 	// 通过ID删除构建列表
 	public int deleteResourceById(ResourceBean resourceBean);
+
+	/**
+	 * 查询是否存在子集
+	 * 
+	 * @param resourceBean
+	 * @return
+	 */
+	public List<ResourceBean> queryResourcesByPid(ResourceBean resourceBean);
 
 	// 通过ID查询一级菜单
 	public List<ResourceBean> queryResourceById(ResourceBean resourceBean);

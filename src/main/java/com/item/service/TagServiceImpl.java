@@ -133,7 +133,13 @@ public class TagServiceImpl implements TagService {
 	@CacheEvict(value = "tagList", allEntries = true)
 	public Result<?> deleteTypeById(TagBean tagBean) {
 		// TODO Auto-generated method stub
-		return Result.success(tagMapper.deleteTypeById(tagBean.getId()));
+		int total = tagMapper.queryTagBeansByPid(tagBean.getId());
+		if (total > 0) {
+			return Result.error(500, "该数据下有子集，请先删除子集");
+		} else {
+			return Result.success(tagMapper.deleteTypeById(tagBean.getId()));
+		}
+
 	}
 
 	@Override
@@ -166,7 +172,13 @@ public class TagServiceImpl implements TagService {
 	@CacheEvict(value = "resourceList", allEntries = true)
 	public Result<?> deleteResourceById(ResourceBean resourceBean) {
 		// TODO Auto-generated method stub
-		return Result.success(tagMapper.deleteResourceById(resourceBean));
+		List<ResourceBean> list = tagMapper.queryResourcesByPid(resourceBean);
+		if (list.size() > 0) {
+			return Result.error(500, "该数据有子集，请先删除子集");
+		} else {
+			return Result.success(tagMapper.deleteResourceById(resourceBean));
+		}
+
 	}
 
 	@Override
