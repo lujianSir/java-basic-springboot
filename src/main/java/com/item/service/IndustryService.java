@@ -20,7 +20,15 @@ public interface IndustryService {
 	 * @param industry
 	 * @return
 	 */
-	int insertOrUpdateIndustry(Industry industry);
+	Result<?> insertOrUpdateIndustry(Industry industry);
+
+	/**
+	 * 批量添加行业信息
+	 * 
+	 * @param list
+	 * @return
+	 */
+	int insertOrUpdateIndustrys(String id);
 
 	/**
 	 * 删除
@@ -28,7 +36,7 @@ public interface IndustryService {
 	 * @param industry
 	 * @return
 	 */
-	int deleteIndustry(Industry industry);
+	Result<?> deleteIndustry(Industry industry);
 
 	/**
 	 * 查询

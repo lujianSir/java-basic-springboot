@@ -17,7 +17,17 @@ public class Industry {
 
 	private int pid;// 父ID
 
-	private List<Industry> childrens = new ArrayList<Industry>();;// 含的子类
+	private String label;
+
+	private List<Industry> children = new ArrayList<Industry>();;// 含的子类
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
 	public int getPid() {
 		return pid;
@@ -43,12 +53,12 @@ public class Industry {
 		this.iname = iname;
 	}
 
-	public List<Industry> getChildrens() {
-		return childrens;
+	public List<Industry> getChildren() {
+		return children;
 	}
 
-	public void setChildrens(List<Industry> childrens) {
-		this.childrens = childrens;
+	public void setChildren(List<Industry> children) {
+		this.children = children;
 	}
 
 }

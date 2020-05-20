@@ -35,6 +35,14 @@ public interface IndustryMapper {
 	int deleteIndustry(Industry industry);
 
 	/**
+	 * 查询是否存在子集
+	 * 
+	 * @param industry
+	 * @return
+	 */
+	List<Industry> queryIndustryChildrens(Industry industry);
+
+	/**
 	 * 查询
 	 * 
 	 * @param industry
@@ -73,4 +81,20 @@ public interface IndustryMapper {
 	 * @return
 	 */
 	int deleteIndustryModelByIdAndMid(IndustryModel industryModel);
+
+	/**
+	 * 批量添加行业信息
+	 * 
+	 * @param list
+	 * @return
+	 */
+	int insertOrUpdateIndustrys(List<Industry> list);
+
+	/**
+	 * 查询行业是否已经绑定
+	 * 
+	 * @param industry
+	 * @return
+	 */
+	List<IndustryModel> queryModelsById(Industry industry);
 }

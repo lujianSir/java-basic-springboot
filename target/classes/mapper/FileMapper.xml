@@ -152,6 +152,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<if test="endPrice != -0.1">
 					and modelprice &lt;= #{endPrice}
 				</if>				
+				
+				<if test="modelBean.id==0">
+					GROUP BY modelinfo.mid				
+				</if>	
 					
 				<if test="orderBy=='' or orderBy== null">
 					order by download desc
@@ -341,4 +345,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(#{item.modelname},#{item.modelprice},#{item.unitprice},#{item.buildtype},#{item.resource_one},#{item.resource_two},#{item.resource_three},#{item.resource_four},#{item.filePics},#{item.fileModel},#{item.mdescribe},#{item.creatTime},#{item.userid},#{item.modelstatus},#{item.examine},#{item.examinepeople},#{item.examinetime})
    		</foreach> 		
 	</insert>
+	
+	<select id="queryAllModelBeans" resultType="com.item.entity.ModelBean">
+		select mid from modelinfo
+	</select>
 </mapper>

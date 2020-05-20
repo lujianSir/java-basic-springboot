@@ -73,4 +73,11 @@ public interface FileMapper {
 	 */
 	public int insertModels(List<ModelBean> list);
 
+	/**
+	 * 查询所有的模型
+	 * 
+	 * @return
+	 */
+	public List<ModelBean> queryAllModelBeans();
+
 }

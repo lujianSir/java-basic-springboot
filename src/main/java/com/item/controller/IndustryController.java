@@ -30,20 +30,7 @@ public class IndustryController {
 	 */
 	@RequestMapping(value = "/insertOrUpdateIndustry")
 	public Result<?> insertOrUpdateIndustry(Industry industry) {
-		int row = industryService.insertOrUpdateIndustry(industry);
-		if (industry.getId() > 0) {
-			if (row > 0) {
-				return Result.success("修改成功");
-			} else {
-				return Result.error(500, "修改失败");
-			}
-		} else {
-			if (row > 0) {
-				return Result.success("添加成功");
-			} else {
-				return Result.error(501, "添加失败");
-			}
-		}
+		return industryService.insertOrUpdateIndustry(industry);
 	}
 
 	/**
@@ -54,11 +41,21 @@ public class IndustryController {
 	 */
 	@RequestMapping(value = "/deleteIndustry")
 	public Result<?> deleteIndustry(Industry industry) {
-		int row = industryService.deleteIndustry(industry);
+		return industryService.deleteIndustry(industry);
+	}
+
+	/**
+	 * 
+	 * @param industry
+	 * @return
+	 */
+	@RequestMapping(value = "/insertOrUpdateIndustrys")
+	public Result<?> insertOrUpdateIndustrys(String id) {
+		int row = industryService.insertOrUpdateIndustrys(id);
 		if (row > 0) {
-			return Result.success("删除成功");
+			return Result.success("添加成功");
 		} else {
-			return Result.error(500, "删除失败");
+			return Result.error(500, "添加失败");
 		}
 
 	}
