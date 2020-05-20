@@ -81,7 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	FROM
 		orderflow a LEFT JOIN modelinfo b  on a.mids=b.mid   LEFT JOIN userinfo c on a.uid=c.userid 
 	WHERE
-		a.orderstatus =1   
+		a.orderstatus =1   and  b.modelname is not null 
 		<if test="uid !=null and uid !='' and uid !='00da3c04c1b14519862301666987bfcd'">
 				and a.uid=#{uid}
 		</if>

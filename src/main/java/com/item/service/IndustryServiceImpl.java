@@ -62,7 +62,7 @@ public class IndustryServiceImpl implements IndustryService {
 			return Result.error(500, "有子集绑定，请先删除子集");
 		} else {
 			IndustryModel industryModel = new IndustryModel();
-			industryModel.setId(industryModel.getId());
+			industryModel.setId(industry.getId());
 			industryMapper.deleteIndustryModelByIdAndMid(industryModel);
 			industryMapper.deleteIndustry(industry);
 			return Result.success();

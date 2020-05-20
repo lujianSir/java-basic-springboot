@@ -45,6 +45,7 @@ public class IndustryController {
 	}
 
 	/**
+	 * 全选
 	 * 
 	 * @param industry
 	 * @return
