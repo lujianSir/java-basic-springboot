@@ -120,7 +120,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					modelstatus = 1
 				AND examine = 1
 				<if test="modelBean.id !=null and modelBean.id !=''">
-					and id=#{modelBean.id}
+					and id=#{modelBean.id} 	or id in (select id from industry where pid =#{modelBean.id})
 				</if>	
 				<if test="modelBean.modelname!=null and modelBean.modelname!=''">
 					and modelname like  CONCAT('%',#{modelBean.modelname},'%')
@@ -153,10 +153,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					and modelprice &lt;= #{endPrice}
 				</if>				
 				
-				<if test="modelBean.id==0">
-					GROUP BY modelinfo.mid				
-				</if>	
-					
+				GROUP BY modelinfo.mid				
+				
 				<if test="orderBy=='' or orderBy== null">
 					order by download desc
 				</if>			
