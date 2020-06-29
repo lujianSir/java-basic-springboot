@@ -25,11 +25,12 @@ public class TokenInterceptor implements HandlerInterceptor {
 			throws Exception {
 
 		// 配置跨域访问的最简单的方式是用通配符 * ，（就是不安全，所有的请求都能跨域）
-//        response.setHeader("Access-Control-Allow-Origin", "*");
-//        response.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,HEAD,PUT,PATCH");
-//        response.setHeader("Access-Control-Max-Age", "36000");
-//        response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,Authorization,authorization");
-//        response.setHeader("Access-Control-Allow-Credentials","true");//保持跨域 Ajax 时的 Cookie
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "POST,GET,OPTIONS,DELETE,HEAD,PUT,PATCH");
+		response.setHeader("Access-Control-Max-Age", "36000");
+		response.setHeader("Access-Control-Allow-Headers",
+				"Origin, X-Requested-With, Content-Type, Accept,Authorization,authorization");
+		response.setHeader("Access-Control-Allow-Credentials", "true");// 保持跨域 Ajax 时的 Cookie
 
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json; charset=utf-8");
