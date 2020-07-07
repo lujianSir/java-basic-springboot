@@ -2,6 +2,7 @@ package com.item.tool;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +56,15 @@ public class Utils {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月");// 设置日期格式
 		String currentTime = df.format(new Date());// new Date()为获取当前系统时间
 		return currentTime;
+	}
+
+	// 获取三天后的时间
+	public static String getThreeOldTime() {
+		Calendar calendar2 = Calendar.getInstance();
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		calendar2.add(Calendar.MONTH, 1);
+		String three_days_after = sdf2.format(calendar2.getTime());
+		return three_days_after;
 	}
 
 	/**

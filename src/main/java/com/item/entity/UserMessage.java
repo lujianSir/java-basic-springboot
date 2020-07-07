@@ -29,6 +29,46 @@ public class UserMessage extends User implements Serializable {
 	// 邮箱
 	private String email;
 
+	private String starttime;// 开始时间
+
+	private String endtime;// 结束时间
+
+	private int comform;// 1是商城 2是模型那边
+
+	private int openstatus;// 1可以用 2不可以用
+
+	public int getOpenstatus() {
+		return openstatus;
+	}
+
+	public void setOpenstatus(int openstatus) {
+		this.openstatus = openstatus;
+	}
+
+	public int getComform() {
+		return comform;
+	}
+
+	public void setComform(int comform) {
+		this.comform = comform;
+	}
+
+	public String getStarttime() {
+		return starttime;
+	}
+
+	public void setStarttime(String starttime) {
+		this.starttime = starttime;
+	}
+
+	public String getEndtime() {
+		return endtime;
+	}
+
+	public void setEndtime(String endtime) {
+		this.endtime = endtime;
+	}
+
 	public String getAccountStr() {
 		return accountStr;
 	}

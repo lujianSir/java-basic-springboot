@@ -111,16 +111,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 商城用户注册 -->
 	<insert id="userMessageRegister" parameterType="com.item.entity.UserMessage">
 		INSERT INTO usermessage
-		(`userid`,`nickname`,`username`,`password`,`status`,`registertime`,`account`,`email`)
+		(`userid`,`nickname`,`username`,`password`,`status`,`registertime`,`account`,`email`,`starttime`,`endtime`)
 		VALUES
-		(#{userid},#{nickname},#{username},#{password},#{status},#{registertime},#{account},#{email})
+		(#{userid},#{nickname},#{username},#{password},#{status},#{registertime},#{account},#{email},#{starttime},#{endtime})
 	</insert>
 	
 	<!-- 根据商城用户名去查询用户信息	 -->
 	<select id="userMessageLogin" parameterType="String" resultType="com.item.entity.UserMessage">
-		select * from usermessage where username = #{username}
+		SELECT * from usermessage where username = #{username}
 	</select>
 		
+		<!-- 根据商城用户名去查询用户信息	 -->
+	<select id="userMessageLoginModel" parameterType="String" resultType="com.item.entity.UserMessage">
+		SELECT
+			*,
+			case when endtime ='' THEN 1 
+			when endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d') THEN 1 else 2 end openstatus from usermessage where username = #{username}
+	</select>
 		
 	<!-- 查询所有的商城用户 -->	
 	<select id="queryUserMessages" resultType="com.item.entity.UserMessage">

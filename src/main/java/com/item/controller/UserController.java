@@ -121,8 +121,12 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/userMessageLogin")
-	public Result<?> userMessageLogin(String username, String password) {
-		return userService.userMessageLogin(username, password);
+	public Result<?> userMessageLogin(String username, String password, String comform) {
+		int num = 0;
+		if (comform != null && !comform.equals("")) {
+			num = Integer.parseInt(comform);
+		}
+		return userService.userMessageLogin(username, password, num);
 	}
 
 	/**

@@ -152,6 +152,14 @@ public class UserServiceImpl implements UserService {
 				}
 				userMessage.setStatus(1);
 				userMessage.setRegistertime(JavaTool.getUserCurrent());
+				if (userMessage.getComform() == 1) {// 商城注册
+					userMessage.setStarttime(JavaTool.getUserCurrent());
+					userMessage.setEndtime("");
+				} else if (userMessage.getComform() == 2) {// 模型注册
+					userMessage.setStarttime(JavaTool.getUserCurrent());
+					String endtime = Utils.getThreeOldTime();
+					userMessage.setEndtime(endtime);
+				}
 				userMapper.userMessageRegister(userMessage);// 注册商城用户
 
 				UserBean userBean = new UserBean();
@@ -174,23 +182,32 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Result<?> userMessageLogin(String username, String password) {
+	public Result<?> userMessageLogin(String username, String password, int comform) {
 		// TODO Auto-generated method stub
 		int num = userMapper.userMessageExist(username);
 		try {
 			if (num > 0) {
-				// 获取user信息
-				UserMessage user = userMapper.userMessageLogin(username);
+				UserMessage user = new UserMessage();
+				if (comform == 1) {// 商城 不区分时间
+					// 获取user信息
+					user = userMapper.userMessageLogin(username);
+				} else {// 模型 区分时间
+					user = userMapper.userMessageLoginModel(username);
+				}
+
 				if (user.getStatus() == 1) {
 					// 判断密码是否相等
 					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
-
-						String token = TokenUtil.sign(user);
-						// 将token放在密码带出去
-						user.setPassword(token);
-						int shoppCount = shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
-						user.setShoppCount(shoppCount);
-						return Result.success(user);
+						if (user.getOpenstatus() == 2) {
+							return Result.error(50040, "账号已经到期");
+						} else {
+							String token = TokenUtil.sign(user);
+							// 将token放在密码带出去
+							user.setPassword(token);
+							int shoppCount = shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
+							user.setShoppCount(shoppCount);
+							return Result.success(user);
+						}
 					} else {
 						return Result.error(50010, "用户密码错误");
 					}

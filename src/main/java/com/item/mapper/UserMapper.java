@@ -49,6 +49,9 @@ public interface UserMapper {
 	// 根据用户名密码登录(商城页面)
 	public UserMessage userMessageLogin(String username);
 
+	//// 根据用户名密码登录(模型页面)
+	public UserMessage userMessageLoginModel(String username);
+
 	// 用户注册(商城页面)
 	public void userMessageRegister(UserMessage userMessage);
 
