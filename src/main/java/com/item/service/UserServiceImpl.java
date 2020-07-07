@@ -152,14 +152,9 @@ public class UserServiceImpl implements UserService {
 				}
 				userMessage.setStatus(1);
 				userMessage.setRegistertime(JavaTool.getUserCurrent());
-				if (userMessage.getComform() == 1) {// 商城注册
-					userMessage.setStarttime(JavaTool.getUserCurrent());
-					userMessage.setEndtime("");
-				} else if (userMessage.getComform() == 2) {// 模型注册
-					userMessage.setStarttime(JavaTool.getUserCurrent());
-					String endtime = Utils.getThreeOldTime();
-					userMessage.setEndtime(endtime);
-				}
+				userMessage.setStarttime(JavaTool.getUserCurrent());
+				String endtime = Utils.getThreeOldTime();
+				userMessage.setEndtime(endtime);
 				userMapper.userMessageRegister(userMessage);// 注册商城用户
 
 				UserBean userBean = new UserBean();
