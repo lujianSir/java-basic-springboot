@@ -130,7 +130,7 @@ public class UserController {
 	}
 
 	/**
-	 * 用户退出
+	 * 用户退出1
 	 * 
 	 * @return
 	 */
