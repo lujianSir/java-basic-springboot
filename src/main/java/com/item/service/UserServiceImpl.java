@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
 				}
 
 				if (user.getStatus() == 1) {
-					// 判断密码是否相等
+					// 判断密码是否相等1
 					if (user.getPassword().trim().equals(JavaTool.string2MD5(password).trim())) {
 						if (user.getOpenstatus() == 2) {
 							return Result.error(50040, "账号已经到期");
