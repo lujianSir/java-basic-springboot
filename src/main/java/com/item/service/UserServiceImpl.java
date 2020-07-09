@@ -161,7 +161,7 @@ public class UserServiceImpl implements UserService {
 				userMessage.setStarttime(JavaTool.getUserCurrent());
 				String endtime = Utils.getThreeOldTime();
 				userMessage.setEndtime(endtime);
-				userMapper.userMessageRegister(userMessage);// 注册商城用户
+				userMapper.userMessageRegister(userMessage);// 注册商城用户1
 
 				UserBean userBean = new UserBean();
 				userBean.setUserid(userMessage.getUserid());
