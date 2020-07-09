@@ -32,7 +32,10 @@ public interface UserService {
 	public Result<?> userMessageRegister(UserMessage userMessage);
 
 	// 根据用户名密码登录(商城页面)
-	public Result<?> userMessageLogin(String username, String password, int comform);
+	public Result<?> userMessageLogin(HttpServletRequest request, String username, String password, int comform);
+
+	// 用户退出
+	public Result<?> userMessageOut(String username);
 
 	// 发送邮件
 	public void sendSimpleMail(String to, String title, String content);

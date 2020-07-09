@@ -121,12 +121,22 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/userMessageLogin")
-	public Result<?> userMessageLogin(String username, String password, String comform) {
+	public Result<?> userMessageLogin(HttpServletRequest request, String username, String password, String comform) {
 		int num = 0;
 		if (comform != null && !comform.equals("")) {
 			num = Integer.parseInt(comform);
 		}
-		return userService.userMessageLogin(username, password, num);
+		return userService.userMessageLogin(request, username, password, num);
+	}
+
+	/**
+	 * 用户退出
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/userMessageOut")
+	public Result<?> userMessageOut(String username) {
+		return userService.userMessageOut(username);
 	}
 
 	/**

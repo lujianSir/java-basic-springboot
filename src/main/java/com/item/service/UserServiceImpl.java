@@ -1,13 +1,16 @@
 package com.item.service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -44,6 +47,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private ShoppingMapper shoppingMapper;
+
+	@Autowired
+	public StringRedisTemplate stringRedisTemplate;
 
 	/**
 	 * 判断用户是否存在
@@ -177,8 +183,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Result<?> userMessageLogin(String username, String password, int comform) {
+	public Result<?> userMessageLogin(HttpServletRequest request, String username, String password, int comform) {
 		// TODO Auto-generated method stub
+		String sessionId = "";
+		if (comform != 1) {
+			HttpSession session = request.getSession();
+			sessionId = session.getId();
+			String redissessionId = stringRedisTemplate.opsForValue().get(username);
+			if (redissessionId != null && !redissessionId.equals("")) {
+				if (!sessionId.equals(redissessionId)) {
+					return Result.error(50050, "账号已经登录");
+				}
+			}
+		}
 		int num = userMapper.userMessageExist(username);
 		try {
 			if (num > 0) {
@@ -201,6 +218,10 @@ public class UserServiceImpl implements UserService {
 							user.setPassword(token);
 							int shoppCount = shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
 							user.setShoppCount(shoppCount);
+							if (comform != 1) {
+								stringRedisTemplate.opsForValue().set(user.getUsername(), sessionId, 60 * 1,
+										TimeUnit.SECONDS);
+							}
 							return Result.success(user);
 						}
 					} else {
@@ -344,6 +365,23 @@ public class UserServiceImpl implements UserService {
 		user.setNewip(ip);
 		user.setLogintime(Utils.getCurrent());
 		return user;
+	}
+
+	@Override
+	public Result<?> userMessageOut(String username) {
+		// TODO Auto-generated method stub
+		String redissessionId = stringRedisTemplate.opsForValue().get(username);
+		if (redissessionId != null && !redissessionId.equals("")) {
+			boolean flag = stringRedisTemplate.delete(username);
+			if (flag) {
+				return Result.success("退出成功");
+			} else {
+				return Result.error(500, "退出失败");
+			}
+		} else {
+			return Result.success("退出成功");
+		}
+
 	}
 
 }
