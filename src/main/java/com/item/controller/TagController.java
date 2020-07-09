@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.item.entity.ResourceBean;
+import com.item.entity.ResourceInfo;
 import com.item.entity.TagBean;
 import com.item.service.TagService;
 import com.item.tool.Result;
@@ -101,30 +101,30 @@ public class TagController {
 	 * @return
 	 */
 	@RequestMapping(value = "/resourceAllQuery")
-	public Result<?> resourceAllQuery(ResourceBean resourceBean) {
-		return tagService.resourceAllQuery(resourceBean);
+	public Result<?> resourceAllQuery(ResourceInfo resourceInfo) {
+		return tagService.resourceAllQuery(resourceInfo);
 	}
 
 	/**
 	 * 添加或者编辑构建类型
 	 * 
-	 * @param resourceBean
+	 * @param resourceInfo
 	 * @return
 	 */
 	@RequestMapping(value = "/insertOrUpdateResource")
-	public Result<?> insertOrUpdateResource(ResourceBean resourceBean) {
-		return tagService.insertOrUpdateResource(resourceBean);
+	public Result<?> insertOrUpdateResource(ResourceInfo resourceInfo) {
+		return tagService.insertOrUpdateResource(resourceInfo);
 	}
 
 	/**
 	 * 删除构建类型
 	 * 
-	 * @param resourceBean
+	 * @param resourceInfo
 	 * @return
 	 */
 	@RequestMapping(value = "/deleteResourceById")
-	public Result<?> deleteResourceById(ResourceBean resourceBean) {
-		return tagService.deleteResourceById(resourceBean);
+	public Result<?> deleteResourceById(ResourceInfo resourceInfo) {
+		return tagService.deleteResourceById(resourceInfo);
 	}
 
 	/**
@@ -133,8 +133,8 @@ public class TagController {
 	 * @return
 	 */
 	@RequestMapping(value = "/queryResourceById")
-	public Result<?> queryResourceById(ResourceBean resourceBean) {
-		return tagService.queryResourceById(resourceBean);
+	public Result<?> queryResourceById(ResourceInfo resourceInfo) {
+		return tagService.queryResourceById(resourceInfo);
 	}
 
 	/**
@@ -157,13 +157,13 @@ public class TagController {
 			}
 			maplist.add(map);
 		}
-		List<ResourceBean> list = new ArrayList<ResourceBean>();
+		List<ResourceInfo> list = new ArrayList<ResourceInfo>();
 		for (int m = 0; m < maplist.size(); m++) {
-			ResourceBean resourceBean = new ResourceBean();
-			resourceBean.setId(Integer.parseInt(maplist.get(m).get("id").toString()));
-			resourceBean.setPid(Integer.parseInt(maplist.get(m).get("pid").toString()));
-			resourceBean.setRname(maplist.get(m).get("rname").toString());
-			list.add(resourceBean);
+			ResourceInfo resourceInfo = new ResourceInfo();
+			resourceInfo.setId(Integer.parseInt(maplist.get(m).get("id").toString()));
+			resourceInfo.setPid(Integer.parseInt(maplist.get(m).get("pid").toString()));
+			resourceInfo.setRname(maplist.get(m).get("rname").toString());
+			list.add(resourceInfo);
 		}
 		tagService.updateresourceinfo(list);
 		return Result.success();

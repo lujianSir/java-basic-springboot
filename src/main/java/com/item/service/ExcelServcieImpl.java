@@ -17,7 +17,6 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +29,7 @@ import com.item.entity.ExcelManage;
 import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
 import com.item.entity.PakInfo;
-import com.item.entity.ResourceBean;
+import com.item.entity.ResourceInfo;
 import com.item.entity.Role;
 import com.item.mapper.ExcelMapper;
 import com.item.mapper.FileMapper;
@@ -156,7 +155,6 @@ public class ExcelServcieImpl implements ExcelServcie {
 	}
 
 	@Override
-	@CacheEvict(value = "excelContentList", allEntries = true)
 	public int deleteExcelByEid(String eid) {
 		// TODO Auto-generated method stub
 		ExcelManage excelManage = new ExcelManage();
@@ -530,10 +528,10 @@ public class ExcelServcieImpl implements ExcelServcie {
 		if (model.getResource_four() != null && !model.getResource_four().equals("")) {
 			classname = model.getResource_four();
 		}
-		ResourceBean resourceBean = new ResourceBean();
-		resourceBean.setId(Integer.parseInt(classname));
-		resourceBean = tagMapper.queryResourceBeanById(resourceBean);
-		pakInfo.setClassname(resourceBean.getRname());
+		ResourceInfo resourceInfo = new ResourceInfo();
+		resourceInfo.setId(Integer.parseInt(classname));
+		resourceInfo = tagMapper.queryresourceInfoById(resourceInfo);
+		pakInfo.setClassname(resourceInfo.getRname());
 		pakInfo.setDisplayname(model.getModelname());
 		return pakInfo;
 	}

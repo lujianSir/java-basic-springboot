@@ -6,12 +6,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.item.entity.ResourceBean;
+import com.item.entity.ResourceInfo;
 import com.item.entity.TagBean;
 import com.item.mapper.TagMapper;
 import com.item.tool.Result;
@@ -94,7 +92,6 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	@Cacheable(value = "tagList")
 	public Result<?> tagAllQuery() {
 		// TODO Auto-generated method stub
 		List<TagBean> list = tagMapper.tagAllQuery();
@@ -102,7 +99,6 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	@Cacheable(value = "tagList", key = "#id")
 	public Result<?> queryTagById(int id) {
 		// TODO Auto-generated method stub
 		TagBean tagBean = tagMapper.queryTagById(id);
@@ -110,7 +106,6 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	@CacheEvict(value = "tagList", allEntries = true)
 	public Result<?> insertOrUpdateType(TagBean tagBean) {
 		// TODO Auto-generated method stub
 		int id = tagBean.getId();
@@ -130,7 +125,6 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	@CacheEvict(value = "tagList", allEntries = true)
 	public Result<?> deleteTypeById(TagBean tagBean) {
 		// TODO Auto-generated method stub
 		int total = tagMapper.queryTagBeansByPid(tagBean.getId());
@@ -143,23 +137,21 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	@Cacheable(value = "resourceList")
-	public Result<?> resourceAllQuery(ResourceBean resourceBean) {
+	public Result<?> resourceAllQuery(ResourceInfo resourceInfo) {
 		// TODO Auto-generated method stub
-		return Result.success(tagMapper.resourceAllQuery(resourceBean));
+		return Result.success(tagMapper.resourceAllQuery(resourceInfo));
 	}
 
 	@Override
-	@CacheEvict(value = "resourceList", allEntries = true)
-	public Result<?> insertOrUpdateResource(ResourceBean resourceBean) {
+	public Result<?> insertOrUpdateResource(ResourceInfo resourceInfo) {
 		// TODO Auto-generated method stub
-		int id = resourceBean.getId();
+		int id = resourceInfo.getId();
 		int num = 0;
 		if (id > 0) {
-			num = tagMapper.updateResource(resourceBean);
+			num = tagMapper.updateResource(resourceInfo);
 		} else {
-			num = tagMapper.insertResource(resourceBean);
-			num = resourceBean.getId();
+			num = tagMapper.insertResource(resourceInfo);
+			num = resourceInfo.getId();
 		}
 		if (num > 0) {
 			return Result.success(num);
@@ -169,28 +161,25 @@ public class TagServiceImpl implements TagService {
 	}
 
 	@Override
-	@CacheEvict(value = "resourceList", allEntries = true)
-	public Result<?> deleteResourceById(ResourceBean resourceBean) {
+	public Result<?> deleteResourceById(ResourceInfo resourceInfo) {
 		// TODO Auto-generated method stub
-		List<ResourceBean> list = tagMapper.queryResourcesByPid(resourceBean);
+		List<ResourceInfo> list = tagMapper.queryResourcesByPid(resourceInfo);
 		if (list.size() > 0) {
 			return Result.error(500, "该数据有子集，请先删除子集");
 		} else {
-			return Result.success(tagMapper.deleteResourceById(resourceBean));
+			return Result.success(tagMapper.deleteResourceById(resourceInfo));
 		}
 
 	}
 
 	@Override
-	@Cacheable(value = "resourceList", key = "#resourceBean.pid")
-	public Result<?> queryResourceById(ResourceBean resourceBean) {
+	public Result<?> queryResourceById(ResourceInfo resourceInfo) {
 		// TODO Auto-generated method stub
-		return Result.success(tagMapper.queryResourceById(resourceBean));
+		return Result.success(tagMapper.queryResourceById(resourceInfo));
 	}
 
 	@Override
-	@CacheEvict(value = "resourceList", allEntries = true)
-	public Result<?> updateresourceinfo(List<ResourceBean> list) {
+	public Result<?> updateresourceinfo(List<ResourceInfo> list) {
 		// TODO Auto-generated method stub
 		tagMapper.deleteResourceAll();
 		tagMapper.insertResourceAll(list);

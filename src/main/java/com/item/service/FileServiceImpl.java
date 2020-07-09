@@ -21,7 +21,7 @@ import com.item.entity.FileBean;
 import com.item.entity.ModelBean;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
-import com.item.entity.ResourceBean;
+import com.item.entity.ResourceInfo;
 import com.item.entity.Role;
 import com.item.entity.StarClass;
 import com.item.entity.UserBean;
@@ -170,10 +170,10 @@ public class FileServiceImpl implements FileService {
 				if (!model.getResource_four().equals("")) {
 					classname = model.getResource_four();
 				}
-				ResourceBean resourceBean = new ResourceBean();
-				resourceBean.setId(Integer.parseInt(classname));
-				resourceBean = tagMapper.queryResourceBeanById(resourceBean);
-				pakInfo.setClassname(resourceBean.getRname());
+				ResourceInfo resourceInfo = new ResourceInfo();
+				resourceInfo.setId(Integer.parseInt(classname));
+				resourceInfo = tagMapper.queryresourceInfoById(resourceInfo);
+				pakInfo.setClassname(resourceInfo.getRname());
 				pakInfo.setDisplayname(model.getModelname());
 				fileMapper.insertPakInfo(pakInfo);
 				// 模型信息录入

@@ -2,7 +2,7 @@ package com.item.service;
 
 import java.util.List;
 
-import com.item.entity.ResourceBean;
+import com.item.entity.ResourceInfo;
 import com.item.entity.TagBean;
 import com.item.tool.Result;
 
@@ -30,18 +30,18 @@ public interface TagService {
 	public Result<?> deleteTypeById(TagBean tagBean);
 
 	// 查询所有的构件库列表
-	public Result<?> resourceAllQuery(ResourceBean resourceBean);
+	public Result<?> resourceAllQuery(ResourceInfo resourceInfo);
 
 	// 添加或者修改
-	public Result<?> insertOrUpdateResource(ResourceBean resourceBean);
+	public Result<?> insertOrUpdateResource(ResourceInfo resourceInfo);
 
 	// 通过ID删除构建列表
-	public Result<?> deleteResourceById(ResourceBean resourceBean);
+	public Result<?> deleteResourceById(ResourceInfo resourceInfo);
 
 	// 通过ID查询一级菜单
-	public Result<?> queryResourceById(ResourceBean resourceBean);
+	public Result<?> queryResourceById(ResourceInfo resourceInfo);
 
 	// 修改资源库管理
-	public Result<?> updateresourceinfo(List<ResourceBean> list);
+	public Result<?> updateresourceinfo(List<ResourceInfo> list);
 
 }

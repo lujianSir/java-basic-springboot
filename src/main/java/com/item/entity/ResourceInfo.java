@@ -8,12 +8,7 @@ import java.io.Serializable;
  * @author
  *
  */
-public class ResourceBean implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -833491664501890240L;
+public class ResourceInfo implements Serializable {
 
 	// ID
 	private int id;

@@ -72,17 +72,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <!-- 查询所有的构建类型-->
-    <select id="resourceAllQuery"   resultType="com.item.entity.ResourceBean">
+    <select id="resourceAllQuery"   resultType="com.item.entity.ResourceInfo">
        	select * from (select id ,pid , rname from resourceinfo where FIND_IN_SET(id,getResourceChildList(#{pid}))) a ORDER BY id
     </select>
     
     <!-- 添加构建类型节点 -->
-    <insert id="insertResource" parameterType="com.item.entity.ResourceBean" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertResource" parameterType="com.item.entity.ResourceInfo" useGeneratedKeys="true" keyProperty="id">
     	insert into resourceinfo (pid,rname) values (#{pid},#{rname})
     </insert>
     
      <!-- 修改构建类型节点 -->
-    <update id="updateResource" parameterType="com.item.entity.ResourceBean">
+    <update id="updateResource" parameterType="com.item.entity.ResourceInfo">
     	update resourceinfo 
     		<set>
     			<if test="pid !=null and pid!=''">
@@ -100,12 +100,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	delete from resourceinfo where id=#{id}  
     </delete>
     
-    <select id="queryResourcesByPid" resultType="com.item.entity.ResourceBean">
+    <select id="queryResourcesByPid" resultType="com.item.entity.ResourceInfo">
     	select * from  resourceinfo where pid=#{id}
     </select>
     
     <!-- 查询一级菜单 -->
-    <select id="queryResourceById" resultType="com.item.entity.ResourceBean">
+    <select id="queryResourceById" resultType="com.item.entity.ResourceInfo">
     	select * from resourceinfo where pid=#{pid}
     </select>
     
@@ -123,7 +123,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    </foreach>
 	</insert>
 	
-	<select id="queryResourceBeanById" resultType="com.item.entity.ResourceBean">
+	<select id="queryResourceInfoById" resultType="com.item.entity.ResourceInfo">
 		select * from resourceinfo where id =#{id}
 	</select>
 </mapper>

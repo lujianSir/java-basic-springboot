@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.item.entity.ResourceBean;
+import com.item.entity.ResourceInfo;
 import com.item.entity.TagBean;
 
 @Repository
@@ -41,35 +41,35 @@ public interface TagMapper {
 	public int queryTagBeansByPid(int id);
 
 	// 查询所有的构建类型
-	public List<ResourceBean> resourceAllQuery(ResourceBean resourceBean);
+	public List<ResourceInfo> resourceAllQuery(ResourceInfo resourceInfo);
 
 	// 添加构建类型
-	public int insertResource(ResourceBean resourceBean);
+	public int insertResource(ResourceInfo resourceInfo);
 
 	// 编辑构建类型
-	public int updateResource(ResourceBean resourceBean);
+	public int updateResource(ResourceInfo resourceInfo);
 
 	// 通过ID删除构建列表
-	public int deleteResourceById(ResourceBean resourceBean);
+	public int deleteResourceById(ResourceInfo resourceInfo);
 
 	/**
 	 * 查询是否存在子集
 	 * 
-	 * @param resourceBean
+	 * @param resourceInfo
 	 * @return
 	 */
-	public List<ResourceBean> queryResourcesByPid(ResourceBean resourceBean);
+	public List<ResourceInfo> queryResourcesByPid(ResourceInfo resourceInfo);
 
 	// 通过ID查询一级菜单
-	public List<ResourceBean> queryResourceById(ResourceBean resourceBean);
+	public List<ResourceInfo> queryResourceById(ResourceInfo resourceInfo);
 
 	// 删除所有的信息
 	public void deleteResourceAll();
 
 	// 批量添加所有信息
-	public void insertResourceAll(List<ResourceBean> list);
+	public void insertResourceAll(List<ResourceInfo> list);
 
 	// 根据ID查询信息
-	public ResourceBean queryResourceBeanById(ResourceBean resourceBean);
+	public ResourceInfo queryresourceInfoById(ResourceInfo resourceInfo);
 
 }
