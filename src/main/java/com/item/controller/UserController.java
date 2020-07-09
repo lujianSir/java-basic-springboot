@@ -135,8 +135,19 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = "/userMessageOut")
-	public Result<?> userMessageOut(String username) {
-		return userService.userMessageOut(username);
+	public Result<?> userMessageOut(String username, String sessionId) {
+		return userService.userMessageOut(username, sessionId);
+	}
+
+	/**
+	 * 用户退出(内部)
+	 * 
+	 * @param username
+	 * @return
+	 */
+	@RequestMapping(value = "/userMessageOutByAdmin")
+	public Result<?> userMessageOutByAdmin(String username) {
+		return userService.userMessageOutByAdmin(username);
 	}
 
 	/**

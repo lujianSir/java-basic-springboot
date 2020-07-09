@@ -35,6 +35,16 @@ public class UserMessage extends User implements Serializable {
 
 	private int openstatus;// 1可以用 2不可以用
 
+	private String sessionId;// 唯一识别
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
 	public int getOpenstatus() {
 		return openstatus;
 	}

@@ -35,7 +35,10 @@ public interface UserService {
 	public Result<?> userMessageLogin(HttpServletRequest request, String username, String password, int comform);
 
 	// 用户退出
-	public Result<?> userMessageOut(String username);
+	public Result<?> userMessageOut(String username, String sessionId);
+
+	// 用户退出(测试)
+	public Result<?> userMessageOutByAdmin(String username);
 
 	// 发送邮件
 	public void sendSimpleMail(String to, String title, String content);

@@ -221,6 +221,12 @@ public class UserServiceImpl implements UserService {
 							if (comform != 1) {
 								stringRedisTemplate.opsForValue().set(user.getUsername(), sessionId, 60 * 60 * 24,
 										TimeUnit.SECONDS);
+								user.setSessionId(sessionId);
+								UserMessage userMessage = new UserMessage();
+								userMessage.setUserid(user.getUserid());
+								userMessage.setSessionId(sessionId);
+								userMessage.setStatus(1);
+								userMapper.updateUserMessage(userMessage);
 							}
 							return Result.success(user);
 						}
@@ -368,7 +374,33 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Result<?> userMessageOut(String username) {
+	public Result<?> userMessageOut(String username, String sessionId) {
+		// TODO Auto-generated method stub
+		if (sessionId != null && !sessionId.equals("")) {
+			String redissessionId = stringRedisTemplate.opsForValue().get(username);
+			if (redissessionId != null && !redissessionId.equals("")) {
+				if (sessionId.equals(redissessionId)) {
+					boolean flag = stringRedisTemplate.delete(username);
+					if (flag) {
+						return Result.success("退出成功");
+					} else {
+						return Result.error(500, "退出失败");
+					}
+				} else {
+					return Result.error(501, "退出失败");
+				}
+
+			} else {
+				return Result.success("退出成功");
+			}
+		} else {
+			return Result.error(502, "退出失败");
+		}
+
+	}
+
+	@Override
+	public Result<?> userMessageOutByAdmin(String username) {
 		// TODO Auto-generated method stub
 		String redissessionId = stringRedisTemplate.opsForValue().get(username);
 		if (redissessionId != null && !redissessionId.equals("")) {
@@ -381,7 +413,6 @@ public class UserServiceImpl implements UserService {
 		} else {
 			return Result.success("退出成功");
 		}
-
 	}
 
 }

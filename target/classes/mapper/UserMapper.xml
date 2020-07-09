@@ -161,7 +161,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="email != null and email !=''">
 				email=#{email},
 			</if>
-					
+			<if test="sessionId != null and sessionId !=''">
+				sessionId=#{sessionId},
+			</if>	
    		</set>
 		where userid=#{userid}
 	</update>
