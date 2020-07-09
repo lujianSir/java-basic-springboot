@@ -64,6 +64,7 @@ com\item\service\PowerService.class
 com\item\config\FileUploadProperties.class
 com\item\service\RoleService.class
 com\item\entity\Image.class
+com\item\entity\ResourceInfo.class
 com\item\alipay\PropertiesListener.class
 com\item\config\TokenInterceptor.class
 com\item\entity\UserBean.class
@@ -78,7 +79,6 @@ com\item\entity\ExcelBean.class
 com\item\tool\ExcelUtil.class
 com\item\entity\Page.class
 com\item\controller\ShoppingController.class
-com\item\entity\ResourceBean.class
 com\item\tool\CorsFilter.class
 com\item\config\IntercepterConfig.class
 com\item\service\TagService.class

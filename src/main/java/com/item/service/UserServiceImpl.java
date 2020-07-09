@@ -219,7 +219,7 @@ public class UserServiceImpl implements UserService {
 							int shoppCount = shoppingMapper.selectShoppingCartCountByUid(user.getUserid());
 							user.setShoppCount(shoppCount);
 							if (comform != 1) {
-								stringRedisTemplate.opsForValue().set(user.getUsername(), sessionId, 60 * 1,
+								stringRedisTemplate.opsForValue().set(user.getUsername(), sessionId, 60 * 60 * 24,
 										TimeUnit.SECONDS);
 							}
 							return Result.success(user);
