@@ -1,11 +1,12 @@
 package com.item.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author Created by yawn on 2018-01-09 14:31
  */
-public class VacTask {
+public class VacTask implements Serializable {
 
 	private String id;
 	private String name;

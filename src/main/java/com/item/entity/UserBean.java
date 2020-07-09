@@ -2,15 +2,13 @@ package com.item.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-
 /**
  * 后台管理用户
  * 
  * @author Administrator
  *
  */
-@Entity
+
 public class UserBean extends User implements Serializable {
 
 	private static final long serialVersionUID = -6813725469825556830L;

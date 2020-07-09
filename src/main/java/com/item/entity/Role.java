@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class Role {
+import java.io.Serializable;
+
+public class Role implements Serializable {
 
 	private int id;// 角色对应的ID
 

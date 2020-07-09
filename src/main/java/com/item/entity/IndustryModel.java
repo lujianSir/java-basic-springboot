@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class IndustryModel {
+import java.io.Serializable;
+
+public class IndustryModel implements Serializable {
 
 	private int id;// ID
 

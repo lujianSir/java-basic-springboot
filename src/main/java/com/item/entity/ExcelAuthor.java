@@ -1,12 +1,14 @@
 package com.item.entity;
 
+import java.io.Serializable;
+
 /**
  * 流程审批
  * 
  * @author Administrator
  *
  */
-public class ExcelAuthor {
+public class ExcelAuthor implements Serializable {
 
 	private String authorid;// 审批ID
 

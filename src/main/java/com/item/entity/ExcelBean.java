@@ -1,8 +1,10 @@
 package com.item.entity;
 
+import java.io.Serializable;
+
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 
-public class ExcelBean implements java.io.Serializable {
+public class ExcelBean implements Serializable {
 	/**
 	 * 
 	 */

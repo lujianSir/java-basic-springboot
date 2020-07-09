@@ -2,15 +2,13 @@ package com.item.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-
 /**
  * 商城用户
  * 
  * @author Administrator
  *
  */
-@Entity
+
 public class UserMessage extends User implements Serializable {
 
 	/**

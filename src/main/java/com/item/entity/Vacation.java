@@ -1,12 +1,13 @@
 package com.item.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * @author Created by yawn on 2018-01-08 16:44
  */
-public class Vacation implements Comparable<Vacation> {
+public class Vacation implements Comparable<Vacation>, Serializable {
 
 	/**
 	 * 申请人

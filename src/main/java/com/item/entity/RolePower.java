@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class RolePower {
+import java.io.Serializable;
+
+public class RolePower implements Serializable {
 
 	private int powerid;// 权限ID
 

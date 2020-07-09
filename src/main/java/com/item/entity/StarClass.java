@@ -1,12 +1,14 @@
 package com.item.entity;
 
+import java.io.Serializable;
+
 /**
  * 评论
  * 
  * @author Administrator
  *
  */
-public class StarClass {
+public class StarClass implements Serializable {
 
 	private int sid;// 评论ID
 

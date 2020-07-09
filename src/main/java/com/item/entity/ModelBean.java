@@ -3,9 +3,6 @@ package com.item.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-
-@Entity
 public class ModelBean implements Serializable {
 
 	/**

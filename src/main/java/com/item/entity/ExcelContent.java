@@ -1,12 +1,14 @@
 package com.item.entity;
 
+import java.io.Serializable;
+
 /**
  * 表格的内容
  * 
  * @author Administrator
  *
  */
-public class ExcelContent {
+public class ExcelContent implements Serializable {
 	private int id;// 内容ID
 	private String eid;// 表格的iD
 	private String str1;

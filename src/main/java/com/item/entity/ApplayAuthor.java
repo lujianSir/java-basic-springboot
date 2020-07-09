@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class ApplayAuthor {
+import java.io.Serializable;
+
+public class ApplayAuthor implements Serializable {
 
 	private String applyid;// 发起的ID
 

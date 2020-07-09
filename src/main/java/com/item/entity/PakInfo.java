@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class PakInfo {
+import java.io.Serializable;
+
+public class PakInfo implements Serializable {
 
 	private String pakgamepath;
 

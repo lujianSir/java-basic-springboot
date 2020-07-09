@@ -2,15 +2,12 @@ package com.item.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-
 /**
  * 用来处理页面标签
  * 
  * @author
  *
  */
-@Entity
 public class ResourceBean implements Serializable {
 
 	/**

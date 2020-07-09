@@ -3,9 +3,6 @@ package com.item.entity;
 import java.io.Serializable;
 import java.sql.Date;
 
-import javax.persistence.Entity;
-
-@Entity
 public class FlowBean implements Serializable {
 
 	/**
@@ -20,15 +17,14 @@ public class FlowBean implements Serializable {
 	private Date flowtime;
 	// 流程节点
 	private int node;
-	//备注
+	// 备注
 	private String remark;
-	//表单名称
+	// 表单名称
 	private String formname;
-	//文件地址
+	// 文件地址
 	private String filepath;
-	//用于判断数据是否需要被审批
+	// 用于判断数据是否需要被审批
 	private int isapprove;
-	
 
 	public long getFlownum() {
 		return flownum;
@@ -61,7 +57,6 @@ public class FlowBean implements Serializable {
 	public void setFlowtime(Date flowtime) {
 		this.flowtime = flowtime;
 	}
-
 
 	public String getRemark() {
 		return remark;

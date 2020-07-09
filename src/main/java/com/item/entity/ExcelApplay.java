@@ -1,5 +1,6 @@
 package com.item.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class ExcelApplay {
+public class ExcelApplay implements Serializable {
 
 	private String applyid;// 发起的ID
 

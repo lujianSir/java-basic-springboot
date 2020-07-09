@@ -1,5 +1,6 @@
 package com.item.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author Administrator
  *
  */
-public class Industry {
+public class Industry implements Serializable {
 
 	private int id;// 行业ID
 

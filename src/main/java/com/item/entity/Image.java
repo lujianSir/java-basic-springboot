@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class Image {
+import java.io.Serializable;
+
+public class Image implements Serializable {
 
 	private String pic;// 图片名称
 

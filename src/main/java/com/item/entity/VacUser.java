@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class VacUser {
+import java.io.Serializable;
+
+public class VacUser implements Serializable {
 
 	private String nickname;// 名称
 

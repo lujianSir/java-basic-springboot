@@ -1,6 +1,8 @@
 package com.item.entity;
 
-public class VacComment {
+import java.io.Serializable;
+
+public class VacComment implements Serializable {
 
 	private String username;// 评论人
 	private String comment;// 评论内容

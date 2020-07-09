@@ -1,12 +1,14 @@
 package com.item.entity;
 
+import java.io.Serializable;
+
 /**
  * 上传表的数据
  * 
  * @author Administrator
  *
  */
-public class ExcelManage {
+public class ExcelManage implements Serializable {
 
 	private String eid;// 表格的iD
 

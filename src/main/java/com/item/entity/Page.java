@@ -1,8 +1,9 @@
 package com.item.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Page {
+public class Page implements Serializable {
 
 	// 当前页
 	private int pageNumber;

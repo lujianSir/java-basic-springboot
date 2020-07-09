@@ -2,15 +2,13 @@ package com.item.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-
 /**
  * 用来处理页面标签
  * 
- * @author 
+ * @author
  *
  */
-@Entity
+
 public class TagBean implements Serializable {
 
 	/**
@@ -20,17 +18,17 @@ public class TagBean implements Serializable {
 
 	// ID
 	private int id;
-	
+
 	// 父节点
 	private int pid; // 一级 默认父ID为0
-	
+
 	// 标题类型
 	private String typeclass;
-	
+
 	// 标题名称
 	private String typename;
-	
-	//标题对应的内容
+
+	// 标题对应的内容
 	private String content;
 
 	public int getId() {
@@ -72,5 +70,5 @@ public class TagBean implements Serializable {
 	public void setContent(String content) {
 		this.content = content;
 	}
-			
+
 }
