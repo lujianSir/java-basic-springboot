@@ -232,17 +232,17 @@ public class UserServiceImpl implements UserService {
 								userMessage.setStatus(1);
 								userMapper.updateUserMessage(userMessage);
 
-								LoginMessage loginMessage = new LoginMessage();
-								loginMessage.setUsername(username);
-								LoginMessage message = userMapper.queryLoginMessageByUsername(loginMessage);
-								loginMessage.setLogintime(Utils.getCurrent());
-								if (message == null) {
-									loginMessage.setTotal(1);
-									userMapper.insertLoginMessage(loginMessage);
-								} else {
-									loginMessage.setTotal(2);
-									userMapper.updateLoginMessage(loginMessage);
-								}
+//								LoginMessage loginMessage = new LoginMessage();
+//								loginMessage.setUsername(username);
+//								LoginMessage message = userMapper.queryLoginMessageByUsername(loginMessage);
+//								loginMessage.setLogintime(Utils.getCurrent());
+//								if (message == null) {
+//									loginMessage.setTotal(1);
+//									userMapper.insertLoginMessage(loginMessage);
+//								} else {
+//									loginMessage.setTotal(2);
+//									userMapper.updateLoginMessage(loginMessage);
+//								}
 
 							}
 							return Result.success(user);
@@ -438,16 +438,14 @@ public class UserServiceImpl implements UserService {
 		loginMessage.setLogintime(Utils.getCurrent());
 		LoginMessage message = userMapper.queryLoginMessageByUsername(loginMessage);
 		if (message == null) {
-			loginMessage.setTotal(1);
+			ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+			// System.out.println("3秒后开始执行计划线程池服务..." + new Date());
+			String str = loginMessage.getUsername();
+			scheduledExecutorService.scheduleAtFixedRate(new MyThread(str), 0, 120, TimeUnit.SECONDS);
+			loginMessage.setTotal(-1);
 			userMapper.insertLoginMessage(loginMessage);
 		} else {
-			if (message.getTotal() == 1) {
-				ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-				// System.out.println("3秒后开始执行计划线程池服务..." + new Date());
-				String str = loginMessage.getUsername();
-				scheduledExecutorService.scheduleAtFixedRate(new MyThread(str), 0, 120, TimeUnit.SECONDS);
-			}
-			loginMessage.setTotal(message.getTotal() + 1);
+			loginMessage.setTotal(message.getTotal() + 2);
 			userMapper.updateLoginMessage(loginMessage);
 		}
 		return Result.success("连接成功");

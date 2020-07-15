@@ -34,7 +34,7 @@ public class MyThread implements Runnable {
 			loginMessage.setUsername(username);
 			UserMapper userMapper = (UserMapper) SpringUtil.getBean(UserMapper.class);
 			LoginMessage msg = userMapper.queryLoginMessageByUsername(loginMessage);
-			if (msg.getTotal() > 0) {
+			if (msg.getTotal() != 0) {
 				String oldlogintime = msg.getLogintime();
 				String nowtime = Utils.getCurrent();
 				String min = Utils.getHour(oldlogintime, nowtime, "yyyy-MM-dd HH:mm");
