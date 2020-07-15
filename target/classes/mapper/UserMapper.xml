@@ -105,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 检测商城用户是否存在 -->
 	<select id="userMessageExist" parameterType="string" resultType="int">
 		SELECT
-		count(*) FROM usermessage WHERE username=#{username}
+		count(*) FROM usermessage WHERE BINARY username=#{username}
 	</select>
 	
 	<!-- 商城用户注册 -->

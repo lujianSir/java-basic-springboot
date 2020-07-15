@@ -25,6 +25,7 @@ com\item\tool\Result.class
 com\item\entity\FileBean.class
 com\item\service\ExcelProcessService.class
 com\item\entity\User.class
+com\item\entity\LoginMessage.class
 com\item\service\ExcelServcieImpl.class
 com\item\controller\UnityController.class
 com\item\controller\ExcelController.class
@@ -69,6 +70,7 @@ com\item\alipay\PropertiesListener.class
 com\item\config\TokenInterceptor.class
 com\item\entity\UserBean.class
 com\item\tool\FileUtil.class
+com\item\config\MyThread.class
 com\item\service\UserServiceImpl.class
 com\item\controller\FlowController.class
 com\item\entity\ModelBean.class
@@ -97,6 +99,7 @@ com\item\service\ShoppingService.class
 com\item\controller\RoleController.class
 com\item\mapper\FlowMapper.class
 com\item\entity\VacTask.class
+com\item\config\SpringUtil.class
 com\item\service\RoleServiceImpl.class
 com\item\entity\PakInfo.class
 com\item\controller\IndustryController.class
