@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.item.entity.LoginMessage;
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
 
@@ -73,4 +74,15 @@ public interface UserMapper {
 	// 通过ID查询后台信息
 	UserBean queryUserBeanByUserId(String userid);
 
+	// 添加登录信息
+	void insertLoginMessage(LoginMessage loginMessage);
+
+	// 修改登录信息
+	void updateLoginMessage(LoginMessage loginMessage);
+
+	// t通过登录名查询
+	LoginMessage queryLoginMessageByUsername(LoginMessage loginMessage);
+
+	// 通过登录名删除
+	void deleteLoginMessageByUsername(LoginMessage loginMessage);
 }

@@ -233,4 +233,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.*,b.name rname from userinfo a  LEFT JOIN  role  b on a.role=b.id
 		where a.userid=#{userid}
 	</select>
+	
+	<!-- 添加登录用户以及对应的时间 -->
+	<insert id="insertLoginMessage" parameterType="com.item.entity.LoginMessage">
+			insert into loginmessage (username,logintime,total) values(#{username},#{logintime},#{total})
+	</insert>
+	
+	<update id="updateLoginMessage" parameterType="com.item.entity.LoginMessage">
+		update loginmessage 
+			<set>
+				<if test="logintime!=null and logintime!=''">
+					logintime=#{logintime},
+				</if>
+				<if test="total!=null and total!='' or total==0">
+					total=#{total},
+				</if>
+				
+			</set>
+			where username=#{username}
+	</update>
+	
+	<select id="queryLoginMessageByUsername" resultType="com.item.entity.LoginMessage">
+		select * from loginmessage where username=#{username}
+	</select>
+	
+	<delete id="deleteLoginMessageByUsername" parameterType="com.item.entity.LoginMessage">
+		delete from loginmessage where username=#{username}
+	</delete>
 </mapper>

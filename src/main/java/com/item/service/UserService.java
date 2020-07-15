@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.item.entity.LoginMessage;
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
 import com.item.tool.Result;
@@ -57,5 +58,8 @@ public interface UserService {
 
 	// 通过ID查询后台信息
 	UserBean queryUserBeanByUserId(String userid, HttpServletRequest request);
+
+	// 添加登录信息做判断
+	Result<?> getMessage(LoginMessage loginMessage);
 
 }

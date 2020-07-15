@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.item.entity.LoginMessage;
 import com.item.entity.Page;
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
@@ -257,4 +258,15 @@ public class UserController {
 	public Result<?> updatePassword(UserBean user) {
 		return userService.updateUserBeanByUserId(user);
 	}
+
+	/**
+	 * 
+	 * @param loginMessage
+	 * @return
+	 */
+	@RequestMapping(value = "/getMessage")
+	public Result<?> getMessage(LoginMessage loginMessage) {
+		return userService.getMessage(loginMessage);
+	}
+
 }
