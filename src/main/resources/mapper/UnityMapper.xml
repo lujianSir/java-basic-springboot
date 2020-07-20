@@ -25,10 +25,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<select id="queryFlowModelByName" resultType="com.item.entity.PakInfo">
+		select * FROM (
 			SELECT
 					modelname pakname,
-					filePics pakpicturepath,
-					fileModel pakdownloadpath
+						filePics pakpicturepath,
+						fileModel pakdownloadpath,
+						modelstyle
 				FROM
 					(
 						SELECT
@@ -39,16 +41,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 							a.resource_four,
 							a.modelname,
 							a.filePics,
-							a.fileModel
+							a.fileModel,
+							CASE
+						WHEN b.endtime = '' THEN
+							1
+						WHEN b.endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d') THEN
+							1
+						ELSE
+							0
+						END modelstyle
 						FROM
 							modelinfo a
-						LEFT JOIN flowmodel b ON a.mid = b.mid
+						LEFT JOIN   flowmodel b ON a.mid = b.mid
 						WHERE
 							b.uid = #{uid}
-						AND b.endtime = ''
-						OR b.endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d')
 					) a
-				WHERE
+				WHERE				
 					a.resource_one IN 
 					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
 				      (#{item})
@@ -65,12 +73,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
 				      (#{item})
 			    </foreach>	
+			    ) a where a.modelstyle=1
 			    LIMIT  #{page.pageStart},#{page.pageSize}			
 	</select>
 	
 	<select id="queryCountFlowModelByName" resultType="int">
+			select count(*) FROM (
 			SELECT
-					count(*)
+					modelname pakname,
+					filePics pakpicturepath,
+					fileModel pakdownloadpath,
+					modelstyle
 				FROM
 					(
 						SELECT
@@ -81,16 +94,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 							a.resource_four,
 							a.modelname,
 							a.filePics,
-							a.fileModel
+							a.fileModel,
+							CASE
+						WHEN b.endtime = '' THEN
+							1
+						WHEN b.endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d') THEN
+							1
+						ELSE
+							0
+						END modelstyle
 						FROM
 							modelinfo a
-						LEFT JOIN flowmodel b ON a.mid = b.mid
+						LEFT JOIN   flowmodel b ON a.mid = b.mid
 						WHERE
 							b.uid = #{uid}
-						AND b.endtime = ''
-						OR b.endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d')
 					) a
-				WHERE
+				WHERE				
 					a.resource_one IN 
 					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
 				      (#{item})
@@ -106,7 +125,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				OR a.resource_four IN 
 				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
 				      (#{item})
-			    </foreach>		
+			    </foreach>	
+			    ) a where a.modelstyle=1
+
 	</select>
 	
 	<!-- 通过类别或者名称查询总数 -->

@@ -338,7 +338,14 @@ public class OrderController {
 					payService.updateOrderFlow(orderFlow);
 					// 批量添加流水信息
 					FlowModel flowModel = changeFlowModel(orderFlow, trade_no);
-					payService.insertFlowModel(flowModel);
+
+					FlowModel f = payService.queryFlowModel(flowModel);
+					if (f == null) {
+						payService.insertFlowModel(flowModel);
+					} else {
+						payService.updateFlowModel(flowModel);
+					}
+					// payService.insertFlowModel(flowModel);
 
 					// 删除购物的信息
 					shoppingService.deleteShopCartByUserIdAndMid(orderFlow);

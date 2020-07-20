@@ -79,4 +79,9 @@ public interface PayService {
 	 * @return
 	 */
 	public List<OrderFlow> getLoadBuy(OrderFlow orderFlow);
+
+	// 修改流水信息
+	public void updateFlowModel(FlowModel flowModel);
+
+	public FlowModel queryFlowModel(FlowModel flowModel);
 }

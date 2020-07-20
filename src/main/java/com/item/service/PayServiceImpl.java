@@ -167,7 +167,13 @@ public class PayServiceImpl implements PayService {
 			flowModel.setEndtime(JavaTool.getTime(orderFlow.getCycle()));
 			flowModel.setSaynew(1);
 			flowModel.setCreattime(Utils.getCurrent());
-			payMapper.insertFlowModel(flowModel);
+
+			FlowModel f = payMapper.queryFlowModel(flowModel);
+			if (f == null) {
+				payMapper.insertFlowModel(flowModel);
+			} else {
+				payMapper.updateFlowModel(flowModel);
+			}
 
 			// 删除购物的信息
 			shoppingMapper.deleteShopCartByUserIdAndMid(orderFlow);
@@ -286,7 +292,13 @@ public class PayServiceImpl implements PayService {
 				flowModel.setEndtime(JavaTool.getTime(orderFlow.getCycle()));
 				flowModel.setSaynew(1);
 				flowModel.setCreattime(Utils.getCurrent());
-				payMapper.insertFlowModel(flowModel);
+
+				FlowModel f = payMapper.queryFlowModel(flowModel);
+				if (f == null) {
+					payMapper.insertFlowModel(flowModel);
+				} else {
+					payMapper.updateFlowModel(flowModel);
+				}
 
 				// 删除购物的信息
 				shoppingMapper.deleteShopCartByUserIdAndMid(orderFlow);
@@ -299,6 +311,18 @@ public class PayServiceImpl implements PayService {
 	public List<OrderFlow> getLoadBuy(OrderFlow orderFlow) {
 		// TODO Auto-generated method stub
 		return payMapper.getLoadBuy(orderFlow);
+	}
+
+	@Override
+	public void updateFlowModel(FlowModel flowModel) {
+		// TODO Auto-generated method stub
+		payMapper.updateFlowModel(flowModel);
+	}
+
+	@Override
+	public FlowModel queryFlowModel(FlowModel flowModel) {
+		// TODO Auto-generated method stub
+		return payMapper.queryFlowModel(flowModel);
 	}
 
 }

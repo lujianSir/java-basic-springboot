@@ -20,6 +20,16 @@ public class PakInfo implements Serializable {
 
 	private String displayname;// 名称
 
+	private int modelstyle;
+
+	public int getModelstyle() {
+		return modelstyle;
+	}
+
+	public void setModelstyle(int modelstyle) {
+		this.modelstyle = modelstyle;
+	}
+
 	public String getPakgamepath() {
 		return pakgamepath;
 	}
