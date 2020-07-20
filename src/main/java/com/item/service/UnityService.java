@@ -15,6 +15,15 @@ public interface UnityService {
 	Page queryPakInfoByName(String name, Page page);
 
 	/**
+	 * 通过类别查询名称
+	 * 
+	 * @param name
+	 * @param page
+	 * @return
+	 */
+	Page queryFlowModelByName(String name, Page page, String uid);
+
+	/**
 	 * 通过名称模糊查询
 	 * 
 	 * @param pakInfo
@@ -29,4 +38,5 @@ public interface UnityService {
 	 * @return
 	 */
 	Result<?> queryZTree();
+
 }

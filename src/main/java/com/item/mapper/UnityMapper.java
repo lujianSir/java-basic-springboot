@@ -5,9 +5,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.item.entity.Menu;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
-import com.item.entity.Menu;
 
 @Repository
 public interface UnityMapper {
@@ -27,6 +27,11 @@ public interface UnityMapper {
 	 * @return
 	 */
 	int queryCountByName(@Param("list") List<String> list);
+
+	List<PakInfo> queryFlowModelByName(@Param("list") List<String> list, @Param("page") Page page,
+			@Param("uid") String uid);
+
+	int queryCountFlowModelByName(@Param("list") List<String> list, @Param("uid") String uid);
 
 	/**
 	 * 通过名称模糊查询

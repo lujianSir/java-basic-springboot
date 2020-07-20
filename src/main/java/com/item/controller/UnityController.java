@@ -43,6 +43,19 @@ public class UnityController {
 	}
 
 	/**
+	 * 查询已经购买的
+	 * 
+	 * @param name
+	 * @param page
+	 * @return
+	 */
+	@RequestMapping(value = "/queryFlowModelByName")
+	public Result<?> queryFlowModelByName(String name, Page page, String uid) {
+		page = unityService.queryFlowModelByName(name, page, uid);
+		return Result.success(page);
+	}
+
+	/**
 	 * 查询树结构
 	 * 
 	 * @return

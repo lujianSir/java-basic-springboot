@@ -23,6 +23,92 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		LIMIT  #{page.pageStart},#{page.pageSize}				
 	</select>
 	
+	
+	<select id="queryFlowModelByName" resultType="com.item.entity.PakInfo">
+			SELECT
+					modelname pakname,
+					filePics pakpicturepath,
+					fileModel pakdownloadpath
+				FROM
+					(
+						SELECT
+							a.mid,
+							a.resource_one,
+							a.resource_two,
+							a.resource_three,
+							a.resource_four,
+							a.modelname,
+							a.filePics,
+							a.fileModel
+						FROM
+							modelinfo a
+						LEFT JOIN flowmodel b ON a.mid = b.mid
+						WHERE
+							b.uid = #{uid}
+						AND b.endtime = ''
+						OR b.endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d')
+					) a
+				WHERE
+					a.resource_one IN 
+					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			   		 </foreach>	
+				OR a.resource_two IN 
+					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			    	</foreach>	
+				OR a.resource_three IN
+					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			    	</foreach>	
+				OR a.resource_four IN 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			    </foreach>	
+			    LIMIT  #{page.pageStart},#{page.pageSize}			
+	</select>
+	
+	<select id="queryCountFlowModelByName" resultType="int">
+			SELECT
+					count(*)
+				FROM
+					(
+						SELECT
+							a.mid,
+							a.resource_one,
+							a.resource_two,
+							a.resource_three,
+							a.resource_four,
+							a.modelname,
+							a.filePics,
+							a.fileModel
+						FROM
+							modelinfo a
+						LEFT JOIN flowmodel b ON a.mid = b.mid
+						WHERE
+							b.uid = #{uid}
+						AND b.endtime = ''
+						OR b.endtime >= DATE_FORMAT(NOW(), '%Y-%m-%d')
+					) a
+				WHERE
+					a.resource_one IN 
+					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			   		 </foreach>	
+				OR a.resource_two IN 
+					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			    	</foreach>	
+				OR a.resource_three IN
+					<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			    	</foreach>	
+				OR a.resource_four IN 
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				      (#{item})
+			    </foreach>		
+	</select>
+	
 	<!-- 通过类别或者名称查询总数 -->
 	<select id="queryCountByName" resultType="int">
 		select count(*) from pakinfo 

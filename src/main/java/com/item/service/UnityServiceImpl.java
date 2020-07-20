@@ -86,4 +86,30 @@ public class UnityServiceImpl implements UnityService {
 		return parent;
 	}
 
+	@Override
+	public Page queryFlowModelByName(String name, Page page, String uid) {
+		// TODO Auto-generated method stub
+		List<String> list = new ArrayList<String>();
+		if (name != null && !name.equals("")) {
+			String[] str = name.split(",");
+			for (int i = 0; i < str.length; i++) {
+				list.add(str[i]);
+			}
+		}
+		List<PakInfo> pakInfos = unityMapper.queryFlowModelByName(list, page, uid);
+		if (pakInfos.size() > 0) {
+			for (int i = 0; i < pakInfos.size(); i++) {
+				PakInfo pakinfo = pakInfos.get(i);
+				pakInfos.get(i)
+						.setPakpicturepath("http://134.175.21.43:6066/image/web/模型封面/" + pakinfo.getPakpicturepath());
+				pakInfos.get(i).setPakdownloadpath(
+						"http://134.175.21.43:6066/file/download?fileModel=" + pakinfo.getPakdownloadpath());
+			}
+		}
+		int total = unityMapper.queryCountFlowModelByName(list, uid);
+		page.setList(pakInfos);
+		page.setTotal(total);
+		return page;
+	}
+
 }
