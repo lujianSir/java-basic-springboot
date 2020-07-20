@@ -69,6 +69,8 @@ public interface TagMapper {
 	// 批量添加所有信息
 	public void insertResourceAll(List<ResourceInfo> list);
 
+	ResourceInfo selectResourceInfoById(int id);
+
 	// 根据ID查询信息
 	public ResourceInfo queryresourceInfoById(ResourceInfo resourceInfo);
 

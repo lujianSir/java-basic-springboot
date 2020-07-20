@@ -126,4 +126,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryResourceInfoById" resultType="com.item.entity.ResourceInfo">
 		select * from resourceinfo where id =#{id}
 	</select>
+	
+	<select id="selectResourceInfoById" resultType="com.item.entity.ResourceInfo">
+		select * from resourceinfo where id =#{id}
+	</select>
 </mapper>

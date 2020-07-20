@@ -172,7 +172,7 @@ public class FileServiceImpl implements FileService {
 				}
 				ResourceInfo resourceInfo = new ResourceInfo();
 				resourceInfo.setId(Integer.parseInt(classname));
-				resourceInfo = tagMapper.queryresourceInfoById(resourceInfo);
+				resourceInfo = tagMapper.selectResourceInfoById(resourceInfo.getId());
 				pakInfo.setClassname(resourceInfo.getRname());
 				pakInfo.setDisplayname(model.getModelname());
 				fileMapper.insertPakInfo(pakInfo);
