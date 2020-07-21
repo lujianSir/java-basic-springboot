@@ -100,8 +100,8 @@ public class UnityServiceImpl implements UnityService {
 		if (pakInfos.size() > 0) {
 			for (int i = 0; i < pakInfos.size(); i++) {
 				PakInfo pakinfo = pakInfos.get(i);
-				pakInfos.get(i)
-						.setPakpicturepath("http://134.175.21.43:6066/image/web/模型封面/" + pakinfo.getPakpicturepath());
+				pakInfos.get(i).setPakpicturepath(
+						"http://134.175.21.43:6066/file/download?filepic=" + pakinfo.getPakpicturepath());
 				pakInfos.get(i).setPakdownloadpath(
 						"http://134.175.21.43:6066/file/download?fileModel=" + pakinfo.getPakdownloadpath());
 			}
