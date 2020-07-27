@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,11 +77,11 @@ public class ExcelController {
 	public Result<?> zipDownLoad(HttpServletResponse response, HttpServletRequest request) throws IOException {
 		// path是指欲下载的文件的路径。
 		// windows
-		File file = ResourceUtils.getFile("classpath:zip/mould.zip");
+		// File file = ResourceUtils.getFile("classpath:zip/mould.zip");
 		// linux下面
-//		String path = "";
-//		path = System.getProperty("user.dir") + File.separator + "mould.zip";
-//		File file = new File(path);
+		String path = "";
+		path = System.getProperty("user.dir") + File.separator + "mould.zip";
+		File file = new File(path);
 		// 取得文件名。
 		String filename = file.getName();
 		if (!file.exists()) {
