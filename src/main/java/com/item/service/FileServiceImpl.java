@@ -137,10 +137,15 @@ public class FileServiceImpl implements FileService {
 	 */
 	@Override
 	public Result<?> modelUpload(ModelBean model) {
-
+		Role role = roleMapper.queryRoleByUserId(model.getUserid());// 获取角色
 		try {
 			// 模型信息修改
 			if (model.getMid() > 0) {
+				if (role.getId() != 1 && role.getId() != 31) {
+					model.setExamine(0);
+				} else {
+					model.setUserid("");
+				}
 				fileMapper.modelInfoUpdate(model);
 			} else {
 				PakInfo pakInfo = new PakInfo();
@@ -177,7 +182,6 @@ public class FileServiceImpl implements FileService {
 				pakInfo.setDisplayname(model.getModelname());
 				fileMapper.insertPakInfo(pakInfo);
 				// 模型信息录入
-				Role role = roleMapper.queryRoleByUserId(model.getUserid());
 				if (role.getId() == 1 || role.getId() == 31) {
 					model.setExamine(1);
 					model.setExaminepeople(model.getUserid());
