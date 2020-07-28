@@ -7,6 +7,7 @@ com\item\service\PowerServiceImpl.class
 com\item\entity\Vacation.class
 com\item\tool\ActivitiUtil.class
 com\item\entity\ExcelApplay.class
+com\item\entity\FunctionManage.class
 com\item\entity\Industry.class
 com\item\entity\UserMessage.class
 com\item\alipay\AlipayProperties.class

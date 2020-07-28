@@ -155,15 +155,20 @@ public class UnityServiceImpl implements UnityService {
 	public Result<?> queryFunctionManage(FunctionManage functionManage) {
 		// TODO Auto-generated method stub
 		FunctionManage fc = unityMapper.queryFunctionManage(functionManage);
-		if (fc.getFunctiontime() > 0) {
-			int total = fc.getFunctiontime() - 1;
-			functionManage.setFunctiontime(total);
-			functionManage.setLasttime(JavaTool.getUserCurrent());
-			unityMapper.updateFunctionManage(functionManage);
-			return Result.success(functionManage);
+		if (fc == null) {
+			return Result.error(501, "用户限制使用");
 		} else {
-			return Result.error(500, "使用次数已完");
+			if (fc.getFunctiontime() > 0) {
+				int total = fc.getFunctiontime() - 1;
+				functionManage.setFunctiontime(total);
+				functionManage.setLasttime(JavaTool.getUserCurrent());
+				unityMapper.updateFunctionManage(functionManage);
+				return Result.success(total);
+			} else {
+				return Result.error(500, "使用次数已完");
+			}
 		}
+
 	}
 
 }
