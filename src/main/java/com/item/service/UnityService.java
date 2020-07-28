@@ -2,6 +2,7 @@ package com.item.service;
 
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
+import com.item.entity.UserMessage;
 import com.item.tool.Result;
 
 public interface UnityService {
@@ -38,5 +39,13 @@ public interface UnityService {
 	 * @return
 	 */
 	Result<?> queryZTree();
+
+	/**
+	 * 通过username和sessionid获取用户信息
+	 * 
+	 * @param userMessage
+	 * @return
+	 */
+	UserMessage queryUserMessageByUserNameAndSessionId(UserMessage userMessage);
 
 }

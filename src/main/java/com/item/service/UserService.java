@@ -62,4 +62,7 @@ public interface UserService {
 	// 添加登录信息做判断
 	Result<?> getMessage(LoginMessage loginMessage);
 
+	// UE登录
+	Result<?> queryUserBeanByUnity(String username, String password, HttpServletRequest request);
+
 }

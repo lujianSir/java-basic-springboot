@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
+import com.item.entity.UserMessage;
 import com.item.service.UnityService;
-import com.item.service.UserService;
 import com.item.tool.Result;
 
 @Controller
@@ -17,9 +17,6 @@ public class UnityController {
 
 	@Autowired
 	private UnityService unityService;
-
-	@Autowired
-	private UserService userService;
 
 	/**
 	 * 通过名称模糊查询
@@ -82,8 +79,16 @@ public class UnityController {
 	 * @return
 	 */
 	@RequestMapping(value = "/loginAdminByUserId")
-	public String loginAdminByUserId(String username, String password) {
+	public String loginAdminByUserId(String username, String sessionId) {
 		return "uintylogin";
+
+	}
+
+	@RequestMapping(value = "/queryUserMessageByUserNameAndSessionId")
+	@ResponseBody
+	public Result<?> queryUserMessageByUserNameAndSessionId(UserMessage userMessage) {
+		UserMessage u = unityService.queryUserMessageByUserNameAndSessionId(userMessage);
+		return Result.success(u);
 	}
 
 }

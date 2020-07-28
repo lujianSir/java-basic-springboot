@@ -173,4 +173,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="queryZTree" resultType="com.item.entity.Menu">
 		select * from resourceinfo
 	</select>
+	
+	<!-- 通过username和sessionid获取用户信息 -->
+	<select id="queryUserMessageByUserNameAndSessionId" resultType="com.item.entity.UserMessage">
+		select username ,password from usermessage where username=#{username} and sessionId=#{sessionId}
+	</select>
+
 </mapper>

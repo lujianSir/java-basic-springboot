@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.item.entity.Menu;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
+import com.item.entity.UserMessage;
 
 @Repository
 public interface UnityMapper {
@@ -56,4 +57,13 @@ public interface UnityMapper {
 	 * @return
 	 */
 	List<Menu> queryZTree();
+
+	/**
+	 * 通过username和sessionid获取用户信息
+	 * 
+	 * @param userMessage
+	 * @return
+	 */
+	UserMessage queryUserMessageByUserNameAndSessionId(UserMessage userMessage);
+
 }

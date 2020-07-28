@@ -38,6 +38,19 @@ public class UserController {
 	}
 
 	/**
+	 * UE登录
+	 * 
+	 * @param username
+	 * @param password
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/queryUserBeanByUnity")
+	public Result<?> queryUserBeanByUnity(String username, String password, HttpServletRequest request) {
+		return userService.queryUserBeanByUnity(username, password, request);
+	}
+
+	/**
 	 * 管理用户注册接口
 	 * 
 	 * @param username

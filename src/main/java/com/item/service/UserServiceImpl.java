@@ -451,4 +451,46 @@ public class UserServiceImpl implements UserService {
 		return Result.success("连接成功");
 	}
 
+	@Override
+	public Result<?> queryUserBeanByUnity(String username, String password, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		try {
+			if (this.userExist(username)) {
+				// 获取user信息
+				UserBean user = userMapper.userLogin(username);
+				// 判断密码是否相等
+				if (user.getStatus() == 1) {
+					if (user.getPassword().trim().equals(password)) {
+						String ip = JavaTool.getIp(request);
+						UserBean u = new UserBean();
+						u.setUserid(user.getUserid());
+						u.setOldip(ip);
+						u.setStatus(user.getStatus());
+						userMapper.updateUserBeanByUserId(u);
+						// 清除密码消息
+						user.setPassword("");
+						String token = TokenUtil.sign(user);
+						// 将token放在密码带出去
+						user.setPassword(token);
+						user.setNewip(ip);
+						user.setLogintime(Utils.getCurrent());
+						return Result.success(user);
+					} else {
+						return Result.error(50010, "用户密码错误");
+					}
+
+				} else {
+					return Result.error(50030, "用户已被禁用");
+				}
+
+			} else {
+				return Result.error(50020, "用户不存在");
+			}
+			// 根据用户信息判断
+		} catch (Exception e) {
+			LOG.error(e.getMessage());
+			return Result.error(500, "服务端异常");
+		}
+	}
+
 }

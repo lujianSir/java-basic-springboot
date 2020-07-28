@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+</head>
+<body>
+</body>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">	
+	$(function(){ 
+		var username = getUrlParam("username");
+		var sessionId = getUrlParam("sessionId");
+
+	//	window.location.href="http://192.168.2.111:666/#/alogin?username="+username+"?password="+password
+	 $.ajax({
+	            method: 'get',
+	            url: '/unity/queryUserMessageByUserNameAndSessionId?username='+username+"&sessionId="+sessionId,
+	            contentType: false,
+	            processData: false,
+	            success: function(res){
+	            	var result=res.data;
+	            	if(result==null){
+	            		window.location.href="http://bwsk.cool/#/shopAdmin";
+	            	}else{
+	            		var username=result.username;
+		            	var password=result.password;
+		            	window.location.href="http://bwsk.cool/#/alogin?username="+username+"&password="+password;
+	            	}
+	            	
+	            }
+	       }); 
+	})
+
+//	window.localStorage.setItem('userid',userid)
+	//window.location.href="http://bwsk.cool/#/admin"
+	function getUrlParam(name) { //封装方法
+	    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	    var r = window.location.search.substr(1).match(reg); //匹配目标参数
+	    if(r != null) return unescape(r[2]);
+	    return null; //返回参数值
+	}
+	
+</script>
+</html>

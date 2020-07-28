@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.item.entity.Menu;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
+import com.item.entity.UserMessage;
 import com.item.mapper.UnityMapper;
 import com.item.tool.Result;
 
@@ -110,6 +111,18 @@ public class UnityServiceImpl implements UnityService {
 		page.setList(pakInfos);
 		page.setTotal(total);
 		return page;
+	}
+
+	@Override
+	public UserMessage queryUserMessageByUserNameAndSessionId(UserMessage userMessage) {
+		// TODO Auto-generated method stub
+		UserMessage u = unityMapper.queryUserMessageByUserNameAndSessionId(userMessage);
+		if (u != null) {
+			return u;
+		} else {
+			return null;
+		}
+
 	}
 
 }
