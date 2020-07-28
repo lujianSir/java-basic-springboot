@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.item.entity.FunctionManage;
 import com.item.entity.Menu;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
@@ -66,4 +67,27 @@ public interface UnityMapper {
 	 */
 	UserMessage queryUserMessageByUserNameAndSessionId(UserMessage userMessage);
 
+	/**
+	 * 添加模块使用次数
+	 * 
+	 * @param functionManage
+	 * @return
+	 */
+	int insertFunctionManage(FunctionManage functionManage);
+
+	/**
+	 * 修改
+	 * 
+	 * @param functionManage
+	 * @return
+	 */
+	int updateFunctionManage(FunctionManage functionManage);
+
+	/**
+	 * 查询名称是否重复
+	 * 
+	 * @param functionManage
+	 * @return
+	 */
+	FunctionManage queryFunctionManage(FunctionManage functionManage);
 }

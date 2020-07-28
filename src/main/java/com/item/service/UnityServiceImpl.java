@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.item.entity.FunctionManage;
 import com.item.entity.Menu;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
 import com.item.entity.UserMessage;
 import com.item.mapper.UnityMapper;
+import com.item.tool.JavaTool;
 import com.item.tool.Result;
 
 @Service
@@ -123,6 +125,45 @@ public class UnityServiceImpl implements UnityService {
 			return null;
 		}
 
+	}
+
+	@Override
+	public Result<?> insertFunctionManage(FunctionManage functionManage) {
+		// TODO Auto-generated method stub
+		int row = 0;
+		functionManage.setLasttime(JavaTool.getUserCurrent());
+		FunctionManage fc = unityMapper.queryFunctionManage(functionManage);
+		if (fc != null) {
+			row = unityMapper.updateFunctionManage(functionManage);
+			if (row > 0) {
+				return Result.success("修改成功");
+			} else {
+				return Result.error(500, "修改失败");
+			}
+		} else {
+			row = unityMapper.insertFunctionManage(functionManage);
+			if (row > 0) {
+				return Result.success("添加成功");
+			} else {
+				return Result.error(500, "添加失败");
+			}
+		}
+
+	}
+
+	@Override
+	public Result<?> queryFunctionManage(FunctionManage functionManage) {
+		// TODO Auto-generated method stub
+		FunctionManage fc = unityMapper.queryFunctionManage(functionManage);
+		if (fc.getFunctiontime() > 0) {
+			int total = fc.getFunctiontime() - 1;
+			functionManage.setFunctiontime(total);
+			functionManage.setLasttime(JavaTool.getUserCurrent());
+			unityMapper.updateFunctionManage(functionManage);
+			return Result.success(functionManage);
+		} else {
+			return Result.error(500, "使用次数已完");
+		}
 	}
 
 }

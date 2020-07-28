@@ -179,4 +179,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select username ,password from usermessage where username=#{username} and sessionId=#{sessionId}
 	</select>
 
+	<insert id="insertFunctionManage" parameterType="com.item.entity.FunctionManage">
+		insert into functionmanage (username,functionname,functiontime,lasttime) values (#{username},#{functionname},#{functiontime},#{lasttime})
+	</insert>
+	
+	<select id="queryFunctionManage" resultType="com.item.entity.FunctionManage">
+		select * from functionmanage where username=#{username} and functionname=#{functionname}
+	</select>
+	
+	<update id="updateFunctionManage" parameterType="com.item.entity.FunctionManage">
+		update functionmanage 
+		<set>
+			<if test="functiontime!=null and functiontime!='' or functiontime==0">
+				functiontime=#{functiontime},
+			</if>
+			<if test="lasttime!=null and lasttime!='' ">
+				lasttime=#{lasttime},
+			</if>		
+		</set>	
+		where username=#{username} and functionname=#{functionname}	
+	</update>
 </mapper>

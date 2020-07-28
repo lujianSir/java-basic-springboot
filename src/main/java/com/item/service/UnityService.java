@@ -1,5 +1,6 @@
 package com.item.service;
 
+import com.item.entity.FunctionManage;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
 import com.item.entity.UserMessage;
@@ -47,5 +48,21 @@ public interface UnityService {
 	 * @return
 	 */
 	UserMessage queryUserMessageByUserNameAndSessionId(UserMessage userMessage);
+
+	/**
+	 * 添加模块使用次数
+	 * 
+	 * @param functionManage
+	 * @return
+	 */
+	Result<?> insertFunctionManage(FunctionManage functionManage);
+
+	/**
+	 * 查询使用次数
+	 * 
+	 * @param functionManage
+	 * @return
+	 */
+	Result<?> queryFunctionManage(FunctionManage functionManage);
 
 }

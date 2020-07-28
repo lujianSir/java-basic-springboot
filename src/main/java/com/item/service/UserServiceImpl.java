@@ -19,10 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.item.config.MyThread;
+import com.item.entity.FunctionManage;
 import com.item.entity.LoginMessage;
 import com.item.entity.UserBean;
 import com.item.entity.UserMessage;
 import com.item.mapper.ShoppingMapper;
+import com.item.mapper.UnityMapper;
 import com.item.mapper.UserMapper;
 import com.item.tool.JavaTool;
 import com.item.tool.Result;
@@ -54,6 +56,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	public StringRedisTemplate stringRedisTemplate;
+
+	@Autowired
+	private UnityMapper unityMapper;
 
 	/**
 	 * 判断用户是否存在
@@ -176,6 +181,13 @@ public class UserServiceImpl implements UserService {
 				userBean.setRole(3);
 				userBean.setStatus(1);
 				userMapper.userRegister(userBean);// 同时注册后台用户 默认为一般用户
+
+				FunctionManage functionManage = new FunctionManage();
+				functionManage.setFunctionname("cad");
+				functionManage.setUsername(userMessage.getUsername());
+				functionManage.setFunctiontime(3);
+				functionManage.setLasttime(JavaTool.getUserCurrent());
+				unityMapper.insertFunctionManage(functionManage);
 
 				return Result.success();
 			}

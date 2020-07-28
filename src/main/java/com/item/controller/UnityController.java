@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.item.entity.FunctionManage;
 import com.item.entity.Page;
 import com.item.entity.PakInfo;
 import com.item.entity.UserMessage;
@@ -89,6 +90,30 @@ public class UnityController {
 	public Result<?> queryUserMessageByUserNameAndSessionId(UserMessage userMessage) {
 		UserMessage u = unityService.queryUserMessageByUserNameAndSessionId(userMessage);
 		return Result.success(u);
+	}
+
+	/**
+	 * 添加功能管理
+	 * 
+	 * @param functionManage
+	 * @return
+	 */
+	@RequestMapping(value = "/insertFunctionManage")
+	@ResponseBody
+	public Result<?> insertFunctionManage(FunctionManage functionManage) {
+		return unityService.insertFunctionManage(functionManage);
+	}
+
+	/**
+	 * 查询使用的次数
+	 * 
+	 * @param functionManage
+	 * @return
+	 */
+	@RequestMapping(value = "/queryFunctionManage")
+	@ResponseBody
+	public Result<?> queryFunctionManage(FunctionManage functionManage) {
+		return unityService.queryFunctionManage(functionManage);
 	}
 
 }
