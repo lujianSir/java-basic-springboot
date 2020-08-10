@@ -162,6 +162,13 @@ public class ExcelController {
 //		return Result.success(pageInfo);
 //	}
 
+	/**
+	 * 查询上传的表格信息
+	 * 
+	 * @param excelManage
+	 * @param page
+	 * @return
+	 */
 	@RequestMapping("/queryExcelManage")
 	@ResponseBody
 	public Result<?> queryExcelManage(ExcelManage excelManage, Page page) {
